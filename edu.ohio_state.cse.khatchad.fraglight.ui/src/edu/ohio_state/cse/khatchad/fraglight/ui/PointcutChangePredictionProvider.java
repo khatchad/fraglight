@@ -3,29 +3,26 @@
  */
 package edu.ohio_state.cse.khatchad.fraglight.ui;
 
-import static java.lang.System.out;
 import static org.eclipse.core.resources.ResourcesPlugin.getWorkspace;
 
 import java.util.Collection;
 
+import org.eclipse.ajdt.core.AspectJPlugin;
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.mylyn.context.core.ContextChangeEvent;
-import org.eclipse.mylyn.context.core.ContextCore;
 import org.eclipse.mylyn.context.core.IInteractionElement;
-import org.eclipse.mylyn.internal.context.core.ContextCorePlugin;
 import org.eclipse.mylyn.internal.context.core.IActiveSearchOperation;
 import org.eclipse.mylyn.internal.java.ui.JavaStructureBridge;
 import org.eclipse.mylyn.internal.java.ui.search.AbstractJavaRelationProvider;
 
-import uk.ac.lancs.comp.khatchad.rejuvenatepc.core.PointcutAnalyzer;
-
+import edu.ohio_state.cse.khatchad.ajplugintools.core.PointcutAnalyzer;
 import edu.ohio_state.cse.khatchad.ajplugintools.util.AJUtil;
 
 /**
@@ -53,7 +50,7 @@ public class PointcutChangePredictionProvider extends AbstractJavaRelationProvid
 				IWorkspaceRoot root = workspace.getRoot();
 				IProject[] projects = root.getProjects();
 				for ( IProject proj : projects ) {
-					if ( proj.isAccessible() ) {
+					if ( proj.isAccessible() && AspectJPlugin.isAJProject(proj) ) {
 						IJavaProject javaProject = JavaCore.create(proj);
 						Collection<? extends AdviceElement> toAnalyze = null;
 						try {
@@ -64,11 +61,18 @@ public class PointcutChangePredictionProvider extends AbstractJavaRelationProvid
 							continue;
 						}
 						if (!toAnalyze.isEmpty()) {
-							this.analyzer.analyze(toAnalyze, lMonitor);
+							try {
+								//TODO: Get a progress monitor from somewhere.
+								this.analyzer.analyze(toAnalyze, new NullProgressMonitor());
+							}
+							catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+								throw new RuntimeException(e);
+							}
 						}
 					}
 				}
-				
 				break;
 			}
 		}
