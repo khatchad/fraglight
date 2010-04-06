@@ -7,22 +7,19 @@ import static org.eclipse.core.resources.ResourcesPlugin.getWorkspace;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.ajdt.core.AspectJPlugin;
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ElementChangedEvent;
 import org.eclipse.jdt.core.IElementChangedListener;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaElementDelta;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.mylyn.context.core.ContextChangeEvent;
@@ -32,8 +29,8 @@ import org.eclipse.mylyn.internal.java.ui.JavaStructureBridge;
 import org.eclipse.mylyn.internal.java.ui.search.AbstractJavaRelationProvider;
 
 import ca.mcgill.cs.swevo.jayfx.model.IElement;
-
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PointcutAnalyzer;
+import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PointcutRejuvenator;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.IntentionArc;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.Pattern;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil;
@@ -51,6 +48,8 @@ public class PointcutChangePredictionProvider extends
 	public static final String NAME = "may break"; //$NON-NLS-1$
 
 	private PointcutAnalyzer analyzer = new PointcutAnalyzer();
+	
+	private PointcutRejuvenator rejuvenator = new PointcutRejuvenator();
 
 	public PointcutChangePredictionProvider() {
 		super(JavaStructureBridge.CONTENT_TYPE, ID);
@@ -65,35 +64,20 @@ public class PointcutChangePredictionProvider extends
 
 				//analyze pointcuts.
 				IWorkspace workspace = getWorkspace();
-				IWorkspaceRoot root = workspace.getRoot();
-				IProject[] projects = root.getProjects();
-				for (IProject proj : projects) {
-					if (proj.isAccessible() && AspectJPlugin.isAJProject(proj)) {
-						IJavaProject javaProject = JavaCore.create(proj);
-						Collection<? extends AdviceElement> toAnalyze = null;
-						try {
-							toAnalyze = AJUtil
-									.extractValidAdviceElements(javaProject);
-						}
-						catch (JavaModelException e) {
-							//next project.
-							continue;
-						}
-						if (!toAnalyze.isEmpty()) {
-							try {
-								//TODO: Get a progress monitor from somewhere.
-								this.analyzer.analyze(toAnalyze,
-										new NullProgressMonitor());
-							}
-							catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-								throw new RuntimeException(e);
-							}
-
-						}
+				Collection<? extends AdviceElement> toAnalyze = AJUtil.extractValidAdviceElements(workspace);
+				
+				if (!toAnalyze.isEmpty()) {
+					try {
+						//TODO: Get a progress monitor from somewhere.
+						this.analyzer.analyze(toAnalyze,
+								new NullProgressMonitor());
 					}
-				}
+					catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						throw new RuntimeException(e);
+					}
+				}	
 				break;
 			}
 
@@ -159,11 +143,12 @@ public class PointcutChangePredictionProvider extends
 				//this represents the case where a new method execution join point is added.
 				if (element.getElementType() == IJavaElement.METHOD
 						&& element.isStructureKnown()) {
+					
 					//calculate the change confidence for every PCE.
-					Map<AdviceElement, Set<Pattern<IntentionArc<IElement>>>> pointcutToPatternSetMap = this.analyzer
-							.getPointcutToPatternSetMap();
-					for (AdviceElement advElem : pointcutToPatternSetMap
-							.keySet()) {
+					//TODO: May just want to call the rejuvenator here.
+					
+					List<AdviceElement> empty = Collections.emptyList();
+					for (AdviceElement advElem : empty ) {
 
 						//calculate the change confidence.
 						double changeConfidence = calculateChangeConfidence(
