@@ -145,7 +145,17 @@ public class PointcutChangePredictionProvider extends
 						&& element.isStructureKnown()) {
 					
 					//calculate the change confidence for every PCE.
-					//TODO: May just want to call the rejuvenator here.
+					
+					//TODO: OK. Here's the suggestion. (no pun intended). Let's rejuvenate all pointcuts and get a map from pointcuts to suggestions.
+					//		What I'm not sure about is how the rejuvenator handles more than one pointcut as input, because that is only what I have given
+					//		it so far. If there is more than one pointcut, how are the suggestions separated? Is there already a map between pointcuts and
+					//		suggestions? I recall that being somewhere.
+					
+					//TODO: at this point, we have the join point that was just added. Let's find \mu(jps), i.e., all patterns (regardless of how they
+					//		were derived) that produce the new join point as a suggestion. 
+					
+					//Do I send it every available pointcut?
+					this.rejuvenator.analyze(adviceCol, lMonitor);
 					
 					List<AdviceElement> empty = Collections.emptyList();
 					for (AdviceElement advElem : empty ) {
