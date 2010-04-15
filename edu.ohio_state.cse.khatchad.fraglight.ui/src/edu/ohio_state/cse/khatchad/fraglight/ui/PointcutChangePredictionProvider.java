@@ -8,6 +8,7 @@ import static org.eclipse.core.resources.ResourcesPlugin.getWorkspace;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +30,7 @@ import org.eclipse.mylyn.internal.java.ui.JavaStructureBridge;
 import org.eclipse.mylyn.internal.java.ui.search.AbstractJavaRelationProvider;
 
 import ca.mcgill.cs.swevo.jayfx.model.IElement;
+import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PatternMatcher;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PointcutAnalyzer;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PointcutRejuvenator;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.IntentionArc;
@@ -48,8 +50,6 @@ public class PointcutChangePredictionProvider extends
 	public static final String NAME = "may break"; //$NON-NLS-1$
 
 	private PointcutAnalyzer analyzer = new PointcutAnalyzer();
-	
-	private PointcutRejuvenator rejuvenator = new PointcutRejuvenator();
 
 	public PointcutChangePredictionProvider() {
 		super(JavaStructureBridge.CONTENT_TYPE, ID);
@@ -64,8 +64,9 @@ public class PointcutChangePredictionProvider extends
 
 				//analyze pointcuts.
 				IWorkspace workspace = getWorkspace();
-				Collection<? extends AdviceElement> toAnalyze = AJUtil.extractValidAdviceElements(workspace);
-				
+				Collection<? extends AdviceElement> toAnalyze = AJUtil
+						.extractValidAdviceElements(workspace);
+
 				if (!toAnalyze.isEmpty()) {
 					try {
 						//TODO: Get a progress monitor from somewhere.
@@ -77,21 +78,21 @@ public class PointcutChangePredictionProvider extends
 						e.printStackTrace();
 						throw new RuntimeException(e);
 					}
-				}	
+				}
 				break;
 			}
 
 			case DEACTIVATED: {
 				//TODO: Only write the XML file when an XML file already exists implies that the patterns have been rebuilt since last load.
-				try {
-					this.analyzer.writeXMLFile();
-				}
-				catch (IOException e) {
-					throw new RuntimeException("Error writing XML file.", e);
-				}
-				catch (CoreException e) {
-					throw new RuntimeException("Error writing XML file.", e);
-				}
+//				try {
+//					this.analyzer.writeXMLFile();
+//				}
+//				catch (IOException e) {
+//					throw new RuntimeException("Error writing XML file.", e);
+//				}
+//				catch (CoreException e) {
+//					throw new RuntimeException("Error writing XML file.", e);
+//				}
 			}
 		}
 	}
@@ -143,27 +144,55 @@ public class PointcutChangePredictionProvider extends
 				//this represents the case where a new method execution join point is added.
 				if (element.getElementType() == IJavaElement.METHOD
 						&& element.isStructureKnown()) {
-					
+
 					//calculate the change confidence for every PCE.
+					Collection<Set<Pattern<IntentionArc<IElement>>>> allPatternSets = this.analyzer
+							.getPointcutToPatternSetMap().values();
+					Set<Pattern<IntentionArc<IElement>>> allPatterns = new LinkedHashSet<Pattern<IntentionArc<IElement>>>();
+					for (Set<Pattern<IntentionArc<IElement>>> patternSet : allPatternSets) {
+						allPatterns.addAll(patternSet);
+					}
+
+					//initialize the pattern matcher, seeding it with all patterns.
+					PatternMatcher matcher = new PatternMatcher(allPatterns);
 					
-					//TODO: OK. Here's the suggestion. (no pun intended). Let's rejuvenate all pointcuts and get a map from pointcuts to suggestions.
-					//		What I'm not sure about is how the rejuvenator handles more than one pointcut as input, because that is only what I have given
-					//		it so far. If there is more than one pointcut, how are the suggestions separated? Is there already a map between pointcuts and
-					//		suggestions? I recall that being somewhere.
+					//let the matcher match patterns against code in the projects:
+					try {
+						matcher.analyze(this.analyzer.getPointcutToPatternSetMap().keySet(), new NullProgressMonitor());
+					}
+					catch (Exception e) {
+						throw new RuntimeException(e);
+					}
 					
-					//TODO: at this point, we have the join point that was just added. Let's find \mu(jps), i.e., all patterns (regardless of how they
-					//		were derived) that produce the new join point as a suggestion. 
-					
-					//Do I send it every available pointcut?
-					this.rejuvenator.analyze(adviceCol, lMonitor);
-					
-					List<AdviceElement> empty = Collections.emptyList();
-					for (AdviceElement advElem : empty ) {
+					Set<Pattern<IntentionArc<IElement>>> patternsMatchingJoinPoint = new LinkedHashSet<Pattern<IntentionArc<IElement>>>();
+
+					for (Pattern<IntentionArc<IElement>> pattern : allPatterns) {
+						//get all java elements produced by the pattern.
+						Set<IJavaElement> matchingJavaElementSet = matcher
+								.getMatchingJavaElements(pattern);
+						if (matchingJavaElementSet.contains(element))
+							patternsMatchingJoinPoint.add(pattern);
+					}
+
+					for (AdviceElement advElem : this.analyzer
+							.getPointcutToPatternSetMap().keySet()) {
+
+						Set<Pattern<IntentionArc<IElement>>> patternsDerivedFromPointcut = this.analyzer
+								.getPointcutToPatternSetMap().get(advElem);
+
+						Set<Pattern<IntentionArc<IElement>>> patternsToConsider = new LinkedHashSet<Pattern<IntentionArc<IElement>>>(
+								patternsDerivedFromPointcut);
+						patternsToConsider.retainAll(patternsMatchingJoinPoint);
+						
+						//decide if the new join point is captured by the pointcut.
+						boolean captured = isCapturedBy(element, advElem);
 
 						//calculate the change confidence.
 						double changeConfidence = calculateChangeConfidence(
-								element, advElem);
+								captured, patternsToConsider);
 
+						//TODO: Do something with the change confidence.
+						System.out.println("Change confidence for pointcut " + advElem + " is " + changeConfidence);
 					}
 				}
 			}
@@ -175,16 +204,11 @@ public class PointcutChangePredictionProvider extends
 	 * @param element
 	 * @param advElem
 	 * @return
-	 * @throws JavaModelException 
+	 * @throws JavaModelException
 	 */
-	private double calculateChangeConfidence(IJavaElement joinPointShadow,
-			AdviceElement advElem) throws JavaModelException {
-
-		//decide if the new join point is captured by the pointcut.
-		boolean captured = isCapturedBy(joinPointShadow, advElem);
-
-		Set<Pattern<IntentionArc<IElement>>> patternSet = getValidPatterns(
-				joinPointShadow, advElem);
+	private double calculateChangeConfidence(boolean captured,
+			Set<Pattern<IntentionArc<IElement>>> patternSet)
+			throws JavaModelException {
 
 		double numerator = 0;
 		for (Pattern<IntentionArc<IElement>> pattern : patternSet) {
@@ -200,29 +224,15 @@ public class PointcutChangePredictionProvider extends
 	}
 
 	/**
-	 * @param advElem
-	 * @param joinPointShadow
-	 * @return
-	 */
-	private Set<Pattern<IntentionArc<IElement>>> getValidPatterns(
-			IJavaElement joinPointShadow, AdviceElement advElem) {
-		Map<AdviceElement, Set<Pattern<IntentionArc<IElement>>>> pointcutToPatternSetMap = this.analyzer
-				.getPointcutToPatternSetMap();
-		Set<Pattern<IntentionArc<IElement>>> patternSet = pointcutToPatternSetMap
-				.get(advElem);
-		//TODO: I need to know whether or not these patterns produce a "suggestion" that matches the given joinPointShadow.
-		//      I guess that the next step from here is taking a look at the rejuvenation process.
-		return null;
-	}
-
-	/**
 	 * @param joinPointShadow
 	 * @param advice
 	 * @return
-	 * @throws JavaModelException 
+	 * @throws JavaModelException
 	 */
-	private boolean isCapturedBy(IJavaElement joinPointShadow, AdviceElement advice) throws JavaModelException {
-		Set<IJavaElement> advisedJavaElements = AJUtil.getAdvisedJavaElements(advice);
+	private boolean isCapturedBy(IJavaElement joinPointShadow,
+			AdviceElement advice) throws JavaModelException {
+		Set<IJavaElement> advisedJavaElements = AJUtil
+				.getAdvisedJavaElements(advice);
 		return advisedJavaElements.contains(joinPointShadow);
 	}
 }
