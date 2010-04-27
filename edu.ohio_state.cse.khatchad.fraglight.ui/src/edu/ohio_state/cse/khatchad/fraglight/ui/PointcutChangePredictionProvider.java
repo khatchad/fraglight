@@ -14,10 +14,17 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
+import org.eclipse.ajdt.core.javaelements.CompilationUnitTools;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ElementChangedEvent;
+import org.eclipse.jdt.core.IBuffer;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IElementChangedListener;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaElementDelta;
@@ -36,6 +43,8 @@ import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PointcutRejuvenator;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.IntentionArc;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.Pattern;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil;
+import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
+import edu.ohio_state.cse.khatchad.fraglight.ui.preferences.PreferenceConstants;
 
 /**
  * @author <a href="mailto:khatchad@cse.ohio-state.edu">Raffi Khatchadourian</a>
@@ -49,10 +58,17 @@ public class PointcutChangePredictionProvider extends
 
 	public static final String NAME = "may break"; //$NON-NLS-1$
 
+	private static final double CHANGE_CONFIDENCE_DEFAULT_THRESHOLD = 0.50;
+
 	private PointcutAnalyzer analyzer = new PointcutAnalyzer();
+	
+	IProgressMonitor monitor = new NullProgressMonitor();
+	
+	private double changeConfidenceThreshold = CHANGE_CONFIDENCE_DEFAULT_THRESHOLD;
 
 	public PointcutChangePredictionProvider() {
 		super(JavaStructureBridge.CONTENT_TYPE, ID);
+		FraglightUiPlugin.getDefault().setChangePredictionProvider(this);
 	}
 
 	@Override
@@ -64,17 +80,21 @@ public class PointcutChangePredictionProvider extends
 
 				//analyze pointcuts.
 				IWorkspace workspace = getWorkspace();
+				try {
+					workspace.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
+				}
+				catch (CoreException e) {
+					throw new RuntimeException(e);
+				}
 				Collection<? extends AdviceElement> toAnalyze = AJUtil
 						.extractValidAdviceElements(workspace);
 
 				if (!toAnalyze.isEmpty()) {
 					try {
-						//TODO: Get a progress monitor from somewhere.
 						this.analyzer.analyze(toAnalyze,
-								new NullProgressMonitor());
+								this.monitor);
 					}
 					catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 						throw new RuntimeException(e);
 					}
@@ -83,6 +103,9 @@ public class PointcutChangePredictionProvider extends
 			}
 
 			case DEACTIVATED: {
+				//deregister as a Java editor change listener.
+				JavaCore.removeElementChangedListener(this);
+				
 				//TODO: Only write the XML file when an XML file already exists implies that the patterns have been rebuilt since last load.
 //				try {
 //					this.analyzer.writeXMLFile();
@@ -144,6 +167,18 @@ public class PointcutChangePredictionProvider extends
 				//this represents the case where a new method execution join point is added.
 				if (element.getElementType() == IJavaElement.METHOD
 						&& element.isStructureKnown()) {
+				
+					//save the file.
+					ICompilationUnit icu = Util.getCompilationUnit(element);
+					icu.getBuffer().save(this.monitor, false);
+					
+					// Ensure that the building process is triggered.
+					try {
+						element.getJavaProject().getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
+					}
+					catch (CoreException e) {
+						throw new RuntimeException(e);
+					}
 
 					//calculate the change confidence for every PCE.
 					Collection<Set<Pattern<IntentionArc<IElement>>>> allPatternSets = this.analyzer
@@ -158,7 +193,7 @@ public class PointcutChangePredictionProvider extends
 					
 					//let the matcher match patterns against code in the projects:
 					try {
-						matcher.analyze(this.analyzer.getPointcutToPatternSetMap().keySet(), new NullProgressMonitor());
+						matcher.analyze(this.analyzer.getPointcutToPatternSetMap().keySet(), this.monitor);
 					}
 					catch (Exception e) {
 						throw new RuntimeException(e);
@@ -185,11 +220,14 @@ public class PointcutChangePredictionProvider extends
 						patternsToConsider.retainAll(patternsMatchingJoinPoint);
 						
 						//decide if the new join point is captured by the pointcut.
-						boolean captured = isCapturedBy(element, advElem);
+						boolean captured = AJUtil.isCapturedBy(element, advElem);
 
 						//calculate the change confidence.
 						double changeConfidence = calculateChangeConfidence(
 								captured, patternsToConsider);
+						
+						//TODO: Only output if the change confidence is above the threshold.
+						double thresholdValue = FraglightUiPlugin.getDefault().getPreferenceStore().getDouble(PreferenceConstants.P_THRESHOLD);
 
 						//TODO: Do something with the change confidence.
 						System.out.println("Change confidence for pointcut " + advElem + " is " + changeConfidence);
@@ -219,20 +257,29 @@ public class PointcutChangePredictionProvider extends
 		}
 
 		int denominator = patternSet.size();
+		//TODO: Guard against the denominator being zero here.
 		double changeConfidence = ((double) numerator) / denominator;
 		return changeConfidence;
 	}
 
 	/**
-	 * @param joinPointShadow
-	 * @param advice
-	 * @return
-	 * @throws JavaModelException
+	 * @return the analyzer
 	 */
-	private boolean isCapturedBy(IJavaElement joinPointShadow,
-			AdviceElement advice) throws JavaModelException {
-		Set<IJavaElement> advisedJavaElements = AJUtil
-				.getAdvisedJavaElements(advice);
-		return advisedJavaElements.contains(joinPointShadow);
+	public PointcutAnalyzer getAnalyzer() {
+		return this.analyzer;
+	}
+
+	/**
+	 * @param changeConfidenceThreshold the changeConfidenceThreshold to set
+	 */
+	public void setChangeConfidenceThreshold(double changeConfidenceThreshold) {
+		this.changeConfidenceThreshold = changeConfidenceThreshold;
+	}
+
+	/**
+	 * @return the changeConfidenceThreshold
+	 */
+	public double getChangeConfidenceThreshold() {
+		return changeConfidenceThreshold;
 	}
 }

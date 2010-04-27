@@ -8,5 +8,19 @@
             contentType="java">
       </provider>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="edu.ohio_state.cse.khatchad.fraglight.ui.preferences.PreferencePage"
+            id="edu.ohio_state.cse.khatchad.fraglight.ui.preferences.PreferencePage"
+            name="Fraglight">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="edu.ohio_state.cse.khatchad.fraglight.ui.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

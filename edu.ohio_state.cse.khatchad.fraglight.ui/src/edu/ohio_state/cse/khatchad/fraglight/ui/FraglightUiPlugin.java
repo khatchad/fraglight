@@ -15,6 +15,11 @@ public class FraglightUiPlugin extends AbstractUIPlugin {
 	private static FraglightUiPlugin plugin;
 	
 	/**
+	 * A reference to the change prediction provider, initially null.
+	 */
+	private PointcutChangePredictionProvider changePredictionProvider;
+	
+	/**
 	 * The constructor
 	 */
 	public FraglightUiPlugin() {
@@ -45,6 +50,21 @@ public class FraglightUiPlugin extends AbstractUIPlugin {
 	 */
 	public static FraglightUiPlugin getDefault() {
 		return plugin;
+	}
+
+	/**
+	 * @return the changePredictionProvider
+	 */
+	public PointcutChangePredictionProvider getChangePredictionProvider() {
+		return this.changePredictionProvider;
+	}
+
+	/**
+	 * @param changePredictionProvider the changePredictionProvider to set
+	 */
+	public void setChangePredictionProvider(
+			PointcutChangePredictionProvider changePredictionProvider) {
+		this.changePredictionProvider = changePredictionProvider;
 	}
 
 }
