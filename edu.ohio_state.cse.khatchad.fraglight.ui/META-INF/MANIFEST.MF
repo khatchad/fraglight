@@ -8,13 +8,15 @@ Bundle-Vendor: Ohio State University
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.mylyn.context.core;bundle-version="[3.0.0,4.0.0)",
- edu.ohio_state.cse.khatchad.fraglight.core
+ edu.ohio_state.cse.khatchad.fraglight.core,
+ org.eclipse.jdt.ui
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Import-Package: edu.ohio_state.cse.khatchad.fraglight.core.analysis,
  edu.ohio_state.cse.khatchad.fraglight.core.util,
  org.eclipse.ajdt.core,
  org.eclipse.ajdt.core.javaelements,
+ org.eclipse.contribution.xref.internal.ui.utils,
  org.eclipse.core.resources,
  org.eclipse.jdt.core,
  org.eclipse.mylyn.internal.java.ui,

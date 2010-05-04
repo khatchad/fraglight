@@ -3,6 +3,8 @@ package edu.ohio_state.cse.khatchad.fraglight.ui;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import edu.ohio_state.cse.khatchad.fraglight.ui.views.PointcutChangePredictionView;
+
 /**
  * The activator class controls the plug-in life cycle
  */
@@ -18,6 +20,11 @@ public class FraglightUiPlugin extends AbstractUIPlugin {
 	 * A reference to the change prediction provider, initially null.
 	 */
 	private PointcutChangePredictionProvider changePredictionProvider;
+	
+	/**
+	 * A reference to the change prediction view, initially null.
+	 */
+	private PointcutChangePredictionView changePredictionView;
 	
 	/**
 	 * The constructor
@@ -65,6 +72,21 @@ public class FraglightUiPlugin extends AbstractUIPlugin {
 	public void setChangePredictionProvider(
 			PointcutChangePredictionProvider changePredictionProvider) {
 		this.changePredictionProvider = changePredictionProvider;
+	}
+
+	/**
+	 * @return the changePredictionView
+	 */
+	public PointcutChangePredictionView getChangePredictionView() {
+		return this.changePredictionView;
+	}
+
+	/**
+	 * @param changePredictionView the changePredictionView to set
+	 */
+	public void setChangePredictionView(
+			PointcutChangePredictionView changePredictionView) {
+		this.changePredictionView = changePredictionView;
 	}
 
 }

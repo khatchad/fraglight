@@ -30,6 +30,8 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaElementDelta;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.mylyn.context.core.ContextChangeEvent;
 import org.eclipse.mylyn.context.core.IInteractionElement;
 import org.eclipse.mylyn.internal.context.core.IActiveSearchOperation;
@@ -52,7 +54,7 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.preferences.PreferenceConstants;
  */
 @SuppressWarnings("restriction")
 public class PointcutChangePredictionProvider extends
-		AbstractJavaRelationProvider implements IElementChangedListener {
+		AbstractJavaRelationProvider implements IElementChangedListener, IStructuredContentProvider {
 
 	private static final String ID = ID_GENERIC + ".pointcutchangeprediction";
 
@@ -146,7 +148,10 @@ public class PointcutChangePredictionProvider extends
 		return ID;
 	}
 
+	private Set<Prediction> predictionSet = new LinkedHashSet<Prediction>();
+	
 	public void elementChanged(ElementChangedEvent event) {
+		this.predictionSet.clear();
 		IJavaElementDelta delta = event.getDelta();
 		try {
 			handleDelta(delta.getAffectedChildren());
@@ -226,15 +231,47 @@ public class PointcutChangePredictionProvider extends
 						double changeConfidence = calculateChangeConfidence(
 								captured, patternsToConsider);
 						
-						//TODO: Only output if the change confidence is above the threshold.
 						double thresholdValue = FraglightUiPlugin.getDefault().getPreferenceStore().getDouble(PreferenceConstants.P_THRESHOLD);
-
-						//TODO: Do something with the change confidence.
-						System.out.println("Change confidence for pointcut " + advElem + " is " + changeConfidence);
+						
+						//Only make a prediction if the change confidence is above or at the threshold.
+						if ( changeConfidence >= thresholdValue ) {
+							Prediction prediction = new Prediction(advElem, changeConfidence);
+							this.predictionSet.add(prediction);
+						}
 					}
 				}
 			}
 			handleDelta(child.getAffectedChildren());
+		}
+	}
+	
+	public class Prediction {
+		
+		private AdviceElement advice;
+		
+		private double changeConfidence;
+		
+		/**
+		 * @param advice
+		 * @param changeConfidence
+		 */
+		public Prediction(AdviceElement advice, double changeConfidence) {
+			this.advice = advice;
+			this.changeConfidence = changeConfidence;
+		}
+
+		/**
+		 * @return the advice
+		 */
+		public AdviceElement getAdvice() {
+			return this.advice;
+		}
+
+		/**
+		 * @return the changeConfidence
+		 */
+		public double getChangeConfidence() {
+			return this.changeConfidence;
 		}
 	}
 
@@ -281,5 +318,25 @@ public class PointcutChangePredictionProvider extends
 	 */
 	public double getChangeConfidenceThreshold() {
 		return changeConfidenceThreshold;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
+	 */
+	public Object[] getElements(Object inputElement) {
+		return this.predictionSet.toArray();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
+	 */
+	public void dispose() {
+	}
+	
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
+	 */
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 	}
 }
