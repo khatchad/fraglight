@@ -1,18 +1,27 @@
 package edu.ohio_state.cse.khatchad.fraglight.ui.views;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.part.*;
-import org.eclipse.jdt.ui.JavaElementLabelProvider;
-import org.eclipse.jface.viewers.*;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.jface.action.*;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.ui.*;
-import org.eclipse.swt.widgets.Menu;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.ViewPart;
 
 import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
-import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.Prediction;
+import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
 
 /**
  * This sample class demonstrates how to plug-in a new workbench view. The view
@@ -78,14 +87,28 @@ public class PointcutChangePredictionView extends ViewPart {
 	 * it.
 	 */
 	public void createPartControl(Composite parent) {
-		viewer = new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL
-				| SWT.V_SCROLL);
-		viewer.setContentProvider(FraglightUiPlugin.getDefault()
-				.getChangePredictionProvider());
+		Table table = getTable(parent);
+		
+		this.viewer = new TableViewer(table);
+		this.viewer.setUseHashlookup(true);
+		this.viewer.setColumnProperties(COLUMN_NAMES);
+		
+		IContentProvider contentProvider;
+		
+		FraglightUiPlugin fraglightUiPlugin = FraglightUiPlugin.getDefault();
+		if ( fraglightUiPlugin == null )
+			contentProvider = null;
+		else {
+			PointcutChangePredictionProvider changePredictionProvider = fraglightUiPlugin.getChangePredictionProvider();
+			contentProvider = changePredictionProvider;
+		}
+		
+		viewer.setContentProvider(contentProvider);
+		
+		
 		viewer.setLabelProvider(new PointcutChangePredictionViewLabelProvider());
 		viewer.setSorter(new PointcutChangePredictionViewNameSorter());
 		viewer.setInput(getViewSite());
-		this.viewer.setColumnProperties(COLUMN_NAMES);
 
 		// Create the help context id for the viewer's control
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(),
@@ -119,46 +142,14 @@ public class PointcutChangePredictionView extends ViewPart {
 	}
 
 	private void fillContextMenu(IMenuManager manager) {
-		// Other plug-ins can contribute there actions here
-//		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
 	}
 
 	private void fillLocalToolBar(IToolBarManager manager) {
-//		manager.add(action1);
-//		manager.add(action2);
 	}
 
 	private void makeActions() {
 		doubleClickAction = new DoubleClickAction(getViewSite().getShell(),
 				viewer);
-		
-//		action1 = new Action() {
-//			public void run() {
-//				showMessage("Action 1 executed");
-//			}
-//		};
-//		action1.setText("Action 1");
-//		action1.setToolTipText("Action 1 tooltip");
-//		action1.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-//				.getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
-//
-//		action2 = new Action() {
-//			public void run() {
-//				showMessage("Action 2 executed");
-//			}
-//		};
-//		action2.setText("Action 2");
-//		action2.setToolTipText("Action 2 tooltip");
-//		action2.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
-//				.getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
-//		doubleClickAction = new Action() {
-//			public void run() {
-//				ISelection selection = viewer.getSelection();
-//				Object obj = ((IStructuredSelection) selection)
-//						.getFirstElement();
-//				showMessage("Double-click detected on " + obj.toString());
-//			}
-//		};
 	}
 
 	private void hookDoubleClickAction() {
@@ -179,6 +170,41 @@ public class PointcutChangePredictionView extends ViewPart {
 	 */
 	public void setFocus() {
 		viewer.getControl().setFocus();
-		viewer.refresh();
+	}
+	
+	private Table getTable(Composite parent) {
+		int tableStyle = SWT.SINGLE | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL
+				| SWT.FULL_SELECTION | SWT.HIDE_SELECTION;
+
+		Table table = new Table(parent, tableStyle);
+
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.grabExcessVerticalSpace = true;
+		gridData.horizontalSpan = 2;
+		table.setLayoutData(gridData);
+
+		table.setLinesVisible(true);
+		table.setHeaderVisible(true);
+
+		TableColumn suggestionColumn = new TableColumn(table, SWT.LEFT, 0);
+		suggestionColumn.setText("Advice");
+		suggestionColumn.setWidth(200);
+
+		// Add listener to column so tasks are sorted by suggestion when clicked 
+//		suggestionColumn.addSelectionListener(new SelectionAdapter() {
+//			public void widgetSelected(SelectionEvent e) {
+//				viewer.setSorter(new SuggestionViewSorter(SortBy.SUGGESTIONS));
+//			}
+//		});
+
+		TableColumn confidenceColumn = new TableColumn(table, SWT.LEFT, 1);
+		confidenceColumn.setText("Confidence");
+		confidenceColumn.setWidth(300);
+//		suggestionColumn.addSelectionListener(new SelectionAdapter() {
+//			public void widgetSelected(SelectionEvent e) {
+//				viewer.setSorter(new SuggestionViewSorter(SortBy.CONFIDENCE));
+//			}
+//		});
+		return table;
 	}
 }
