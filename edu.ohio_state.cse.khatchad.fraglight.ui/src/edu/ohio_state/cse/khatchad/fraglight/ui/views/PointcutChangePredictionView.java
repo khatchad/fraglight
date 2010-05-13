@@ -63,6 +63,8 @@ public class PointcutChangePredictionView extends ViewPart {
 
 	private TableViewer viewer;
 	
+	private PointcutChangePredictionViewContentProvider contentProvider;
+	
 	private Action doubleClickAction;
 
 	/*
@@ -93,16 +95,7 @@ public class PointcutChangePredictionView extends ViewPart {
 		this.viewer.setUseHashlookup(true);
 		this.viewer.setColumnProperties(COLUMN_NAMES);
 		
-		IContentProvider contentProvider;
-		
-		FraglightUiPlugin fraglightUiPlugin = FraglightUiPlugin.getDefault();
-		if ( fraglightUiPlugin == null )
-			contentProvider = null;
-		else {
-			PointcutChangePredictionProvider changePredictionProvider = fraglightUiPlugin.getChangePredictionProvider();
-			contentProvider = changePredictionProvider;
-		}
-		
+		this.contentProvider = new PointcutChangePredictionViewContentProvider();
 		viewer.setContentProvider(contentProvider);
 		
 		
@@ -111,10 +104,10 @@ public class PointcutChangePredictionView extends ViewPart {
 		viewer.setInput(getViewSite());
 
 		// Create the help context id for the viewer's control
-		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(),
-				"edu.ohio_state.cse.khatchad.fraglight.ui.viewer");
+//		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(),
+//				"edu.ohio_state.cse.khatchad.fraglight.ui.viewer");
 		makeActions();
-		hookContextMenu();
+//		hookContextMenu();
 		hookDoubleClickAction();
 		contributeToActionBars();
 	}

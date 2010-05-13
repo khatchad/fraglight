@@ -54,19 +54,21 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.preferences.PreferenceConstants;
  */
 @SuppressWarnings("restriction")
 public class PointcutChangePredictionProvider extends
-		AbstractJavaRelationProvider implements IElementChangedListener, IStructuredContentProvider {
+		AbstractJavaRelationProvider implements IElementChangedListener {
 
 	private static final String ID = ID_GENERIC + ".pointcutchangeprediction";
 
 	public static final String NAME = "may break"; //$NON-NLS-1$
 
-	private static final double CHANGE_CONFIDENCE_DEFAULT_THRESHOLD = 0.50;
+	public static final double DEFAULT_CHANGE_CONFIDENCE_THRESHOLD = 0.50;
 
-	private PointcutAnalyzer analyzer = new PointcutAnalyzer();
-	
+	private PointcutAnalyzer analyzer = new PointcutAnalyzer(FraglightUiPlugin
+			.getDefault().getPreferenceStore().getInt(
+					PreferenceConstants.P_ANALYSIS_DEPTH));
+
 	IProgressMonitor monitor = new NullProgressMonitor();
-	
-	private double changeConfidenceThreshold = CHANGE_CONFIDENCE_DEFAULT_THRESHOLD;
+
+	private double changeConfidenceThreshold = DEFAULT_CHANGE_CONFIDENCE_THRESHOLD;
 
 	public PointcutChangePredictionProvider() {
 		super(JavaStructureBridge.CONTENT_TYPE, ID);
@@ -76,61 +78,64 @@ public class PointcutChangePredictionProvider extends
 	@Override
 	public void contextChanged(ContextChangeEvent event) {
 		switch (event.getEventKind()) {
-			case ACTIVATED: {
-				//register as a Java editor change listener.
-				JavaCore.addElementChangedListener(this);
+		case ACTIVATED: {
+			// register as a Java editor change listener.
+			JavaCore.addElementChangedListener(this);
 
-				//analyze pointcuts.
-				IWorkspace workspace = getWorkspace();
+			// analyze pointcuts.
+			IWorkspace workspace = getWorkspace();
+			try {
+				workspace.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
+			} catch (CoreException e) {
+				throw new RuntimeException(e);
+			}
+			Collection<? extends AdviceElement> toAnalyze = AJUtil
+					.extractValidAdviceElements(workspace);
+
+			if (!toAnalyze.isEmpty()) {
 				try {
-					workspace.build(IncrementalProjectBuilder.FULL_BUILD, monitor);
-				}
-				catch (CoreException e) {
+					this.analyzer.analyze(toAnalyze, this.monitor);
+				} catch (Exception e) {
+					e.printStackTrace();
 					throw new RuntimeException(e);
 				}
-				Collection<? extends AdviceElement> toAnalyze = AJUtil
-						.extractValidAdviceElements(workspace);
-
-				if (!toAnalyze.isEmpty()) {
-					try {
-						this.analyzer.analyze(toAnalyze,
-								this.monitor);
-					}
-					catch (Exception e) {
-						e.printStackTrace();
-						throw new RuntimeException(e);
-					}
-				}
-				break;
 			}
+			break;
+		}
 
-			case DEACTIVATED: {
-				//deregister as a Java editor change listener.
-				JavaCore.removeElementChangedListener(this);
-				
-				//TODO: Only write the XML file when an XML file already exists implies that the patterns have been rebuilt since last load.
-//				try {
-//					this.analyzer.writeXMLFile();
-//				}
-//				catch (IOException e) {
-//					throw new RuntimeException("Error writing XML file.", e);
-//				}
-//				catch (CoreException e) {
-//					throw new RuntimeException("Error writing XML file.", e);
-//				}
-			}
+		case DEACTIVATED: {
+			// deregister as a Java editor change listener.
+			JavaCore.removeElementChangedListener(this);
+
+			// TODO: Only write the XML file when an XML file already exists
+			// implies that the patterns have been rebuilt since last load.
+			// try {
+			// this.analyzer.writeXMLFile();
+			// }
+			// catch (IOException e) {
+			// throw new RuntimeException("Error writing XML file.", e);
+			// }
+			// catch (CoreException e) {
+			// throw new RuntimeException("Error writing XML file.", e);
+			// }
+		}
 		}
 	}
 
 	@Override
 	protected void findRelated(IInteractionElement node, int degreeOfSeparation) {
-		// TODO This method may very well be the one that eventually does the work.
-		//Given an interaction, will find pointcuts that may have broken.
+		// TODO This method may very well be the one that eventually does the
+		// work.
+		// Given an interaction, will find pointcuts that may have broken.
 		System.out.println("Find realtd was called.");
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.mylyn.internal.context.core.AbstractRelationProvider#getName()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.mylyn.internal.context.core.AbstractRelationProvider#getName
+	 * ()
 	 */
 	@Override
 	public String getName() {
@@ -149,14 +154,16 @@ public class PointcutChangePredictionProvider extends
 	}
 
 	private Set<Prediction> predictionSet = new LinkedHashSet<Prediction>();
-	
+
+	public Set<Prediction> getPredictionSet() {
+		return predictionSet;
+	}
+
 	public void elementChanged(ElementChangedEvent event) {
-		this.predictionSet.clear();
 		IJavaElementDelta delta = event.getDelta();
 		try {
 			handleDelta(delta.getAffectedChildren());
-		}
-		catch (JavaModelException e) {
+		} catch (JavaModelException e) {
 		}
 	}
 
@@ -168,24 +175,27 @@ public class PointcutChangePredictionProvider extends
 			throws JavaModelException {
 		for (IJavaElementDelta child : delta) {
 			if (child.getKind() == IJavaElementDelta.ADDED) {
+				this.predictionSet.clear();
 				final IJavaElement element = child.getElement();
-				//this represents the case where a new method execution join point is added.
+				// this represents the case where a new method execution join
+				// point is added.
 				if (element.getElementType() == IJavaElement.METHOD
 						&& element.isStructureKnown()) {
-				
-					//save the file.
+
+					// save the file.
 					ICompilationUnit icu = Util.getCompilationUnit(element);
 					icu.getBuffer().save(this.monitor, false);
-					
+
 					// Ensure that the building process is triggered.
 					try {
-						element.getJavaProject().getProject().build(IncrementalProjectBuilder.INCREMENTAL_BUILD, monitor);
-					}
-					catch (CoreException e) {
+						element.getJavaProject().getProject().build(
+								IncrementalProjectBuilder.INCREMENTAL_BUILD,
+								monitor);
+					} catch (CoreException e) {
 						throw new RuntimeException(e);
 					}
 
-					//calculate the change confidence for every PCE.
+					// calculate the change confidence for every PCE.
 					Collection<Set<Pattern<IntentionArc<IElement>>>> allPatternSets = this.analyzer
 							.getPointcutToPatternSetMap().values();
 					Set<Pattern<IntentionArc<IElement>>> allPatterns = new LinkedHashSet<Pattern<IntentionArc<IElement>>>();
@@ -193,21 +203,29 @@ public class PointcutChangePredictionProvider extends
 						allPatterns.addAll(patternSet);
 					}
 
-					//initialize the pattern matcher, seeding it with all patterns.
-					PatternMatcher matcher = new PatternMatcher(allPatterns);
-					
-					//let the matcher match patterns against code in the projects:
+					int analysisDepth = FraglightUiPlugin.getDefault()
+							.getPreferenceStore().getInt(
+									PreferenceConstants.P_ANALYSIS_DEPTH);
+
+					// initialize the pattern matcher, seeding it with all
+					// patterns.
+					PatternMatcher matcher = new PatternMatcher(allPatterns,
+							analysisDepth);
+
+					// let the matcher match patterns against code in the
+					// projects:
 					try {
-						matcher.analyze(this.analyzer.getPointcutToPatternSetMap().keySet(), this.monitor);
-					}
-					catch (Exception e) {
+						matcher.analyze(this.analyzer
+								.getPointcutToPatternSetMap().keySet(),
+								this.monitor);
+					} catch (Exception e) {
 						throw new RuntimeException(e);
 					}
-					
+
 					Set<Pattern<IntentionArc<IElement>>> patternsMatchingJoinPoint = new LinkedHashSet<Pattern<IntentionArc<IElement>>>();
 
 					for (Pattern<IntentionArc<IElement>> pattern : allPatterns) {
-						//get all java elements produced by the pattern.
+						// get all java elements produced by the pattern.
 						Set<IJavaElement> matchingJavaElementSet = matcher
 								.getMatchingJavaElements(pattern);
 						if (matchingJavaElementSet.contains(element))
@@ -223,19 +241,25 @@ public class PointcutChangePredictionProvider extends
 						Set<Pattern<IntentionArc<IElement>>> patternsToConsider = new LinkedHashSet<Pattern<IntentionArc<IElement>>>(
 								patternsDerivedFromPointcut);
 						patternsToConsider.retainAll(patternsMatchingJoinPoint);
-						
-						//decide if the new join point is captured by the pointcut.
-						boolean captured = AJUtil.isCapturedBy(element, advElem);
 
-						//calculate the change confidence.
+						// decide if the new join point is captured by the
+						// pointcut.
+						boolean captured = AJUtil
+								.isCapturedBy(element, advElem);
+
+						// calculate the change confidence.
 						double changeConfidence = calculateChangeConfidence(
 								captured, patternsToConsider);
-						
-						double thresholdValue = FraglightUiPlugin.getDefault().getPreferenceStore().getDouble(PreferenceConstants.P_THRESHOLD);
-						
-						//Only make a prediction if the change confidence is above or at the threshold.
-						if ( changeConfidence >= thresholdValue ) {
-							Prediction prediction = new Prediction(advElem, changeConfidence);
+
+						double thresholdValue = FraglightUiPlugin.getDefault()
+								.getPreferenceStore().getDouble(
+										PreferenceConstants.P_THRESHOLD);
+
+						// Only make a prediction if the change confidence is
+						// above or at the threshold.
+						if (changeConfidence >= thresholdValue) {
+							Prediction prediction = new Prediction(advElem,
+									changeConfidence);
 							this.predictionSet.add(prediction);
 						}
 					}
@@ -244,13 +268,13 @@ public class PointcutChangePredictionProvider extends
 			handleDelta(child.getAffectedChildren());
 		}
 	}
-	
+
 	public class Prediction {
-		
+
 		private AdviceElement advice;
-		
+
 		private double changeConfidence;
-		
+
 		/**
 		 * @param advice
 		 * @param changeConfidence
@@ -294,7 +318,7 @@ public class PointcutChangePredictionProvider extends
 		}
 
 		int denominator = patternSet.size();
-		//TODO: Guard against the denominator being zero here.
+		// TODO: Guard against the denominator being zero here.
 		double changeConfidence = ((double) numerator) / denominator;
 		return changeConfidence;
 	}
@@ -307,7 +331,8 @@ public class PointcutChangePredictionProvider extends
 	}
 
 	/**
-	 * @param changeConfidenceThreshold the changeConfidenceThreshold to set
+	 * @param changeConfidenceThreshold
+	 *            the changeConfidenceThreshold to set
 	 */
 	public void setChangeConfidenceThreshold(double changeConfidenceThreshold) {
 		this.changeConfidenceThreshold = changeConfidenceThreshold;
@@ -320,22 +345,20 @@ public class PointcutChangePredictionProvider extends
 		return changeConfidenceThreshold;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
-	 */
-	public Object[] getElements(Object inputElement) {
-		return this.predictionSet.toArray();
-	}
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.jface.viewers.IContentProvider#dispose()
 	 */
 	public void dispose() {
 	}
-	
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface
+	 * .viewers.Viewer, java.lang.Object, java.lang.Object)
 	 */
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 	}
