@@ -1,5 +1,7 @@
 package edu.ohio_state.cse.khatchad.fraglight.ui.views;
 
+import static edu.ohio_state.cse.khatchad.fraglight.ui.views.PointcutChangePredictionViewComparator.SortBy.CHANGE_CONFIDENCE;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -11,6 +13,8 @@ import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
@@ -22,6 +26,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
+import edu.ohio_state.cse.khatchad.fraglight.ui.views.PointcutChangePredictionViewComparator.SortBy;
 
 /**
  * This sample class demonstrates how to plug-in a new workbench view. The view
@@ -100,7 +105,7 @@ public class PointcutChangePredictionView extends ViewPart {
 		
 		
 		viewer.setLabelProvider(new PointcutChangePredictionViewLabelProvider());
-		viewer.setSorter(new PointcutChangePredictionViewNameSorter());
+		viewer.setComparator(new PointcutChangePredictionViewComparator(CHANGE_CONFIDENCE));
 		viewer.setInput(getViewSite());
 
 		// Create the help context id for the viewer's control
@@ -181,23 +186,21 @@ public class PointcutChangePredictionView extends ViewPart {
 
 		TableColumn suggestionColumn = new TableColumn(table, SWT.LEFT, 0);
 		suggestionColumn.setText("Advice");
-		suggestionColumn.setWidth(200);
+		suggestionColumn.setResizable(true);
+		suggestionColumn.setToolTipText("Advice whose pointcut is recommended to change.");
+		suggestionColumn.setWidth(400);
 
-		// Add listener to column so tasks are sorted by suggestion when clicked 
-//		suggestionColumn.addSelectionListener(new SelectionAdapter() {
-//			public void widgetSelected(SelectionEvent e) {
-//				viewer.setSorter(new SuggestionViewSorter(SortBy.SUGGESTIONS));
-//			}
-//		});
-
-		TableColumn confidenceColumn = new TableColumn(table, SWT.LEFT, 1);
+		TableColumn confidenceColumn = new TableColumn(table, SWT.RIGHT, 1);
 		confidenceColumn.setText("Confidence");
-		confidenceColumn.setWidth(300);
-//		suggestionColumn.addSelectionListener(new SelectionAdapter() {
-//			public void widgetSelected(SelectionEvent e) {
-//				viewer.setSorter(new SuggestionViewSorter(SortBy.CONFIDENCE));
-//			}
-//		});
+		confidenceColumn.setResizable(true);
+		confidenceColumn.setToolTipText("The confidence in this pointcut changing.");
+		confidenceColumn.setWidth(100);
+		
+		confidenceColumn.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				viewer.setComparator(new PointcutChangePredictionViewComparator(SortBy.CHANGE_CONFIDENCE));
+			}
+		});
 		return table;
 	}
 }
