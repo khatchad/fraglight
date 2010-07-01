@@ -190,7 +190,7 @@ public class PointcutChangePredictionView extends ViewPart {
 		suggestionColumn.setToolTipText("Advice whose pointcut is recommended to change.");
 		suggestionColumn.setWidth(400);
 
-		TableColumn confidenceColumn = new TableColumn(table, SWT.RIGHT, 1);
+		TableColumn confidenceColumn = new TableColumn(table, SWT.LEFT, 1);
 		confidenceColumn.setText("Confidence");
 		confidenceColumn.setResizable(true);
 		confidenceColumn.setToolTipText("The confidence in this pointcut changing.");
