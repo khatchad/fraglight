@@ -8,10 +8,13 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -20,6 +23,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
@@ -66,11 +71,21 @@ public class PointcutChangePredictionView extends ViewPart {
 	private final String[] COLUMN_NAMES = new String[] { ADVICE_COLUMN,
 			CONFIDENCE_COLUMN };
 
-	private TableViewer viewer;
+//	private TableViewer viewer;
+	private TreeViewer viewer;
 	
-	private PointcutChangePredictionViewContentProvider contentProvider;
+	public TreeViewer getViewer() {
+		return viewer;
+	}
+
+	private PointcutChangePredictionViewTreeContentProvider contentProvider;
 	
 	private Action doubleClickAction;
+	
+	private void makeActions() {
+		doubleClickAction = new DoubleClickAction(getViewSite().getShell(),
+				viewer);
+	}
 
 	/*
 	 * The content provider class is responsible for
@@ -93,6 +108,7 @@ public class PointcutChangePredictionView extends ViewPart {
 	 * This is a callback that will allow us to create the viewer and initialize
 	 * it.
 	 */
+	/*
 	public void createPartControl(Composite parent) {
 		Table table = getTable(parent);
 		
@@ -103,16 +119,56 @@ public class PointcutChangePredictionView extends ViewPart {
 		this.contentProvider = new PointcutChangePredictionViewContentProvider();
 		viewer.setContentProvider(contentProvider);
 		
-		
-		viewer.setLabelProvider(new PointcutChangePredictionViewLabelProvider());
+		viewer.setLabelProvider(new PointcutChangePredictionViewTableLabelProvider());
 		viewer.setComparator(new PointcutChangePredictionViewComparator(CHANGE_CONFIDENCE));
 		viewer.setInput(getViewSite());
 
 		// Create the help context id for the viewer's control
 //		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(),
 //				"edu.ohio_state.cse.khatchad.fraglight.ui.viewer");
-		makeActions();
+//		makeActions();
 //		hookContextMenu();
+		hookDoubleClickAction();
+		contributeToActionBars();
+	}
+	*/
+	
+	public void createPartControl(Composite parent) {
+		this.viewer = new TreeViewer(parent);
+		Tree tree = this.viewer.getTree();
+		final GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		this.viewer.getControl().setLayoutData(gridData);
+		this.viewer.setUseHashlookup(true);
+		
+		tree.setHeaderVisible(true);
+		tree.setLinesVisible(true);
+		
+		TreeColumn treeColumn = new TreeColumn(tree, SWT.LEFT);
+		treeColumn.setText("Advice");
+		treeColumn.setToolTipText("Advice whose pointcut is recommended to change.");
+		
+		treeColumn = new TreeColumn(tree, SWT.LEFT);
+		treeColumn.setText("Confidence");
+		treeColumn.setToolTipText("The confidence in this pointcut changing.");
+		treeColumn.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				viewer.setComparator(new PointcutChangePredictionViewComparator(SortBy.CHANGE_CONFIDENCE));
+			}
+		});
+
+		TableLayout layout = new TableLayout();
+		layout.addColumnData(new ColumnWeightData(80)); 
+		layout.addColumnData(new ColumnWeightData(20)); 
+		
+		tree.setLayout(layout);
+		
+		this.contentProvider = new PointcutChangePredictionViewTreeContentProvider();
+		viewer.setContentProvider(contentProvider);
+		
+		viewer.setLabelProvider(new PointcutChangePredictionViewTableLabelProvider());
+		viewer.setComparator(new PointcutChangePredictionViewComparator(CHANGE_CONFIDENCE));
+		viewer.setInput(getViewSite());
+		makeActions();
 		hookDoubleClickAction();
 		contributeToActionBars();
 	}
@@ -145,10 +201,10 @@ public class PointcutChangePredictionView extends ViewPart {
 	private void fillLocalToolBar(IToolBarManager manager) {
 	}
 
-	private void makeActions() {
-		doubleClickAction = new DoubleClickAction(getViewSite().getShell(),
-				viewer);
-	}
+//	private void makeActions() {
+//		doubleClickAction = new DoubleClickAction(getViewSite().getShell(),
+//				viewer);
+//	}
 
 	private void hookDoubleClickAction() {
 		viewer.addDoubleClickListener(new IDoubleClickListener() {

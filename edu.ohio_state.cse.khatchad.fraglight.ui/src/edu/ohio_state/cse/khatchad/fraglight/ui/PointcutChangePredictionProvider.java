@@ -3,6 +3,7 @@
  */
 package edu.ohio_state.cse.khatchad.fraglight.ui;
 
+import static java.lang.Math.abs;
 import static org.eclipse.core.resources.ResourcesPlugin.getWorkspace;
 
 import java.io.IOException;
@@ -259,12 +260,13 @@ public class PointcutChangePredictionProvider extends
 						// above or at the threshold.
 						if (changeConfidence >= thresholdValue) {
 							Prediction prediction = new Prediction(advElem,
-									changeConfidence);
+									changeConfidence, patternsToConsider);
 							this.predictionSet.add(prediction);
 						}
 					}
 				}
 			}
+			FraglightUiPlugin.getDefault().getChangePredictionView().getViewer().refresh();
 			handleDelta(child.getAffectedChildren());
 		}
 	}
@@ -274,14 +276,18 @@ public class PointcutChangePredictionProvider extends
 		private AdviceElement advice;
 
 		private double changeConfidence;
+		
+		private Set<Pattern<IntentionArc<IElement>>> contributingPatterns;
+		
 
 		/**
 		 * @param advice
 		 * @param changeConfidence
 		 */
-		public Prediction(AdviceElement advice, double changeConfidence) {
+		public Prediction(AdviceElement advice, double changeConfidence, Set<Pattern<IntentionArc<IElement>>> contributingPatterns) {
 			this.advice = advice;
 			this.changeConfidence = changeConfidence;
+			this.contributingPatterns = contributingPatterns;
 		}
 
 		/**
@@ -296,6 +302,10 @@ public class PointcutChangePredictionProvider extends
 		 */
 		public double getChangeConfidence() {
 			return this.changeConfidence;
+		}
+		
+		public Set<Pattern<IntentionArc<IElement>>> getContributingPatterns() {
+			return contributingPatterns;
 		}
 	}
 
@@ -313,7 +323,7 @@ public class PointcutChangePredictionProvider extends
 		for (Pattern<IntentionArc<IElement>> pattern : patternSet) {
 			double quantityToFindTheAbsoluteValueOf = (captured ? 1 : 0)
 					- pattern.getSimularity();
-			double absoluteValue = Math.abs(quantityToFindTheAbsoluteValueOf);
+			double absoluteValue = abs(quantityToFindTheAbsoluteValueOf);
 			numerator += absoluteValue;
 		}
 

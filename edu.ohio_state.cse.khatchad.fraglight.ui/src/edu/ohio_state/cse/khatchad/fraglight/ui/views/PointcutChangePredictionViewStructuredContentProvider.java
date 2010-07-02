@@ -6,7 +6,7 @@ import org.eclipse.jface.viewers.Viewer;
 import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
 
-public class PointcutChangePredictionViewContentProvider implements IStructuredContentProvider{
+public class PointcutChangePredictionViewStructuredContentProvider implements IStructuredContentProvider{
 
 	public Object[] getElements(Object inputElement) {
 		FraglightUiPlugin plugin = FraglightUiPlugin.getDefault();

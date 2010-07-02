@@ -20,14 +20,18 @@ import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.PlatformUI;
 
+import ca.mcgill.cs.swevo.jayfx.model.IElement;
+
+import edu.ohio_state.cse.khatchad.fraglight.core.graph.IntentionArc;
+import edu.ohio_state.cse.khatchad.fraglight.core.graph.Pattern;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.Prediction;
 
-class PointcutChangePredictionViewLabelProvider extends LabelProvider implements
+class PointcutChangePredictionViewTableLabelProvider extends LabelProvider implements
 		ITableLabelProvider {
 
 	private ILabelProvider labelProvider;
 
-	public PointcutChangePredictionViewLabelProvider() {
+	public PointcutChangePredictionViewTableLabelProvider() {
 		ILabelDecorator labelDecorator = PlatformUI.getWorkbench()
 				.getDecoratorManager().getLabelDecorator();
 		JavaElementLabelProvider javaElementLabelProvider = new JavaElementLabelProvider();
@@ -82,7 +86,22 @@ class PointcutChangePredictionViewLabelProvider extends LabelProvider implements
 				throw new IllegalArgumentException("Invalid column number: "
 						+ index);
 			}
-		} else
+		} 
+		
+		else if (obj instanceof Pattern<?>) {
+			@SuppressWarnings("unchecked")
+			Pattern<IntentionArc<IElement>> pattern = (Pattern<IntentionArc<IElement>>)obj;
+			switch (index) {
+			case 0:
+				return this.getText(pattern);	
+			case 1:
+				return this.getText(pattern.getSimularity());
+			default:
+				throw new IllegalArgumentException("Invalid column number: "
+						+ index);
+			}
+		}
+		else
 			return "";
 	}
 
@@ -93,6 +112,7 @@ class PointcutChangePredictionViewLabelProvider extends LabelProvider implements
 			IJavaElement jElem = (IJavaElement) element;
 			AJProjectModelFacade model = AJProjectModelFactory.getInstance().getModelForJavaElement(jElem);
 			String linkName = model.getJavaElementLinkName(jElem);
+			@SuppressWarnings("restriction")
 			AJNode associate = new AJNode(jElem, model
 					.getJavaElementLinkName(jElem));
 			ret = this.labelProvider.getText(associate);
