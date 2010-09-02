@@ -10,10 +10,14 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.views.PointcutChangePredictionVi
  */
 public class FraglightUiPlugin extends AbstractUIPlugin {
 
-	// The plug-in ID
+	/**
+	 * The plug-in ID.
+	 */
 	public static final String PLUGIN_ID = "edu.ohio_state.cse.khatchad.fraglight.ui";
 
-	// The shared instance
+	/**
+	 * The shared instance.
+	 */
 	private static FraglightUiPlugin plugin;
 	
 	/**

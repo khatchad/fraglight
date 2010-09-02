@@ -24,3 +24,4 @@ Import-Package: edu.ohio_state.cse.khatchad.fraglight.core.analysis,
  org.eclipse.jdt.core,
  org.eclipse.mylyn.internal.java.ui,
  org.eclipse.mylyn.internal.java.ui.search
+Bundle-ClassPath: .

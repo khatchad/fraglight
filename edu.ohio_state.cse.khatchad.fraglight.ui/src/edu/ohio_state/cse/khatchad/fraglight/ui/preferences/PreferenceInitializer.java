@@ -7,6 +7,7 @@ import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PointcutAnalyzer;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PointcutProcessor;
 import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
+import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.PointcutAnalysisScope;
 import edu.ohio_state.cse.khatchad.fraglight.ui.views.PointcutChangePredictionView;
 
 /**
@@ -26,17 +27,22 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 				.getDefault().getChangePredictionProvider();
 		
 		int maximumAnalysisDepth;
-		double changeConfidenceThreshold;
+		double highChangeConfidenceThreshold;
+		double lowChangeConfidenceThreshold;
+		PointcutAnalysisScope scope;
 		
 		if ( changePredictionProvider == null ) {
 			maximumAnalysisDepth = PointcutProcessor.DEFAULT_MAXIMUM_ANALYSIS_DEPTH;
-			changeConfidenceThreshold = PointcutChangePredictionProvider.DEFAULT_CHANGE_CONFIDENCE_THRESHOLD;
+			highChangeConfidenceThreshold = PointcutChangePredictionProvider.DEFAULT_HIGH_CHANGE_CONFIDENCE_THRESHOLD;
+			lowChangeConfidenceThreshold = PointcutChangePredictionProvider.DEFAULT_LOW_CHANGE_CONFIDENCE_THRESHOLD;
+			scope = PointcutChangePredictionProvider.DEFAULT_POINTCUT_ANALYSIS_SCOPE;
 		}
 		
 		else {
-			changeConfidenceThreshold = changePredictionProvider.getChangeConfidenceThreshold();
+			highChangeConfidenceThreshold = changePredictionProvider.getHighChangeConfidenceThreshold();
+			lowChangeConfidenceThreshold = changePredictionProvider.getLowChangeConfidenceThreshold();
 			
-			PointcutAnalyzer analyzer = changePredictionProvider.getAnalyzer();
+			PointcutAnalyzer analyzer = changePredictionProvider.getPointcutAnalyzer();
 			
 			if ( analyzer == null ) {
 				maximumAnalysisDepth = PointcutProcessor.DEFAULT_MAXIMUM_ANALYSIS_DEPTH;
@@ -46,12 +52,16 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 				maximumAnalysisDepth = analyzer.getMaximumAnalysisDepth();	
 			}
 			
+			scope = changePredictionProvider.getPointcutAnalysisScope();
+			
 		}	
 		
 		store.setDefault(PreferenceConstants.P_ANALYSIS_DEPTH,
 				maximumAnalysisDepth);
-		store.setDefault(PreferenceConstants.P_THRESHOLD,
-				changeConfidenceThreshold);
+		store.setDefault(PreferenceConstants.P_HIGH_THRESHOLD,
+				highChangeConfidenceThreshold);
+		store.setDefault(PreferenceConstants.P_LOW_THRESHOLD,
+				lowChangeConfidenceThreshold);
+		store.setDefault(PreferenceConstants.P_POINTCUT_SCOPE, scope.toString());
 	}
-
 }

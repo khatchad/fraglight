@@ -15,12 +15,9 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider
 @SuppressWarnings("restriction")
 public class DoubleClickAction extends Action {
 	
-	private Shell shell;
-	
 	private ISelectionProvider selectionProvider;
 
-	public DoubleClickAction(Shell shell, ISelectionProvider selectionProvider) {
-		this.shell = shell;
+	public DoubleClickAction(ISelectionProvider selectionProvider) {
 		this.selectionProvider = selectionProvider;
 	}
 

@@ -1,9 +1,16 @@
 package edu.ohio_state.cse.khatchad.fraglight.ui.preferences;
 
+import java.util.logging.Logger;
+
 import org.eclipse.jface.preference.*;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
+
 import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
+import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
+import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.PointcutAnalysisScope;
 
 /**
  * This class represents a preference page that is contributed to the
@@ -19,6 +26,9 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
 public class PreferencePage extends FieldEditorPreferencePage implements
 		IWorkbenchPreferencePage {
 
+	private static Logger logger = Logger.getLogger(PreferencePage.class
+			.getName());
+
 	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(FraglightUiPlugin.getDefault().getPreferenceStore());
@@ -31,30 +41,34 @@ public class PreferencePage extends FieldEditorPreferencePage implements
 	 * editor knows how to save and restore itself.
 	 */
 	public void createFieldEditors() {
-		//		addField(new DirectoryFieldEditor(PreferenceConstants.P_PATH, 
-		//				"&Directory preference:", getFieldEditorParent()));
-		//		addField(
-		//			new BooleanFieldEditor(
-		//				PreferenceConstants.P_BOOLEAN,
-		//				"&An example of a boolean preference",
-		//				getFieldEditorParent()));
-		//
-		//		addField(new RadioGroupFieldEditor(
-		//				PreferenceConstants.P_CHOICE,
-		//			"An example of a multiple-choice preference",
-		//			1,
-		//			new String[][] { { "&Choice 1", "choice1" }, {
-		//				"C&hoice 2", "choice2" }
-		//		}, getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_ANALYSIS_DEPTH,
-				"&Maximum analysis depth:", getFieldEditorParent()));
 
-		addField(new StringFieldEditor(PreferenceConstants.P_THRESHOLD,
-				"&Change confidence threshold:", getFieldEditorParent()));
+		IntegerFieldEditor maximumAnalysisDepthEditor = new IntegerFieldEditor(
+				PreferenceConstants.P_ANALYSIS_DEPTH,
+				"&Maximum analysis depth:", getFieldEditorParent());
+
+		addField(maximumAnalysisDepthEditor);
+
+		addField(new StringFieldEditor(PreferenceConstants.P_HIGH_THRESHOLD,
+				"&High change confidence threshold:", getFieldEditorParent()));
+
+		addField(new StringFieldEditor(PreferenceConstants.P_LOW_THRESHOLD,
+				"&Low change confidence threshold:", getFieldEditorParent()));
+		
+		addField(new RadioGroupFieldEditor(
+				PreferenceConstants.P_POINTCUT_SCOPE,
+			"Pointcut analysis scope:",
+			1,
+			new String[][] { { "&Project", PointcutAnalysisScope.PROJECT.toString()}, {
+				"&Workspace", PointcutAnalysisScope.WORKSPACE.toString()}
+		}, getFieldEditorParent()));
+		
 	}
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
 	public void init(IWorkbench workbench) {
 	}
