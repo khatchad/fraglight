@@ -53,15 +53,17 @@ public class PreferencePage extends FieldEditorPreferencePage implements
 
 		addField(new StringFieldEditor(PreferenceConstants.P_LOW_THRESHOLD,
 				"&Low change confidence threshold:", getFieldEditorParent()));
-		
+
 		addField(new RadioGroupFieldEditor(
 				PreferenceConstants.P_POINTCUT_SCOPE,
-			"Pointcut analysis scope:",
-			1,
-			new String[][] { { "&Project", PointcutAnalysisScope.PROJECT.toString()}, {
-				"&Workspace", PointcutAnalysisScope.WORKSPACE.toString()}
-		}, getFieldEditorParent()));
-		
+				"Pointcut analysis scope:",
+				1,
+				new String[][] {
+						{ "&Workspace",
+								PointcutAnalysisScope.WORKSPACE.toString() },
+						{ "&Project", PointcutAnalysisScope.PROJECT.toString() } },
+				getFieldEditorParent()));
+
 	}
 
 	/*

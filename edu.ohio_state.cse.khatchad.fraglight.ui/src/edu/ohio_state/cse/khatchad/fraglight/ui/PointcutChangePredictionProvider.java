@@ -314,7 +314,6 @@ public class PointcutChangePredictionProvider extends
 					IJavaElement javaElement = JavaCore
 							.create(interactionElement.getHandleIdentifier());
 					System.out.println(javaElement);
-
 				}
 			}
 
@@ -370,6 +369,7 @@ public class PointcutChangePredictionProvider extends
 	}
 
 	public void elementChanged(ElementChangedEvent event) {
+		
 		IJavaElementDelta delta = event.getDelta();
 		try {
 			handleDelta(delta.getAffectedChildren());
@@ -410,7 +410,7 @@ public class PointcutChangePredictionProvider extends
 		// TODO This method may very well be the one that eventually does the
 		// work.
 		// Given an interaction, will find pointcuts that may have broken.
-		System.out.println("Find realtd was called.");
+		System.out.println("Find related was called.");
 	}
 
 	private Set<Pattern<IntentionArc<IElement>>> getAllPatterns() {
@@ -482,14 +482,11 @@ public class PointcutChangePredictionProvider extends
 	 */
 	private void handleDelta(IJavaElementDelta[] delta)
 			throws JavaModelException {
-		for (IJavaElementDelta child : delta) {
+		for (IJavaElementDelta child : delta) {			
 			if (child.getKind() == IJavaElementDelta.ADDED) {
 
 				logger.log(Level.INFO, "Found new element added to editor.",
 						child);
-
-				logger.info("Clearing previous prediction set.");
-				this.predictionSet.clear();
 
 				final IJavaElement newJoinPointShadow = child.getElement();
 				logger.log(Level.INFO,
@@ -500,8 +497,11 @@ public class PointcutChangePredictionProvider extends
 				// point is added.
 				if (newJoinPointShadow.getElementType() == IJavaElement.METHOD
 						&& newJoinPointShadow.isStructureKnown()) {
-
+					
 					logger.info("Found new method execution join point shadow.");
+					
+					logger.info("Clearing previous prediction set.");
+					this.predictionSet.clear();
 
 					// save the file.
 					logger.info("Saving the file.");
@@ -530,6 +530,10 @@ public class PointcutChangePredictionProvider extends
 					FraglightUiPlugin.getDefault().getChangePredictionView()
 							.getViewer().refresh();
 				}
+			}
+			
+			else {
+				System.out.println("Not added.");
 			}
 
 			handleDelta(child.getAffectedChildren());
