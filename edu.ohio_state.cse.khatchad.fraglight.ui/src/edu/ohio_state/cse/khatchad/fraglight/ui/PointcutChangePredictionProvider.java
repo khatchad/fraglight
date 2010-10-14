@@ -5,14 +5,18 @@ package edu.ohio_state.cse.khatchad.fraglight.ui;
 
 import static java.lang.Math.abs;
 import static org.eclipse.core.resources.ResourcesPlugin.getWorkspace;
+import org.eclipse.mylyn.monitor.core.InteractionEvent.Kind;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
+import org.eclipse.ajdt.mylyn.ui.AspectJStructureBridge;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
@@ -25,12 +29,18 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaElementDelta;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.mylyn.context.core.AbstractContextStructureBridge;
 import org.eclipse.mylyn.context.core.ContextChangeEvent;
+import org.eclipse.mylyn.context.core.ContextCore;
+import org.eclipse.mylyn.context.core.IInteractionContext;
 import org.eclipse.mylyn.context.core.IInteractionElement;
+import org.eclipse.mylyn.internal.context.core.ContextCorePlugin;
 import org.eclipse.mylyn.internal.context.core.IActiveSearchOperation;
 import org.eclipse.mylyn.internal.java.ui.JavaStructureBridge;
 import org.eclipse.mylyn.internal.java.ui.search.AbstractJavaRelationProvider;
+import org.eclipse.mylyn.monitor.core.InteractionEvent;
 
 import ca.mcgill.cs.swevo.jayfx.model.IElement;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PatternMatcher;
@@ -48,16 +58,30 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.preferences.PreferenceConstants;
 @SuppressWarnings("restriction")
 public class PointcutChangePredictionProvider extends
 		AbstractJavaRelationProvider implements IElementChangedListener {
-	
+
 	public enum PointcutAnalysisScope {
 		PROJECT, WORKSPACE
 	}
 
+	/**
+	 * A prediction consists of the advice predicted to change, the degree of
+	 * confidence that we have in that advice changing, and join point addition
+	 * that invoked the prediction, and the set of patterns that contributed to
+	 * the prediction.
+	 * 
+	 * @author <a href="mailto:khatchad@cse.ohio-state.edu>Raffi
+	 *         Khatchadourian</a>
+	 * 
+	 */
 	public class Prediction {
 
 		private AdviceElement advice;
 
 		private IJavaElement affectingJoinPoint;
+
+		public IJavaElement getAffectingJoinPoint() {
+			return affectingJoinPoint;
+		}
 
 		private double changeConfidence;
 
@@ -139,7 +163,7 @@ public class PointcutChangePredictionProvider extends
 	}
 
 	public PointcutChangePredictionProvider() {
-		super(JavaStructureBridge.CONTENT_TYPE, ID);
+		super(AspectJStructureBridge.CONTENT_TYPE, ID);
 		FraglightUiPlugin.getDefault().setChangePredictionProvider(this);
 	}
 
@@ -217,13 +241,74 @@ public class PointcutChangePredictionProvider extends
 		// within the threshold interval.
 		if (changeConfidence >= this.highChangeConfidenceThreshold
 				|| changeConfidence <= this.lowChangeConfidenceThreshold) {
-			logger.info("The change confidence for this pointcut is equal to or greater than the threshold.");
+			logger.info("The change confidence for this pointcut is in the threshold interval.");
 			Prediction prediction = new Prediction(advElem, changeConfidence,
 					affectingJoinPoint, patternsToConsider);
 			logger.log(Level.INFO, "Adding prediction to prediction set.",
 					prediction);
 			this.predictionSet.add(prediction);
+
+			// TODO: Here is where the API manipulation should happen.
+			this.updateDOI(prediction);
 		}
+	}
+
+	protected IInteractionElement convertSelectionToInteractionElement(
+			Object object) {
+		IInteractionElement node = null;
+		if (object instanceof IInteractionElement) {
+			node = (IInteractionElement) object;
+		} else {
+			AbstractContextStructureBridge bridge = ContextCore
+					.getStructureBridge(object);
+			String handle = bridge.getHandleIdentifier(object);
+			node = ContextCore.getContextManager().getElement(handle);
+		}
+		return node;
+	}
+
+	protected IInteractionContext getContext() {
+		return ContextCore.getContextManager().getActiveContext();
+	}
+
+	private void updateDOI(Prediction prediction) {
+
+		if (!ContextCore.getContextManager().isContextActive()) {
+			return;
+		}
+
+		AdviceElement advice = prediction.getAdvice();
+
+		IInteractionContext activeContext = ContextCore.getContextManager()
+				.getActiveContext();
+
+		IInteractionElement interactionElement = ContextCorePlugin.getContextManager().processInteractionEvent(advice,
+				Kind.PREDICTION, ID, activeContext);
+		
+		System.out.println(interactionElement);
+		
+		//TODO: Now need to do something with the interestingness level of this element.
+		
+
+		/*
+		 * IInteractionElement node =
+		 * convertSelectionToInteractionElement(advice);
+		 * List<IInteractionElement> nodes = new
+		 * ArrayList<IInteractionElement>(); nodes.add(node);
+		 * 
+		 * boolean increment = true; logger.log(Level.INFO, (increment ?
+		 * "Incrementing" : "Decrementing") + " the interest level for advice.",
+		 * advice); logger.info("Originally, the interest level was " +
+		 * node.getInterest().getValue());
+		 * 
+		 * boolean manipulated = ContextCorePlugin.getContextManager()
+		 * .manipulateInterestForElements(nodes, increment, false, false, ID,
+		 * getContext(), true);
+		 * 
+		 * logger.info("Now, the interest level is " +
+		 * node.getInterest().getValue()); logger.info((manipulated ?
+		 * "Manipulated" : "Did not manipulate") + " interest.");
+		 */
 	}
 
 	private void calculateChangeConfidenceForPointcuts(
@@ -237,8 +322,8 @@ public class PointcutChangePredictionProvider extends
 				.getInt(PreferenceConstants.P_ANALYSIS_DEPTH);
 
 		/*
-		 * Instead of seeding with the old patterns, maybe I can use the old
-		 * graph and build it incrementally.
+		 * TODO: Instead of seeding with the old patterns, maybe I can use the
+		 * old graph and build it incrementally.
 		 */
 		PatternMatcher matcher = new PatternMatcher(allPatterns,
 				maximumAnalysisDepth);
@@ -308,7 +393,7 @@ public class PointcutChangePredictionProvider extends
 			}
 
 			else if (this.pointcutAnalysisScope == PointcutAnalysisScope.PROJECT) {
-				//TODO: Fix this.
+				// TODO: Fix this.
 				for (IInteractionElement interactionElement : event
 						.getContext().getAllElements()) {
 					IJavaElement javaElement = JavaCore
@@ -345,6 +430,15 @@ public class PointcutChangePredictionProvider extends
 			logger.info("Deregistering as a java editor change listener.");
 			JavaCore.removeElementChangedListener(this);
 
+			logger.info("Clearing previous prediction set.");
+			this.predictionSet.clear();
+			
+			// TODO: This is not correct.
+			logger.info("Refreshing the change prediction view.");
+			FraglightUiPlugin.getDefault().getChangePredictionView()
+					.getViewer().refresh();
+			
+			
 			// TODO: Only write the XML file when an XML file already exists
 			// implies that the patterns have been rebuilt since last load.
 			// try {
@@ -369,7 +463,7 @@ public class PointcutChangePredictionProvider extends
 	}
 
 	public void elementChanged(ElementChangedEvent event) {
-		
+
 		IJavaElementDelta delta = event.getDelta();
 		try {
 			handleDelta(delta.getAffectedChildren());
@@ -482,7 +576,7 @@ public class PointcutChangePredictionProvider extends
 	 */
 	private void handleDelta(IJavaElementDelta[] delta)
 			throws JavaModelException {
-		for (IJavaElementDelta child : delta) {			
+		for (IJavaElementDelta child : delta) {
 			if (child.getKind() == IJavaElementDelta.ADDED) {
 
 				logger.log(Level.INFO, "Found new element added to editor.",
@@ -497,11 +591,16 @@ public class PointcutChangePredictionProvider extends
 				// point is added.
 				if (newJoinPointShadow.getElementType() == IJavaElement.METHOD
 						&& newJoinPointShadow.isStructureKnown()) {
-					
+
 					logger.info("Found new method execution join point shadow.");
-					
+
 					logger.info("Clearing previous prediction set.");
 					this.predictionSet.clear();
+					
+					// TODO: This is not correct.
+					logger.info("Refreshing the change prediction view.");
+					FraglightUiPlugin.getDefault().getChangePredictionView()
+							.getViewer().refresh();
 
 					// save the file.
 					logger.info("Saving the file.");
@@ -531,8 +630,9 @@ public class PointcutChangePredictionProvider extends
 							.getViewer().refresh();
 				}
 			}
-			
+
 			else {
+				// TODO: Remove this.
 				System.out.println("Not added.");
 			}
 
