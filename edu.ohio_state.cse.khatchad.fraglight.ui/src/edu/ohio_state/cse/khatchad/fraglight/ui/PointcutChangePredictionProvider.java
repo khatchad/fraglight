@@ -225,17 +225,7 @@ public class PointcutChangePredictionProvider extends
 				patternsToConsider);
 		logger.log(Level.INFO, "Found the change confidence.", changeConfidence);
 
-		this.highChangeConfidenceThreshold = FraglightUiPlugin.getDefault()
-				.getPreferenceStore()
-				.getDouble(PreferenceConstants.P_HIGH_THRESHOLD);
-		logger.log(Level.INFO, "Using the high prediction threshold value.",
-				this.highChangeConfidenceThreshold);
-
-		this.lowChangeConfidenceThreshold = FraglightUiPlugin.getDefault()
-				.getPreferenceStore()
-				.getDouble(PreferenceConstants.P_LOW_THRESHOLD);
-		logger.log(Level.INFO, "Using the low prediction threshold value.",
-				this.lowChangeConfidenceThreshold);
+		refreshThresholds();
 
 		// Only make a prediction if the change confidence is
 		// within the threshold interval.
@@ -248,9 +238,22 @@ public class PointcutChangePredictionProvider extends
 					prediction);
 			this.predictionSet.add(prediction);
 
-			// TODO: Here is where the API manipulation should happen.
 			this.updateDOI(prediction);
 		}
+	}
+
+	private void refreshThresholds() {
+		this.setHighChangeConfidenceThreshold(FraglightUiPlugin.getDefault()
+				.getPreferenceStore()
+				.getDouble(PreferenceConstants.P_HIGH_THRESHOLD));
+		logger.log(Level.INFO, "Using the high prediction threshold value.",
+				this.getHighChangeConfidenceThreshold());
+
+		this.setLowChangeConfidenceThreshold(FraglightUiPlugin.getDefault()
+				.getPreferenceStore()
+				.getDouble(PreferenceConstants.P_LOW_THRESHOLD));
+		logger.log(Level.INFO, "Using the low prediction threshold value.",
+				this.getLowChangeConfidenceThreshold());
 	}
 
 	protected IInteractionElement convertSelectionToInteractionElement(
@@ -277,38 +280,57 @@ public class PointcutChangePredictionProvider extends
 			return;
 		}
 
-		AdviceElement advice = prediction.getAdvice();
+		double changeConfidence = prediction.getChangeConfidence();
 
-		IInteractionContext activeContext = ContextCore.getContextManager()
-				.getActiveContext();
+		if (changeConfidence <= this.getLowChangeConfidenceThreshold()) {
 
-		IInteractionElement interactionElement = ContextCorePlugin.getContextManager().processInteractionEvent(advice,
-				Kind.PREDICTION, ID, activeContext);
-		
-		System.out.println(interactionElement);
-		
-		//TODO: Now need to do something with the interestingness level of this element.
-		
+			AdviceElement advice = prediction.getAdvice();
 
-		/*
-		 * IInteractionElement node =
-		 * convertSelectionToInteractionElement(advice);
-		 * List<IInteractionElement> nodes = new
-		 * ArrayList<IInteractionElement>(); nodes.add(node);
-		 * 
-		 * boolean increment = true; logger.log(Level.INFO, (increment ?
-		 * "Incrementing" : "Decrementing") + " the interest level for advice.",
-		 * advice); logger.info("Originally, the interest level was " +
-		 * node.getInterest().getValue());
-		 * 
-		 * boolean manipulated = ContextCorePlugin.getContextManager()
-		 * .manipulateInterestForElements(nodes, increment, false, false, ID,
-		 * getContext(), true);
-		 * 
-		 * logger.info("Now, the interest level is " +
-		 * node.getInterest().getValue()); logger.info((manipulated ?
-		 * "Manipulated" : "Did not manipulate") + " interest.");
-		 */
+			logger.log(
+					Level.INFO,
+					"Prediction is lower than threshold. Making element less interesting.",
+					new Object[] { this.getLowChangeConfidenceThreshold(),
+							advice });
+
+			IInteractionElement node = convertSelectionToInteractionElement(advice);
+
+			logger.info("Originally, the interest level was "
+					+ node.getInterest().getValue());
+
+			//let's preserve uninterestingness here.
+			boolean manipulated = ContextCorePlugin.getContextManager()
+					.manipulateInterestForElement(node, false, false, true,
+							ID, true);
+
+			logger.info("Context " + (manipulated ? "was" : "was not")
+					+ " manipulated.");
+
+			logger.info("Now, the interest level is "
+					+ node.getInterest().getValue());
+
+		}
+
+		else if (changeConfidence >= this.getHighChangeConfidenceThreshold()) {
+
+			AdviceElement advice = prediction.getAdvice();
+
+			logger.log(
+					Level.INFO,
+					"Prediction is higher than threshold. Making element more interesting.",
+					new Object[] { this.getHighChangeConfidenceThreshold(),
+							advice });
+
+			IInteractionContext activeContext = ContextCore.getContextManager()
+					.getActiveContext();
+
+			IInteractionElement interactionElement = ContextCorePlugin
+					.getContextManager().processInteractionEvent(advice,
+							Kind.PREDICTION, ID, activeContext);
+
+			logger.info("The interest level is now "
+					+ interactionElement.getInterest().getValue());
+
+		}
 	}
 
 	private void calculateChangeConfidenceForPointcuts(
@@ -432,13 +454,12 @@ public class PointcutChangePredictionProvider extends
 
 			logger.info("Clearing previous prediction set.");
 			this.predictionSet.clear();
-			
+
 			// TODO: This is not correct.
 			logger.info("Refreshing the change prediction view.");
 			FraglightUiPlugin.getDefault().getChangePredictionView()
 					.getViewer().refresh();
-			
-			
+
 			// TODO: Only write the XML file when an XML file already exists
 			// implies that the patterns have been rebuilt since last load.
 			// try {
@@ -596,7 +617,7 @@ public class PointcutChangePredictionProvider extends
 
 					logger.info("Clearing previous prediction set.");
 					this.predictionSet.clear();
-					
+
 					// TODO: This is not correct.
 					logger.info("Refreshing the change prediction view.");
 					FraglightUiPlugin.getDefault().getChangePredictionView()
