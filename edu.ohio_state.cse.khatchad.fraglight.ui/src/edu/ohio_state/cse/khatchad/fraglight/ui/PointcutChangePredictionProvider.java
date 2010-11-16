@@ -29,6 +29,8 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaElementDelta;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.compiler.IProblem;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.mylyn.context.core.AbstractContextStructureBridge;
@@ -297,10 +299,10 @@ public class PointcutChangePredictionProvider extends
 			logger.info("Originally, the interest level was "
 					+ node.getInterest().getValue());
 
-			//let's preserve uninterestingness here.
+			// let's preserve uninterestingness here.
 			boolean manipulated = ContextCorePlugin.getContextManager()
-					.manipulateInterestForElement(node, false, false, true,
-							ID, true);
+					.manipulateInterestForElement(node, false, false, true, ID,
+							true);
 
 			logger.info("Context " + (manipulated ? "was" : "was not")
 					+ " manipulated.");
@@ -388,7 +390,8 @@ public class PointcutChangePredictionProvider extends
 
 			// register as a Java editor change listener.
 			logger.info("Registering as a java editor change listener.");
-			JavaCore.addElementChangedListener(this);
+			JavaCore.addElementChangedListener(this,
+					ElementChangedEvent.POST_RECONCILE);
 
 			// analyze pointcuts.
 			Collection<? extends AdviceElement> toAnalyze = null;
@@ -486,10 +489,29 @@ public class PointcutChangePredictionProvider extends
 	public void elementChanged(ElementChangedEvent event) {
 
 		IJavaElementDelta delta = event.getDelta();
+		
+		//get original AST.
+		IJavaElement element = delta.getElement();
+		ICompilationUnit icu = Util.getCompilationUnit(element);
+		CompilationUnit originalAst = Util.getCompilationUnit(icu, null);
+		System.out.println("Original AST is: " + originalAst);
+		
+		
+		
+		
+
+		IJavaElementDelta[] affectedChildren = delta.getAffectedChildren();
+		if (affectedChildren.length == 0
+				&& (delta.getFlags() & IJavaElementDelta.F_AST_AFFECTED) != 0
+				&& delta.getCompilationUnitAST().getProblems().length == 0) {
+			System.out.println("Something's up with the AST");
+		}
+
 		try {
-			handleDelta(delta.getAffectedChildren());
+			handleDelta(affectedChildren);
 		} catch (JavaModelException e) {
 		}
+
 	}
 
 	private Set<Pattern<IntentionArc<IElement>>> findPatternsMatchingJoinPoint(
@@ -598,7 +620,8 @@ public class PointcutChangePredictionProvider extends
 	private void handleDelta(IJavaElementDelta[] delta)
 			throws JavaModelException {
 		for (IJavaElementDelta child : delta) {
-			if (child.getKind() == IJavaElementDelta.ADDED) {
+			switch (child.getKind()) {
+			case IJavaElementDelta.ADDED: {
 
 				logger.log(Level.INFO, "Found new element added to editor.",
 						child);
@@ -650,11 +673,8 @@ public class PointcutChangePredictionProvider extends
 					FraglightUiPlugin.getDefault().getChangePredictionView()
 							.getViewer().refresh();
 				}
+				break;
 			}
-
-			else {
-				// TODO: Remove this.
-				System.out.println("Not added.");
 			}
 
 			handleDelta(child.getAffectedChildren());
