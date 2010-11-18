@@ -1,5 +1,7 @@
 package edu.ohio_state.cse.khatchad.fraglight.ui;
 
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -42,7 +44,7 @@ public class FraglightUiPlugin extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
-		plugin = this;
+		plugin = this;	
 	}
 
 	/*

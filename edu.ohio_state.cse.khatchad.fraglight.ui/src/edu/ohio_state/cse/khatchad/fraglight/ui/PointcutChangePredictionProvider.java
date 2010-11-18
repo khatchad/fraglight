@@ -9,19 +9,25 @@ import org.eclipse.mylyn.monitor.core.InteractionEvent.Kind;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
 
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
 import org.eclipse.ajdt.mylyn.ui.AspectJStructureBridge;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Plugin;
 import org.eclipse.jdt.core.ElementChangedEvent;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IElementChangedListener;
@@ -31,6 +37,8 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
+import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.mylyn.context.core.AbstractContextStructureBridge;
@@ -43,6 +51,17 @@ import org.eclipse.mylyn.internal.context.core.IActiveSearchOperation;
 import org.eclipse.mylyn.internal.java.ui.JavaStructureBridge;
 import org.eclipse.mylyn.internal.java.ui.search.AbstractJavaRelationProvider;
 import org.eclipse.mylyn.monitor.core.InteractionEvent;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.IFileEditorMapping;
+import org.eclipse.ui.IPartListener;
+import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.IPartService;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchPartReference;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 import ca.mcgill.cs.swevo.jayfx.model.IElement;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PatternMatcher;
@@ -59,7 +78,8 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.preferences.PreferenceConstants;
  */
 @SuppressWarnings("restriction")
 public class PointcutChangePredictionProvider extends
-		AbstractJavaRelationProvider implements IElementChangedListener {
+		AbstractJavaRelationProvider implements IElementChangedListener,
+		IPartListener2 {
 
 	public enum PointcutAnalysisScope {
 		PROJECT, WORKSPACE
@@ -175,7 +195,7 @@ public class PointcutChangePredictionProvider extends
 	 * @return
 	 * @throws JavaModelException
 	 */
-	private double calculateChangeConfidence(boolean captured,
+	private static double calculateChangeConfidence(boolean captured,
 			Set<Pattern<IntentionArc<IElement>>> patternSet)
 			throws JavaModelException {
 
@@ -258,7 +278,7 @@ public class PointcutChangePredictionProvider extends
 				this.getLowChangeConfidenceThreshold());
 	}
 
-	protected IInteractionElement convertSelectionToInteractionElement(
+	private static IInteractionElement convertSelectionToInteractionElement(
 			Object object) {
 		IInteractionElement node = null;
 		if (object instanceof IInteractionElement) {
@@ -388,6 +408,23 @@ public class PointcutChangePredictionProvider extends
 
 			logger.info("Context has been activated.");
 
+			// register as a part listener.
+			logger.info("Registering for notifications of editor activations.");
+
+			IWorkbenchWindow window = PlatformUI.getWorkbench()
+					.getActiveWorkbenchWindow();
+			if (window != null) {
+				window.getPartService().addPartListener(this);
+			}
+
+			IJavaElement input = EditorUtility.getActiveEditorJavaInput();
+			if (input != null) {
+				ICompilationUnit icu = Util.getCompilationUnit(input);
+				CompilationUnit ast = Util.getCompilationUnit(icu, monitor);
+				this.typeToAST.put(icu, ast);
+				System.out.println("Storing AST:\n" + ast);
+			}
+
 			// register as a Java editor change listener.
 			logger.info("Registering as a java editor change listener.");
 			JavaCore.addElementChangedListener(this,
@@ -450,6 +487,18 @@ public class PointcutChangePredictionProvider extends
 		}
 
 		case DEACTIVATED: {
+
+			logger.info("Clearing type to AST map.");
+			this.typeToAST.clear();
+
+			// de-register as a part listener.
+			logger.info("De-registering for notifications of editor activations.");
+			IWorkbenchWindow window = PlatformUI.getWorkbench()
+					.getActiveWorkbenchWindow();
+
+			if (window != null)
+				window.getPartService().removePartListener(this);
+
 			// deregister as a Java editor change listener.
 			logger.info("Context has been deactivated.");
 			logger.info("Deregistering as a java editor change listener.");
@@ -489,22 +538,34 @@ public class PointcutChangePredictionProvider extends
 	public void elementChanged(ElementChangedEvent event) {
 
 		IJavaElementDelta delta = event.getDelta();
-		
-		//get original AST.
-		IJavaElement element = delta.getElement();
-		ICompilationUnit icu = Util.getCompilationUnit(element);
-		CompilationUnit originalAst = Util.getCompilationUnit(icu, null);
-		System.out.println("Original AST is: " + originalAst);
-		
-		
-		
-		
-
 		IJavaElementDelta[] affectedChildren = delta.getAffectedChildren();
+
 		if (affectedChildren.length == 0
 				&& (delta.getFlags() & IJavaElementDelta.F_AST_AFFECTED) != 0
 				&& delta.getCompilationUnitAST().getProblems().length == 0) {
-			System.out.println("Something's up with the AST");
+
+			IJavaElement element = delta.getElement();
+			ICompilationUnit icu = Util.getCompilationUnit(element);
+
+			if (!typeToAST.containsKey(icu)) {
+				CompilationUnit ast = Util
+						.getCompilationUnit(icu, this.monitor);
+				typeToAST.put(icu, ast);
+				System.out.println("Storing AST:\n" + ast);
+			}
+
+			else {
+
+				CompilationUnit originalAST = typeToAST.get(icu);
+				System.out.println("Original AST is:\n" + originalAST);
+
+				CompilationUnit newAST = Util.getCompilationUnit(icu, this.monitor);
+				System.out.println("New AST is:\n" + newAST);
+				
+				//update map with new AST.
+				this.typeToAST.put(icu, newAST);
+
+			}
 		}
 
 		try {
@@ -513,6 +574,8 @@ public class PointcutChangePredictionProvider extends
 		}
 
 	}
+
+	private Map<ICompilationUnit, CompilationUnit> typeToAST = new HashMap<ICompilationUnit, CompilationUnit>();
 
 	private Set<Pattern<IntentionArc<IElement>>> findPatternsMatchingJoinPoint(
 			final IJavaElement affectingJoinPoint,
@@ -582,7 +645,7 @@ public class PointcutChangePredictionProvider extends
 		return NAME;
 	}
 
-	private Set<Pattern<IntentionArc<IElement>>> getPatternsToConsider(
+	private static Set<Pattern<IntentionArc<IElement>>> getPatternsToConsider(
 			Set<Pattern<IntentionArc<IElement>>> patternsMatchingJoinPoint,
 			Set<Pattern<IntentionArc<IElement>>> patternsDerivedFromPointcut) {
 		Set<Pattern<IntentionArc<IElement>>> patternsToConsider = new LinkedHashSet<Pattern<IntentionArc<IElement>>>(
@@ -627,8 +690,7 @@ public class PointcutChangePredictionProvider extends
 						child);
 
 				final IJavaElement newJoinPointShadow = child.getElement();
-				logger.log(Level.INFO,
-						"Obtained new method execution join point shadow.",
+				logger.log(Level.INFO, "Obtained new source code element.",
 						newJoinPointShadow);
 
 				// this represents the case where a new method execution join
@@ -681,16 +743,6 @@ public class PointcutChangePredictionProvider extends
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface
-	 * .viewers.Viewer, java.lang.Object, java.lang.Object)
-	 */
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-	}
-
 	public void setHighChangeConfidenceThreshold(
 			double highChangeConfidenceThreshold) {
 		this.highChangeConfidenceThreshold = highChangeConfidenceThreshold;
@@ -699,5 +751,29 @@ public class PointcutChangePredictionProvider extends
 	public void setLowChangeConfidenceThreshold(
 			double lowChangeConfidenceThreshold) {
 		this.lowChangeConfidenceThreshold = lowChangeConfidenceThreshold;
+	}
+
+	public void partActivated(IWorkbenchPartReference partRef) {
+	}
+
+	public void partBroughtToTop(IWorkbenchPartReference partRef) {
+	}
+
+	public void partClosed(IWorkbenchPartReference partRef) {
+	}
+
+	public void partDeactivated(IWorkbenchPartReference partRef) {
+	}
+
+	public void partOpened(IWorkbenchPartReference partRef) {
+	}
+
+	public void partHidden(IWorkbenchPartReference partRef) {
+	}
+
+	public void partVisible(IWorkbenchPartReference partRef) {
+	}
+
+	public void partInputChanged(IWorkbenchPartReference partRef) {
 	}
 }
