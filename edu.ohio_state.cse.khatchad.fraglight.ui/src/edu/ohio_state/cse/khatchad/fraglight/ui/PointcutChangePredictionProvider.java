@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
 
+import org.eclipse.ajdt.core.javaelements.AJCodeElement;
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
 import org.eclipse.ajdt.mylyn.ui.AspectJStructureBridge;
 import org.eclipse.core.resources.IWorkspace;
@@ -36,6 +37,7 @@ import org.eclipse.jdt.core.IJavaElementDelta;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.compiler.IProblem;
+import org.eclipse.jdt.core.dom.ASTMatcher;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
@@ -64,6 +66,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
 import ca.mcgill.cs.swevo.jayfx.model.IElement;
+import edu.ohio_state.cse.khatchad.fraglight.core.analysis.JoinPointShadowDifferenceAnalyzer;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PatternMatcher;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PointcutAnalyzer;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.IntentionArc;
@@ -78,8 +81,8 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.preferences.PreferenceConstants;
  */
 @SuppressWarnings("restriction")
 public class PointcutChangePredictionProvider extends
-		AbstractJavaRelationProvider implements IElementChangedListener,
-		IPartListener2 {
+		AbstractJavaRelationProvider implements IElementChangedListener
+		{
 
 	public enum PointcutAnalysisScope {
 		PROJECT, WORKSPACE
@@ -179,7 +182,7 @@ public class PointcutChangePredictionProvider extends
 	private PointcutAnalysisScope pointcutAnalysisScope = DEFAULT_POINTCUT_ANALYSIS_SCOPE;
 
 	private Set<Prediction> predictionSet = new LinkedHashSet<Prediction>();
-
+	
 	public PointcutAnalysisScope getPointcutAnalysisScope() {
 		return pointcutAnalysisScope;
 	}
@@ -409,20 +412,19 @@ public class PointcutChangePredictionProvider extends
 			logger.info("Context has been activated.");
 
 			// register as a part listener.
-			logger.info("Registering for notifications of editor activations.");
-
-			IWorkbenchWindow window = PlatformUI.getWorkbench()
-					.getActiveWorkbenchWindow();
-			if (window != null) {
-				window.getPartService().addPartListener(this);
-			}
+//			logger.info("Registering for notifications of editor activations.");
+//			IWorkbenchWindow window = PlatformUI.getWorkbench()
+//					.getActiveWorkbenchWindow();
+//			if (window != null) {
+//				window.getPartService().addPartListener(this);
+//			}
 
 			IJavaElement input = EditorUtility.getActiveEditorJavaInput();
 			if (input != null) {
 				ICompilationUnit icu = Util.getCompilationUnit(input);
 				CompilationUnit ast = Util.getCompilationUnit(icu, monitor);
 				this.typeToAST.put(icu, ast);
-				System.out.println("Storing AST:\n" + ast);
+				logger.info("Stored initial AST for " + icu.getElementName() + ".");
 			}
 
 			// register as a Java editor change listener.
@@ -492,12 +494,12 @@ public class PointcutChangePredictionProvider extends
 			this.typeToAST.clear();
 
 			// de-register as a part listener.
-			logger.info("De-registering for notifications of editor activations.");
-			IWorkbenchWindow window = PlatformUI.getWorkbench()
-					.getActiveWorkbenchWindow();
-
-			if (window != null)
-				window.getPartService().removePartListener(this);
+//			logger.info("De-registering for notifications of editor activations.");
+//			IWorkbenchWindow window = PlatformUI.getWorkbench()
+//					.getActiveWorkbenchWindow();
+//
+//			if (window != null)
+//				window.getPartService().removePartListener(this);
 
 			// deregister as a Java editor change listener.
 			logger.info("Context has been deactivated.");
@@ -551,20 +553,23 @@ public class PointcutChangePredictionProvider extends
 				CompilationUnit ast = Util
 						.getCompilationUnit(icu, this.monitor);
 				typeToAST.put(icu, ast);
-				System.out.println("Storing AST:\n" + ast);
+				logger.info("Stored initial AST for " + icu.getElementName() + ".");
 			}
 
 			else {
 
 				CompilationUnit originalAST = typeToAST.get(icu);
-				System.out.println("Original AST is:\n" + originalAST);
+				logger.log(Level.INFO, "Retrieved original AST for " + icu.getElementName() + ".", originalAST);
 
 				CompilationUnit newAST = Util.getCompilationUnit(icu, this.monitor);
-				System.out.println("New AST is:\n" + newAST);
+				logger.log(Level.INFO, "Retrieved new AST for " + icu.getElementName() + ".", newAST);
 				
 				//update map with new AST.
 				this.typeToAST.put(icu, newAST);
-
+				logger.info("Updated stored AST for " + icu.getElementName() + ".");
+				
+				//now we need to find out the difference. It should be a code element.
+				IJavaElement newJoinPointShadow = extractNewJoinPointShadow(originalAST, newAST);
 			}
 		}
 
@@ -573,6 +578,14 @@ public class PointcutChangePredictionProvider extends
 		} catch (JavaModelException e) {
 		}
 
+	}
+
+	private IJavaElement extractNewJoinPointShadow(CompilationUnit originalAST,
+			CompilationUnit newAST) {
+		JoinPointShadowDifferenceAnalyzer joinPointShadowDifferenceAnalyzer = new JoinPointShadowDifferenceAnalyzer();
+		boolean safeSubtreeMatch = joinPointShadowDifferenceAnalyzer.safeSubtreeMatch(originalAST, newAST);
+		System.out.println(safeSubtreeMatch ? "Equal." : "Not equal.");
+		return null;
 	}
 
 	private Map<ICompilationUnit, CompilationUnit> typeToAST = new HashMap<ICompilationUnit, CompilationUnit>();
@@ -751,29 +764,5 @@ public class PointcutChangePredictionProvider extends
 	public void setLowChangeConfidenceThreshold(
 			double lowChangeConfidenceThreshold) {
 		this.lowChangeConfidenceThreshold = lowChangeConfidenceThreshold;
-	}
-
-	public void partActivated(IWorkbenchPartReference partRef) {
-	}
-
-	public void partBroughtToTop(IWorkbenchPartReference partRef) {
-	}
-
-	public void partClosed(IWorkbenchPartReference partRef) {
-	}
-
-	public void partDeactivated(IWorkbenchPartReference partRef) {
-	}
-
-	public void partOpened(IWorkbenchPartReference partRef) {
-	}
-
-	public void partHidden(IWorkbenchPartReference partRef) {
-	}
-
-	public void partVisible(IWorkbenchPartReference partRef) {
-	}
-
-	public void partInputChanged(IWorkbenchPartReference partRef) {
 	}
 }
