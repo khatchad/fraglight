@@ -81,8 +81,7 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.preferences.PreferenceConstants;
  */
 @SuppressWarnings("restriction")
 public class PointcutChangePredictionProvider extends
-		AbstractJavaRelationProvider implements IElementChangedListener
-		{
+		AbstractJavaRelationProvider implements IElementChangedListener {
 
 	public enum PointcutAnalysisScope {
 		PROJECT, WORKSPACE
@@ -182,7 +181,7 @@ public class PointcutChangePredictionProvider extends
 	private PointcutAnalysisScope pointcutAnalysisScope = DEFAULT_POINTCUT_ANALYSIS_SCOPE;
 
 	private Set<Prediction> predictionSet = new LinkedHashSet<Prediction>();
-	
+
 	public PointcutAnalysisScope getPointcutAnalysisScope() {
 		return pointcutAnalysisScope;
 	}
@@ -412,19 +411,20 @@ public class PointcutChangePredictionProvider extends
 			logger.info("Context has been activated.");
 
 			// register as a part listener.
-//			logger.info("Registering for notifications of editor activations.");
-//			IWorkbenchWindow window = PlatformUI.getWorkbench()
-//					.getActiveWorkbenchWindow();
-//			if (window != null) {
-//				window.getPartService().addPartListener(this);
-//			}
+			// logger.info("Registering for notifications of editor activations.");
+			// IWorkbenchWindow window = PlatformUI.getWorkbench()
+			// .getActiveWorkbenchWindow();
+			// if (window != null) {
+			// window.getPartService().addPartListener(this);
+			// }
 
 			IJavaElement input = EditorUtility.getActiveEditorJavaInput();
 			if (input != null) {
 				ICompilationUnit icu = Util.getCompilationUnit(input);
 				CompilationUnit ast = Util.getCompilationUnit(icu, monitor);
 				this.typeToAST.put(icu, ast);
-				logger.info("Stored initial AST for " + icu.getElementName() + ".");
+				logger.info("Stored initial AST for " + icu.getElementName()
+						+ ".");
 			}
 
 			// register as a Java editor change listener.
@@ -494,12 +494,12 @@ public class PointcutChangePredictionProvider extends
 			this.typeToAST.clear();
 
 			// de-register as a part listener.
-//			logger.info("De-registering for notifications of editor activations.");
-//			IWorkbenchWindow window = PlatformUI.getWorkbench()
-//					.getActiveWorkbenchWindow();
-//
-//			if (window != null)
-//				window.getPartService().removePartListener(this);
+			// logger.info("De-registering for notifications of editor activations.");
+			// IWorkbenchWindow window = PlatformUI.getWorkbench()
+			// .getActiveWorkbenchWindow();
+			//
+			// if (window != null)
+			// window.getPartService().removePartListener(this);
 
 			// deregister as a Java editor change listener.
 			logger.info("Context has been deactivated.");
@@ -553,23 +553,39 @@ public class PointcutChangePredictionProvider extends
 				CompilationUnit ast = Util
 						.getCompilationUnit(icu, this.monitor);
 				typeToAST.put(icu, ast);
-				logger.info("Stored initial AST for " + icu.getElementName() + ".");
+				logger.info("Stored initial AST for " + icu.getElementName()
+						+ ".");
 			}
 
 			else {
 
 				CompilationUnit originalAST = typeToAST.get(icu);
-				logger.log(Level.INFO, "Retrieved original AST for " + icu.getElementName() + ".", originalAST);
+				logger.log(Level.INFO,
+						"Retrieved original AST for " + icu.getElementName()
+								+ ".", originalAST);
 
-				CompilationUnit newAST = Util.getCompilationUnit(icu, this.monitor);
-				logger.log(Level.INFO, "Retrieved new AST for " + icu.getElementName() + ".", newAST);
-				
-				//update map with new AST.
+				CompilationUnit newAST = Util.getCompilationUnit(icu,
+						this.monitor);
+				logger.log(Level.INFO,
+						"Retrieved new AST for " + icu.getElementName() + ".",
+						newAST);
+
+				// update map with new AST.
 				this.typeToAST.put(icu, newAST);
-				logger.info("Updated stored AST for " + icu.getElementName() + ".");
-				
-				//now we need to find out the difference. It should be a code element.
-				IJavaElement newJoinPointShadow = extractNewJoinPointShadow(originalAST, newAST);
+				logger.info("Updated stored AST for " + icu.getElementName()
+						+ ".");
+
+				// now we need to find out the difference. It should be a code
+				// element.
+				IJavaElement newJoinPointShadow = extractNewJoinPointShadow(
+						originalAST, newAST);
+				if (newJoinPointShadow != null) {
+					assertIsAJCodeElement(newJoinPointShadow); //sanity check.
+					logger.log(Level.INFO, "Found new code join point shadow.",
+							newJoinPointShadow);
+					System.out.println(newJoinPointShadow);
+					//TODO: Do something with this.
+				}
 			}
 		}
 
@@ -580,11 +596,27 @@ public class PointcutChangePredictionProvider extends
 
 	}
 
+	private static void assertIsAJCodeElement(IJavaElement newJoinPointShadow) {
+		if ( !(newJoinPointShadow instanceof AJCodeElement) )
+			throw new IllegalStateException("Found illegal type of join point element: " +  newJoinPointShadow.getClass());
+	}
+
 	private IJavaElement extractNewJoinPointShadow(CompilationUnit originalAST,
 			CompilationUnit newAST) {
 		JoinPointShadowDifferenceAnalyzer joinPointShadowDifferenceAnalyzer = new JoinPointShadowDifferenceAnalyzer();
-		boolean safeSubtreeMatch = joinPointShadowDifferenceAnalyzer.safeSubtreeMatch(originalAST, newAST);
-		System.out.println(safeSubtreeMatch ? "Equal." : "Not equal.");
+		boolean match = joinPointShadowDifferenceAnalyzer.safeSubtreeMatch(
+				originalAST, newAST);
+		if (!match
+				&& !joinPointShadowDifferenceAnalyzer.getNewJoinPointShadows()
+						.isEmpty())
+			if (joinPointShadowDifferenceAnalyzer.getNewJoinPointShadows()
+					.size() > 1)
+				// TODO: Deal with this later.
+				throw new IllegalStateException(
+						"Found multiple new join points.");
+			else
+				return joinPointShadowDifferenceAnalyzer
+						.getNewJoinPointShadows().iterator().next();
 		return null;
 	}
 
