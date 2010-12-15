@@ -410,14 +410,6 @@ public class PointcutChangePredictionProvider extends
 
 			logger.info("Context has been activated.");
 
-			// register as a part listener.
-			// logger.info("Registering for notifications of editor activations.");
-			// IWorkbenchWindow window = PlatformUI.getWorkbench()
-			// .getActiveWorkbenchWindow();
-			// if (window != null) {
-			// window.getPartService().addPartListener(this);
-			// }
-
 			IJavaElement input = EditorUtility.getActiveEditorJavaInput();
 			if (input != null) {
 				ICompilationUnit icu = Util.getCompilationUnit(input);
@@ -493,17 +485,9 @@ public class PointcutChangePredictionProvider extends
 			logger.info("Clearing type to AST map.");
 			this.typeToAST.clear();
 
-			// de-register as a part listener.
-			// logger.info("De-registering for notifications of editor activations.");
-			// IWorkbenchWindow window = PlatformUI.getWorkbench()
-			// .getActiveWorkbenchWindow();
-			//
-			// if (window != null)
-			// window.getPartService().removePartListener(this);
-
-			// deregister as a Java editor change listener.
+			// de-register as a Java editor change listener.
 			logger.info("Context has been deactivated.");
-			logger.info("Deregistering as a java editor change listener.");
+			logger.info("De-registering as a java editor change listener.");
 			JavaCore.removeElementChangedListener(this);
 
 			logger.info("Clearing previous prediction set.");
@@ -581,10 +565,15 @@ public class PointcutChangePredictionProvider extends
 						originalAST, newAST);
 				if (newJoinPointShadow != null) {
 					assertIsAJCodeElement(newJoinPointShadow); //sanity check.
-					logger.log(Level.INFO, "Found new code join point shadow.",
+					logger.log(Level.INFO, "Found new code-level join point shadow.",
 							newJoinPointShadow);
-					System.out.println(newJoinPointShadow);
-					//TODO: Do something with this.
+					try {
+						processNewJoinPointShadow(newJoinPointShadow);
+					} catch (JavaModelException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						throw new RuntimeException(e);
+					}
 				}
 			}
 		}
@@ -592,6 +581,9 @@ public class PointcutChangePredictionProvider extends
 		try {
 			handleDelta(affectedChildren);
 		} catch (JavaModelException e) {
+			//TODO: Handle properly.
+			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 
 	}
@@ -744,41 +736,7 @@ public class PointcutChangePredictionProvider extends
 						&& newJoinPointShadow.isStructureKnown()) {
 
 					logger.info("Found new method execution join point shadow.");
-
-					logger.info("Clearing previous prediction set.");
-					this.predictionSet.clear();
-
-					// TODO: This is not correct.
-					logger.info("Refreshing the change prediction view.");
-					FraglightUiPlugin.getDefault().getChangePredictionView()
-							.getViewer().refresh();
-
-					// save the file.
-					logger.info("Saving the file.");
-					ICompilationUnit icu = Util
-							.getCompilationUnit(newJoinPointShadow);
-					icu.getBuffer().save(this.monitor, false);
-
-					// Ensure that the building process is triggered.
-					try {
-						logger.info("Forcing the project to build.");
-						newJoinPointShadow
-								.getJavaProject()
-								.getProject()
-								.build(IncrementalProjectBuilder.INCREMENTAL_BUILD,
-										this.monitor);
-					} catch (CoreException e) {
-						throw new RuntimeException(e);
-					}
-
-					// calculate the change confidence for every PCE.
-					logger.info("Calculating the change confidence for every available pointcut.");
-					calculateChangeConfidenceForPointcuts(newJoinPointShadow);
-
-					// TODO: This is not correct.
-					logger.info("Refreshing the change prediction view.");
-					FraglightUiPlugin.getDefault().getChangePredictionView()
-							.getViewer().refresh();
+					processNewJoinPointShadow(newJoinPointShadow);
 				}
 				break;
 			}
@@ -786,6 +744,44 @@ public class PointcutChangePredictionProvider extends
 
 			handleDelta(child.getAffectedChildren());
 		}
+	}
+
+	private void processNewJoinPointShadow(final IJavaElement newJoinPointShadow)
+			throws JavaModelException {
+		logger.info("Clearing previous prediction set.");
+		this.predictionSet.clear();
+
+		// TODO: This is not correct.
+		logger.info("Refreshing the change prediction view.");
+		FraglightUiPlugin.getDefault().getChangePredictionView()
+				.getViewer().refresh();
+
+		// save the file.
+		logger.info("Saving the file.");
+		ICompilationUnit icu = Util
+				.getCompilationUnit(newJoinPointShadow);
+		icu.getBuffer().save(this.monitor, false);
+
+		// Ensure that the building process is triggered.
+		try {
+			logger.info("Forcing the project to build.");
+			newJoinPointShadow
+					.getJavaProject()
+					.getProject()
+					.build(IncrementalProjectBuilder.INCREMENTAL_BUILD,
+							this.monitor);
+		} catch (CoreException e) {
+			throw new RuntimeException(e);
+		}
+
+		// calculate the change confidence for every PCE.
+		logger.info("Calculating the change confidence for every available pointcut.");
+		calculateChangeConfidenceForPointcuts(newJoinPointShadow);
+
+		// TODO: This is not correct.
+		logger.info("Refreshing the change prediction view.");
+		FraglightUiPlugin.getDefault().getChangePredictionView()
+				.getViewer().refresh();
 	}
 
 	public void setHighChangeConfidenceThreshold(
