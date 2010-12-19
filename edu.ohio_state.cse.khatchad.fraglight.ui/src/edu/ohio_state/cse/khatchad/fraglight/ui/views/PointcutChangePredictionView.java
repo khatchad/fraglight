@@ -2,6 +2,9 @@ package edu.ohio_state.cse.khatchad.fraglight.ui.views;
 
 import static edu.ohio_state.cse.khatchad.fraglight.ui.views.PointcutChangePredictionViewComparator.SortBy.CHANGE_CONFIDENCE;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -28,7 +31,7 @@ import org.eclipse.ui.part.ViewPart;
 import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
 import edu.ohio_state.cse.khatchad.fraglight.ui.views.PointcutChangePredictionViewComparator.SortBy;
 
-public class PointcutChangePredictionView extends ViewPart {
+public class PointcutChangePredictionView extends ViewPart implements PropertyChangeListener {
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -47,7 +50,7 @@ public class PointcutChangePredictionView extends ViewPart {
 	 */
 	private final String CONFIDENCE_COLUMN_NAME = "Confidence";
 
-	private PointcutChangePredictionViewTreeContentProvider contentProvider;
+	private transient PointcutChangePredictionViewTreeContentProvider contentProvider;
 
 	private Action doubleClickAction;
 
@@ -58,6 +61,7 @@ public class PointcutChangePredictionView extends ViewPart {
 	 */
 	public PointcutChangePredictionView() {
 		FraglightUiPlugin.getDefault().setChangePredictionView(this);
+		FraglightUiPlugin.getDefault().getChangePredictionProvider().getPredictionSet().addPropertyChangeListener(this);
 	}
 
 	private void contributeToActionBars() {
@@ -155,7 +159,7 @@ public class PointcutChangePredictionView extends ViewPart {
 
 	private void makeActions() {
 		this.doubleClickAction = new DoubleClickAction(this.viewer);
-		this.clearAction = new ClearAction(this);
+		this.clearAction = new ClearAction();
 	}
 
 	/**
@@ -164,5 +168,10 @@ public class PointcutChangePredictionView extends ViewPart {
 	@Override
 	public void setFocus() {
 		this.viewer.getControl().setFocus();
+	}
+
+	
+	public void propertyChange(PropertyChangeEvent evt) {
+		this.viewer.refresh();
 	}
 }

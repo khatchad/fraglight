@@ -180,7 +180,7 @@ public class PointcutChangePredictionProvider extends
 
 	private PointcutAnalysisScope pointcutAnalysisScope = DEFAULT_POINTCUT_ANALYSIS_SCOPE;
 
-	private Set<Prediction> predictionSet = new LinkedHashSet<Prediction>();
+	private PredictionSet predictionSet = new PredictionSet();
 
 	public PointcutAnalysisScope getPointcutAnalysisScope() {
 		return pointcutAnalysisScope;
@@ -494,9 +494,9 @@ public class PointcutChangePredictionProvider extends
 			this.predictionSet.clear();
 
 			// TODO: This is not correct.
-			logger.info("Refreshing the change prediction view.");
-			FraglightUiPlugin.getDefault().getChangePredictionView()
-					.getViewer().refresh();
+//			logger.info("Refreshing the change prediction view.");
+//			FraglightUiPlugin.getDefault().getChangePredictionView()
+//					.getViewer().refresh();
 
 			// TODO: Only write the XML file when an XML file already exists
 			// implies that the patterns have been rebuilt since last load.
@@ -698,7 +698,7 @@ public class PointcutChangePredictionProvider extends
 		return this.analyzer;
 	}
 
-	public Set<Prediction> getPredictionSet() {
+	public PredictionSet getPredictionSet() {
 		return this.predictionSet;
 	}
 
@@ -751,11 +751,6 @@ public class PointcutChangePredictionProvider extends
 		logger.info("Clearing previous prediction set.");
 		this.predictionSet.clear();
 
-		// TODO: This is not correct.
-		logger.info("Refreshing the change prediction view.");
-		FraglightUiPlugin.getDefault().getChangePredictionView()
-				.getViewer().refresh();
-
 		// save the file.
 		logger.info("Saving the file.");
 		ICompilationUnit icu = Util
@@ -777,11 +772,6 @@ public class PointcutChangePredictionProvider extends
 		// calculate the change confidence for every PCE.
 		logger.info("Calculating the change confidence for every available pointcut.");
 		calculateChangeConfidenceForPointcuts(newJoinPointShadow);
-
-		// TODO: This is not correct.
-		logger.info("Refreshing the change prediction view.");
-		FraglightUiPlugin.getDefault().getChangePredictionView()
-				.getViewer().refresh();
 	}
 
 	public void setHighChangeConfidenceThreshold(

@@ -9,27 +9,25 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.Prediction;
 
-public class PointcutChangePredictionViewTreeContentProvider implements ITreeContentProvider {
-	
+public class PointcutChangePredictionViewTreeContentProvider implements
+		ITreeContentProvider {
+
 	private final Object[] EMPTY = new Object[] {};
 
 	public void dispose() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public Object[] getElements(Object inputElement) {
 		FraglightUiPlugin plugin = FraglightUiPlugin.getDefault();
-		if ( plugin == null )
+		if (plugin == null)
 			return EMPTY;
 		else {
-			PointcutChangePredictionProvider provider = plugin.getChangePredictionProvider();
-			if ( provider == null )
+			PointcutChangePredictionProvider provider = plugin
+					.getChangePredictionProvider();
+			if (provider == null)
 				return EMPTY;
 			else
 				return provider.getPredictionSet().toArray();
@@ -37,10 +35,10 @@ public class PointcutChangePredictionViewTreeContentProvider implements ITreeCon
 	}
 
 	public Object[] getChildren(Object parentElement) {
-		if (!(parentElement instanceof Prediction) )
+		if (!(parentElement instanceof Prediction))
 			return EMPTY;
 		else {
-			Prediction prediction = (Prediction)parentElement;
+			Prediction prediction = (Prediction) parentElement;
 			return prediction.getContributingPatterns().toArray();
 		}
 	}
@@ -50,10 +48,10 @@ public class PointcutChangePredictionViewTreeContentProvider implements ITreeCon
 	}
 
 	public boolean hasChildren(Object element) {
-		if (!(element instanceof Prediction) )
+		if (!(element instanceof Prediction))
 			return false;
 		else {
-			Prediction prediction = (Prediction)element;
+			Prediction prediction = (Prediction) element;
 			return !prediction.getContributingPatterns().isEmpty();
 		}
 	}

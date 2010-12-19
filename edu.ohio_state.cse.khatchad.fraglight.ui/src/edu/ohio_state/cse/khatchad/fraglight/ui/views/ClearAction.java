@@ -10,16 +10,19 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
 
 public class ClearAction extends Action {
 
+	/**
+	 * 
+	 */
+	private static final String CLEAR_THE_SUGGESTED_POINTCUT_LIST = "Clear the suggested pointcut list.";
+
+	private static final String CLEAR = "Clear";
+	
 	private static Logger logger = Logger
 			.getLogger(ClearAction.class.getName());
 
-	private PointcutChangePredictionView view;
-
-	public ClearAction(PointcutChangePredictionView view) {
-		// TODO: Remove parameter.
-		this.view = view;
-		setText("Clear");
-		setToolTipText("Clear the suggested pointcut list.");
+	public ClearAction() {
+		setText(CLEAR);
+		setToolTipText(CLEAR_THE_SUGGESTED_POINTCUT_LIST);
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages()
 				.getImageDescriptor(ISharedImages.IMG_ETOOL_CLEAR));
 	}
@@ -29,8 +32,5 @@ public class ClearAction extends Action {
 		FraglightUiPlugin.getDefault().getChangePredictionProvider()
 				.getPredictionSet().clear();
 		logger.info("Cleared prediction list.");
-		// TODO: Remove refresh.
-		this.view.getViewer().refresh();
 	}
-
 }
