@@ -21,6 +21,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
@@ -31,7 +32,8 @@ import org.eclipse.ui.part.ViewPart;
 import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
 import edu.ohio_state.cse.khatchad.fraglight.ui.views.PointcutChangePredictionViewComparator.SortBy;
 
-public class PointcutChangePredictionView extends ViewPart implements PropertyChangeListener {
+public class PointcutChangePredictionView extends ViewPart implements
+		PropertyChangeListener {
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -61,7 +63,7 @@ public class PointcutChangePredictionView extends ViewPart implements PropertyCh
 	 */
 	public PointcutChangePredictionView() {
 		FraglightUiPlugin.getDefault().setChangePredictionView(this);
-		FraglightUiPlugin.getDefault().getChangePredictionProvider().getPredictionSet().addPropertyChangeListener(this);
+		FraglightUiPlugin.getDefault().addPropertyChangeListener(this);
 	}
 
 	private void contributeToActionBars() {
@@ -72,11 +74,11 @@ public class PointcutChangePredictionView extends ViewPart implements PropertyCh
 
 	@Override
 	public void createPartControl(Composite parent) {
-		this.viewer = new TreeViewer(parent);
-		Tree tree = this.viewer.getTree();
+		this.setViewer(new TreeViewer(parent));
+		Tree tree = this.getViewer().getTree();
 		final GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		this.viewer.getControl().setLayoutData(gridData);
-		this.viewer.setUseHashlookup(true);
+		this.getViewer().getControl().setLayoutData(gridData);
+		this.getViewer().setUseHashlookup(true);
 
 		tree.setHeaderVisible(true);
 		tree.setLinesVisible(true);
@@ -92,7 +94,7 @@ public class PointcutChangePredictionView extends ViewPart implements PropertyCh
 		treeColumn.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				PointcutChangePredictionView.this.viewer
+				PointcutChangePredictionView.this.getViewer()
 						.setComparator(new PointcutChangePredictionViewComparator(
 								SortBy.CHANGE_CONFIDENCE));
 			}
@@ -105,13 +107,13 @@ public class PointcutChangePredictionView extends ViewPart implements PropertyCh
 		tree.setLayout(layout);
 
 		this.contentProvider = new PointcutChangePredictionViewTreeContentProvider();
-		this.viewer.setContentProvider(this.contentProvider);
+		this.getViewer().setContentProvider(this.contentProvider);
 
-		this.viewer
+		this.getViewer()
 				.setLabelProvider(new PointcutChangePredictionViewTableLabelProvider());
-		this.viewer.setComparator(new PointcutChangePredictionViewComparator(
+		this.getViewer().setComparator(new PointcutChangePredictionViewComparator(
 				CHANGE_CONFIDENCE));
-		this.viewer.setInput(getViewSite());
+		this.getViewer().setInput(getViewSite());
 		makeActions();
 		hookContextMenu();
 		hookDoubleClickAction();
@@ -136,6 +138,10 @@ public class PointcutChangePredictionView extends ViewPart implements PropertyCh
 		return this.viewer;
 	}
 
+	public void setViewer(TreeViewer viewer) {
+		this.viewer = viewer;
+	}
+
 	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
 		menuMgr.setRemoveAllWhenShown(true);
@@ -144,13 +150,13 @@ public class PointcutChangePredictionView extends ViewPart implements PropertyCh
 				PointcutChangePredictionView.this.fillContextMenu(manager);
 			}
 		});
-		Menu menu = menuMgr.createContextMenu(this.viewer.getControl());
-		this.viewer.getControl().setMenu(menu);
-		getSite().registerContextMenu(menuMgr, this.viewer);
+		Menu menu = menuMgr.createContextMenu(this.getViewer().getControl());
+		this.getViewer().getControl().setMenu(menu);
+		getSite().registerContextMenu(menuMgr, this.getViewer());
 	}
 
 	private void hookDoubleClickAction() {
-		this.viewer.addDoubleClickListener(new IDoubleClickListener() {
+		this.getViewer().addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
 				PointcutChangePredictionView.this.doubleClickAction.run();
 			}
@@ -158,7 +164,7 @@ public class PointcutChangePredictionView extends ViewPart implements PropertyCh
 	}
 
 	private void makeActions() {
-		this.doubleClickAction = new DoubleClickAction(this.viewer);
+		this.doubleClickAction = new DoubleClickAction(this.getViewer());
 		this.clearAction = new ClearAction();
 	}
 
@@ -167,11 +173,25 @@ public class PointcutChangePredictionView extends ViewPart implements PropertyCh
 	 */
 	@Override
 	public void setFocus() {
-		this.viewer.getControl().setFocus();
+		this.getViewer().getControl().setFocus();
 	}
 
-	
 	public void propertyChange(PropertyChangeEvent evt) {
-		this.viewer.refresh();
+		Object source = evt.getSource();
+
+		if (source == FraglightUiPlugin.getDefault())
+			FraglightUiPlugin.getDefault().getChangePredictionProvider()
+					.getPredictionSet().addPropertyChangeListener(this);
+
+		else if (FraglightUiPlugin.getDefault().getChangePredictionProvider() != null
+				&& source == FraglightUiPlugin.getDefault()
+						.getChangePredictionProvider().getPredictionSet()) {
+			Display display = Display.getDefault();
+			display.asyncExec(new Runnable() {				
+				public void run() {
+					getViewer().refresh();
+				}
+			});
+		}
 	}
 }

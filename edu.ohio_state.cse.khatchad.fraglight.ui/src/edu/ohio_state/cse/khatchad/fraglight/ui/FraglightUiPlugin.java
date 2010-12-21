@@ -1,5 +1,8 @@
 package edu.ohio_state.cse.khatchad.fraglight.ui;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -11,6 +14,8 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.views.PointcutChangePredictionVi
  * The activator class controls the plug-in life cycle
  */
 public class FraglightUiPlugin extends AbstractUIPlugin {
+
+	private enum Property {POINTCUT_CHANGE_PREDICTION_PROVIDER};
 
 	/**
 	 * The plug-in ID.
@@ -31,6 +36,12 @@ public class FraglightUiPlugin extends AbstractUIPlugin {
 	 * A reference to the change prediction view, initially null.
 	 */
 	private PointcutChangePredictionView changePredictionView;
+	
+	private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
+	
+	public void addPropertyChangeListener(final PropertyChangeListener l) {
+		this.changes.addPropertyChangeListener(l);
+	}
 	
 	/**
 	 * The constructor
@@ -77,7 +88,9 @@ public class FraglightUiPlugin extends AbstractUIPlugin {
 	 */
 	public void setChangePredictionProvider(
 			PointcutChangePredictionProvider changePredictionProvider) {
+		PointcutChangePredictionProvider oldValue = this.changePredictionProvider;
 		this.changePredictionProvider = changePredictionProvider;
+		this.changes.firePropertyChange(Property.POINTCUT_CHANGE_PREDICTION_PROVIDER.toString(), oldValue, this.changePredictionProvider);
 	}
 
 	/**
