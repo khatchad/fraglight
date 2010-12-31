@@ -7,6 +7,9 @@ Bundle-Activator: edu.ohio_state.cse.khatchad.fraglightevaluator.Activator
 Bundle-Vendor: Ohio State University
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- edu.ohio_state.cse.khatchad.fraglight.core;bundle-version="1.0.0"
+ edu.ohio_state.cse.khatchad.fraglight.core;bundle-version="1.0.0",
+ org.eclipse.core.resources,
+ org.eclipse.jdt.core,
+ org.eclipse.ajdt.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy

@@ -424,59 +424,7 @@ public class PointcutChangePredictionProvider extends
 			JavaCore.addElementChangedListener(this,
 					ElementChangedEvent.POST_RECONCILE);
 
-			// analyze pointcuts.
-			Collection<? extends AdviceElement> toAnalyze = null;
-
-			this.pointcutAnalysisScope = PointcutAnalysisScope
-					.valueOf(FraglightUiPlugin.getDefault()
-							.getPreferenceStore()
-							.getString(PreferenceConstants.P_POINTCUT_SCOPE));
-
-			if (this.pointcutAnalysisScope == PointcutAnalysisScope.WORKSPACE) {
-
-				IWorkspace workspace = getWorkspace();
-				try {
-					logger.info("Building workspace fully.");
-					// TODO:Check if the workspace is on auto-build.
-					workspace.build(IncrementalProjectBuilder.FULL_BUILD,
-							this.monitor);
-				} catch (CoreException e) {
-					throw new RuntimeException(e);
-				}
-
-				logger.info("Obtaining all advice in the workspace.");
-				toAnalyze = AJUtil.extractAdviceElements(workspace);
-			}
-
-			else if (this.pointcutAnalysisScope == PointcutAnalysisScope.PROJECT) {
-				// TODO: Fix this.
-				for (IInteractionElement interactionElement : event
-						.getContext().getAllElements()) {
-					IJavaElement javaElement = JavaCore
-							.create(interactionElement.getHandleIdentifier());
-					System.out.println(javaElement);
-				}
-			}
-
-			if (!toAnalyze.isEmpty()) {
-				try {
-					short maximumAnalysisDepth = (short) FraglightUiPlugin
-							.getDefault().getPreferenceStore()
-							.getInt(PreferenceConstants.P_ANALYSIS_DEPTH);
-
-					this.analyzer.setMaximumAnalysisDepth(maximumAnalysisDepth);
-
-					logger.log(
-							Level.INFO,
-							"Analyzing all bound pointcuts with particular maximum analysis depth.",
-							new Object[] { toAnalyze, maximumAnalysisDepth });
-
-					this.analyzer.analyze(toAnalyze, this.monitor);
-				} catch (Exception e) {
-					e.printStackTrace();
-					throw new RuntimeException(e);
-				}
-			}
+			analyzePointcuts();
 			break;
 		}
 
@@ -494,9 +442,9 @@ public class PointcutChangePredictionProvider extends
 			this.predictionSet.clear();
 
 			// TODO: This is not correct.
-//			logger.info("Refreshing the change prediction view.");
-//			FraglightUiPlugin.getDefault().getChangePredictionView()
-//					.getViewer().refresh();
+			// logger.info("Refreshing the change prediction view.");
+			// FraglightUiPlugin.getDefault().getChangePredictionView()
+			// .getViewer().refresh();
 
 			// TODO: Only write the XML file when an XML file already exists
 			// implies that the patterns have been rebuilt since last load.
@@ -510,6 +458,68 @@ public class PointcutChangePredictionProvider extends
 			// throw new RuntimeException("Error writing XML file.", e);
 			// }
 		}
+		}
+	}
+
+	private void analyzePointcuts() {
+		// analyze pointcuts.
+		Collection<? extends AdviceElement> toAnalyze = null;
+
+		this.pointcutAnalysisScope = PointcutAnalysisScope
+				.valueOf(FraglightUiPlugin.getDefault()
+						.getPreferenceStore()
+						.getString(PreferenceConstants.P_POINTCUT_SCOPE));
+
+		if (this.pointcutAnalysisScope == PointcutAnalysisScope.WORKSPACE) {
+
+			IWorkspace workspace = getWorkspace();
+			try {
+				logger.info("Building workspace fully.");
+				// TODO:Check if the workspace is on auto-build.
+				workspace.build(IncrementalProjectBuilder.FULL_BUILD,
+						this.monitor);
+			} catch (CoreException e) {
+				throw new RuntimeException(e);
+			}
+
+			logger.info("Obtaining all advice in the workspace.");
+			toAnalyze = AJUtil.extractAdviceElements(workspace);
+		}
+
+		else if (this.pointcutAnalysisScope == PointcutAnalysisScope.PROJECT) {
+			// TODO: Fix this.
+			/*
+			 * for (IInteractionElement interactionElement : event
+			 * .getContext().getAllElements()) { IJavaElement javaElement =
+			 * JavaCore .create(interactionElement.getHandleIdentifier());
+			 * System.out.println(javaElement); }
+			 */
+			throw new IllegalStateException(PointcutAnalysisScope.PROJECT
+					+ " analysis scope is not supported at this time.");
+		}
+
+		analyzePointcuts(toAnalyze);
+	}
+
+	public void analyzePointcuts(Collection<? extends AdviceElement> toAnalyze) {
+		if (!toAnalyze.isEmpty()) {
+			try {
+				short maximumAnalysisDepth = (short) FraglightUiPlugin
+						.getDefault().getPreferenceStore()
+						.getInt(PreferenceConstants.P_ANALYSIS_DEPTH);
+
+				this.analyzer.setMaximumAnalysisDepth(maximumAnalysisDepth);
+
+				logger.log(
+						Level.INFO,
+						"Analyzing all bound pointcuts with particular maximum analysis depth.",
+						new Object[] { toAnalyze, maximumAnalysisDepth });
+
+				this.analyzer.analyze(toAnalyze, this.monitor);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
 		}
 	}
 
@@ -564,8 +574,9 @@ public class PointcutChangePredictionProvider extends
 				IJavaElement newJoinPointShadow = extractNewJoinPointShadow(
 						originalAST, newAST);
 				if (newJoinPointShadow != null) {
-					assertIsAJCodeElement(newJoinPointShadow); //sanity check.
-					logger.log(Level.INFO, "Found new code-level join point shadow.",
+					assertIsAJCodeElement(newJoinPointShadow); // sanity check.
+					logger.log(Level.INFO,
+							"Found new code-level join point shadow.",
 							newJoinPointShadow);
 					try {
 						processNewJoinPointShadow(newJoinPointShadow);
@@ -581,7 +592,7 @@ public class PointcutChangePredictionProvider extends
 		try {
 			handleDelta(affectedChildren);
 		} catch (JavaModelException e) {
-			//TODO: Handle properly.
+			// TODO: Handle properly.
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
@@ -589,8 +600,10 @@ public class PointcutChangePredictionProvider extends
 	}
 
 	private static void assertIsAJCodeElement(IJavaElement newJoinPointShadow) {
-		if ( !(newJoinPointShadow instanceof AJCodeElement) )
-			throw new IllegalStateException("Found illegal type of join point element: " +  newJoinPointShadow.getClass());
+		if (!(newJoinPointShadow instanceof AJCodeElement))
+			throw new IllegalStateException(
+					"Found illegal type of join point element: "
+							+ newJoinPointShadow.getClass());
 	}
 
 	private IJavaElement extractNewJoinPointShadow(CompilationUnit originalAST,
@@ -753,8 +766,7 @@ public class PointcutChangePredictionProvider extends
 
 		// save the file.
 		logger.info("Saving the file.");
-		ICompilationUnit icu = Util
-				.getCompilationUnit(newJoinPointShadow);
+		ICompilationUnit icu = Util.getCompilationUnit(newJoinPointShadow);
 		icu.getBuffer().save(this.monitor, false);
 
 		// Ensure that the building process is triggered.
