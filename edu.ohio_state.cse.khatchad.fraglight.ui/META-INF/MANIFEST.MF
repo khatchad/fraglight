@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.mylyn.monitor.core,
  org.eclipse.jdt;bundle-version="3.6.1",
  org.eclipse.jdt.core;bundle-version="3.6.1"
-Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Import-Package: edu.ohio_state.cse.khatchad.fraglight.core.analysis,
  edu.ohio_state.cse.khatchad.fraglight.core.util,
@@ -28,3 +28,4 @@ Import-Package: edu.ohio_state.cse.khatchad.fraglight.core.analysis,
  org.eclipse.mylyn.internal.java.ui,
  org.eclipse.mylyn.internal.java.ui.search
 Bundle-ClassPath: .
+Export-Package: edu.ohio_state.cse.khatchad.fraglight.ui

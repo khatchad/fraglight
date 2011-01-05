@@ -224,8 +224,7 @@ public class PointcutChangePredictionProvider extends
 				"Finding the change confidence value for a particular pointcut.",
 				advElem);
 
-		Set<Pattern<IntentionArc<IElement>>> patternsDerivedFromPointcut = this.analyzer
-				.getPointcutToPatternSetMap().get(advElem);
+		Set<Pattern<IntentionArc<IElement>>> patternsDerivedFromPointcut = getPatternsDerivedFromPointcut(advElem);
 
 		logger.log(
 				Level.INFO,
@@ -264,6 +263,14 @@ public class PointcutChangePredictionProvider extends
 
 			this.updateDOI(prediction);
 		}
+	}
+
+	protected Set<Pattern<IntentionArc<IElement>>> getPatternsDerivedFromPointcut(
+			AdviceElement advElem) {
+		Map<AdviceElement, Set<Pattern<IntentionArc<IElement>>>> pointcutToPatternSetMap = this.analyzer
+						.getPointcutToPatternSetMap();
+		Set<Pattern<IntentionArc<IElement>>> patternsDerivedFromPointcut = pointcutToPatternSetMap.get(advElem);
+		return patternsDerivedFromPointcut;
 	}
 
 	private void refreshThresholds() {
@@ -357,8 +364,8 @@ public class PointcutChangePredictionProvider extends
 		}
 	}
 
-	private void calculateChangeConfidenceForPointcuts(
-			final IJavaElement affectingJoinPoint) throws JavaModelException {
+	public void calculateChangeConfidenceForPointcuts(
+			final IJavaElement affectingJoinPoint, Collection<AdviceElement> pointcuts) throws JavaModelException {
 
 		logger.info("Retrieving all available patterns associated with pointcuts.");
 		Set<Pattern<IntentionArc<IElement>>> allPatterns = getAllPatterns();
@@ -376,12 +383,6 @@ public class PointcutChangePredictionProvider extends
 
 		// let the matcher match patterns against code in the
 		// projects:
-		logger.info("Retrieving all previously analyzed pointcuts.");
-		Set<AdviceElement> pointcuts = this.analyzer
-				.getPointcutToPatternSetMap().keySet();
-
-		logger.log(Level.INFO, "Obtained previously analyzed pointcuts.",
-				pointcuts);
 		try {
 			logger.info("Matching old patterns with new base-code, I think.");
 			matcher.analyze(pointcuts, this.monitor);
@@ -401,6 +402,16 @@ public class PointcutChangePredictionProvider extends
 					patternsMatchingJoinPoint, advElem);
 		}
 
+	}
+
+	private Set<AdviceElement> retreivePreviouslyAnalyzedPointcuts() {
+		logger.info("Retrieving all previously analyzed pointcuts.");
+		Set<AdviceElement> pointcuts = this.analyzer
+				.getPointcutToPatternSetMap().keySet();
+
+		logger.log(Level.INFO, "Obtained previously analyzed pointcuts.",
+				pointcuts);
+		return pointcuts;
 	}
 
 	@Override
@@ -783,7 +794,8 @@ public class PointcutChangePredictionProvider extends
 
 		// calculate the change confidence for every PCE.
 		logger.info("Calculating the change confidence for every available pointcut.");
-		calculateChangeConfidenceForPointcuts(newJoinPointShadow);
+		Set<AdviceElement> pointcuts = retreivePreviouslyAnalyzedPointcuts();
+		calculateChangeConfidenceForPointcuts(newJoinPointShadow, pointcuts);
 	}
 
 	public void setHighChangeConfidenceThreshold(
