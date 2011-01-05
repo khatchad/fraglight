@@ -2,20 +2,19 @@ package edu.ohio_state.cse.khatchad.fraglightevaluator.actions;
 
 import static org.eclipse.core.resources.ResourcesPlugin.getWorkspace;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
-import org.aspectj.asm.internal.JDTLikeHandleProvider;
-import org.eclipse.ajdt.core.AspectJCore;
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Plugin;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -24,11 +23,16 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
-import org.eclipse.ui.internal.UIPlugin;
 import org.eclipse.jface.dialogs.MessageDialog;
+
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 import edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
+import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
+import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
+import edu.ohio_state.cse.khatchad.fraglightevaluator.analysis.EvaluationPointcutChangePredictionProvider;
 
 /**
  * Our sample action implements workbench action delegate. The action proxy will
@@ -57,6 +61,11 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 		final String version_i = "FraglightTest1_v1";
 		final String version_j = "FraglightTest1_v2";
+		
+		BiMap<String,String> oldPointcutToNewPointcutMap = HashBiMap.create();
+		
+		oldPointcutToNewPointcutMap.put("p*A.aj'A&before", "p*A.aj'A&before2");
+		oldPointcutToNewPointcutMap.put("p*A.aj'A&after", "p*A.aj'A&after2");
 
 		IWorkspace workspace = getWorkspace();
 
@@ -69,6 +78,18 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 		IProject projectI = workspace.getRoot().getProject(version_i);
 		IJavaProject jProjectI = JavaCore.create(projectI);
+		
+		Collection<AdviceElement> oldPointcuts = new ArrayList<AdviceElement>();
+		for (String adviceKey : oldPointcutToNewPointcutMap.keySet() )
+		try {
+			oldPointcuts.add(AJUtil.extractAdviceElement(adviceKey, jProjectI));
+		} catch (JavaModelException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+
+		PointcutChangePredictionProvider changePredictionProvider = new EvaluationPointcutChangePredictionProvider(oldPointcutToNewPointcutMap);
+		changePredictionProvider.analyzePointcuts(oldPointcuts);
 
 		IProject projectJ = workspace.getRoot().getProject(version_j);
 		IJavaProject jProjectJ = JavaCore.create(projectJ);
@@ -89,21 +110,25 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			throw new RuntimeException(e);
 		}
 
-		Set<IJavaElement> addedShadows = getAddedShadowsBetween(
+		Set<IJavaElement> addedShadowCol = getAddedShadowsBetween(
 				shadowsInVersionJ, shadowsInVersionI);
 
-		Collection<? extends AdviceElement> adviceElements = null;
+		Collection<AdviceElement> newPointcuts = new ArrayList<AdviceElement>();
+		for (String adviceValue : oldPointcutToNewPointcutMap.values() )
 		try {
-			adviceElements = AJUtil.extractAdviceElements(jProjectI);
+			newPointcuts.add(AJUtil.extractAdviceElement(adviceValue, jProjectJ));
 		} catch (JavaModelException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-
-		removeDummyAdvice(adviceElements);
 		
-		for ( IJavaElement elem : adviceElements )
-			System.out.println(elem);
+		for (IJavaElement addedShadow : addedShadowCol )
+			try {
+				changePredictionProvider.calculateChangeConfidenceForPointcuts(addedShadow, newPointcuts);
+			} catch (JavaModelException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
 
 		MessageDialog.openInformation(window.getShell(), "FraglightEvaluator",
 				"Fraglight evaluated");
@@ -140,7 +165,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 		for (Iterator<IJavaElement> it = ret.iterator(); it.hasNext();) {
 			IJavaElement elem = it.next();
-			String key = getKey(elem);
+			String key = Util.getKey(elem);
 			if (!addedShadowKeys.contains(key))
 				it.remove();
 		}
@@ -155,7 +180,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	private static Set<String> getShadowKeys(Set<IJavaElement> shadowCol) {
 		Set<String> ret = new LinkedHashSet<String>();
 		for (IJavaElement elem : shadowCol)
-			ret.add(getKey(elem));
+			ret.add(Util.getKey(elem));
 		return ret;
 	}
 
@@ -197,14 +222,5 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	 */
 	public void init(IWorkbenchWindow window) {
 		this.window = window;
-	}
-
-	public static String getKey(IJavaElement javaElem) {
-		StringBuilder key = new StringBuilder(javaElem.getHandleIdentifier());
-		key.delete(0, key.indexOf("<") + 1);
-		int pos = key.indexOf("!");
-		if (pos != -1)
-			key.delete(pos, key.length() - 1);
-		return key.toString();
 	}
 }
