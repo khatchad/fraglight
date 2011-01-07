@@ -364,7 +364,7 @@ public class PointcutChangePredictionProvider extends
 		}
 	}
 
-	public void calculateChangeConfidenceForPointcuts(
+	private void calculateChangeConfidenceForPointcuts(
 			final IJavaElement affectingJoinPoint, Collection<AdviceElement> pointcuts) throws JavaModelException {
 
 		logger.info("Retrieving all available patterns associated with pointcuts.");
@@ -404,7 +404,7 @@ public class PointcutChangePredictionProvider extends
 
 	}
 
-	private Set<AdviceElement> retreivePreviouslyAnalyzedPointcuts() {
+	protected Set<AdviceElement> retreivePreviouslyAnalyzedPointcuts() {
 		logger.info("Retrieving all previously analyzed pointcuts.");
 		Set<AdviceElement> pointcuts = this.analyzer
 				.getPointcutToPatternSetMap().keySet();
@@ -770,7 +770,7 @@ public class PointcutChangePredictionProvider extends
 		}
 	}
 
-	private void processNewJoinPointShadow(final IJavaElement newJoinPointShadow)
+	public void processNewJoinPointShadow(final IJavaElement newJoinPointShadow)
 			throws JavaModelException {
 		logger.info("Clearing previous prediction set.");
 		this.predictionSet.clear();
