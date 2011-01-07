@@ -62,40 +62,87 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 		final String version_i = "FraglightTest1_v1";
 		final String version_j = "FraglightTest1_v2";
 		
-		BiMap<String,String> oldPointcutToNewPointcutMap = HashBiMap.create();
+		BiMap<String,String> oldPointcutKeyToNewPointcutKeyMap = HashBiMap.create();
 		
-		oldPointcutToNewPointcutMap.put("p*A.aj'A&before", "p*A.aj'A&before2");
-		oldPointcutToNewPointcutMap.put("p*A.aj'A&after", "p*A.aj'A&after2");
+		oldPointcutKeyToNewPointcutKeyMap.put("p*A.aj'A&before", "p*A.aj'A&before2");
+		oldPointcutKeyToNewPointcutKeyMap.put("p*A.aj'A&after", "p*A.aj'A&after2");
 
 		IWorkspace workspace = getWorkspace();
 
-		try {
-			workspace.build(IncrementalProjectBuilder.FULL_BUILD, null);
-		} catch (CoreException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		buildWorkspace(workspace);
 
-		IProject projectI = workspace.getRoot().getProject(version_i);
-		IJavaProject jProjectI = JavaCore.create(projectI);
+		IJavaProject jProjectI = getProject(version_i, workspace);
+		IJavaProject jProjectJ = getProject(version_j, workspace);
 		
+		Collection<AdviceElement> oldPointcuts = getPointcuts(
+				oldPointcutKeyToNewPointcutKeyMap.keySet(), jProjectI);
+		
+		Collection<AdviceElement> newPointcuts = getPointcuts(
+				oldPointcutKeyToNewPointcutKeyMap.values(), jProjectJ);
+		
+		//TODO: Make a map from oldpointcuts to newpointcuts (not just keys).
+
+		PointcutChangePredictionProvider changePredictionProvider = new EvaluationPointcutChangePredictionProvider(oldPointcutKeyToNewPointcutKeyMap);
+		changePredictionProvider.analyzePointcuts(oldPointcuts);
+
+
+		// would like to have a set of join points that exist in project_j but
+		// not in project_i.
+		Set<IJavaElement> addedShadowCol = getAddedShadowsBetween(jProjectJ,
+				jProjectI);
+		
+		for (IJavaElement addedShadow : addedShadowCol )
+			try {
+				changePredictionProvider.processNewJoinPointShadow(addedShadow);
+			} catch (JavaModelException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+
+//		Collection<AdviceElement> newPointcuts = new ArrayList<AdviceElement>();
+//		for (String adviceValue : oldPointcutToNewPointcutMap.values() )
+//		try {
+//			newPointcuts.add(AJUtil.extractAdviceElement(adviceValue, jProjectJ));
+//		} catch (JavaModelException e) {
+//			e.printStackTrace();
+//			throw new RuntimeException(e);
+//		}
+
+		MessageDialog.openInformation(window.getShell(), "FraglightEvaluator",
+				"Fraglight evaluated");
+	}
+
+	private Collection<AdviceElement> getPointcuts(
+			Collection<String> oldPointcutKeys,
+			IJavaProject jProjectI) {
 		Collection<AdviceElement> oldPointcuts = new ArrayList<AdviceElement>();
-		for (String adviceKey : oldPointcutToNewPointcutMap.keySet() )
+		for (String adviceKey : oldPointcutKeys )
 		try {
 			oldPointcuts.add(AJUtil.extractAdviceElement(adviceKey, jProjectI));
 		} catch (JavaModelException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
+		return oldPointcuts;
+	}
 
-		PointcutChangePredictionProvider changePredictionProvider = new EvaluationPointcutChangePredictionProvider(oldPointcutToNewPointcutMap);
-		changePredictionProvider.analyzePointcuts(oldPointcuts);
+	private IJavaProject getProject(final String version_i, IWorkspace workspace) {
+		IProject projectI = workspace.getRoot().getProject(version_i);
+		IJavaProject jProjectI = JavaCore.create(projectI);
+		return jProjectI;
+	}
 
-		IProject projectJ = workspace.getRoot().getProject(version_j);
-		IJavaProject jProjectJ = JavaCore.create(projectJ);
+	private void buildWorkspace(IWorkspace workspace) {
+		try {
+			workspace.build(IncrementalProjectBuilder.FULL_BUILD, null);
+		} catch (CoreException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
 
-		// would like to have a set of join points that exist in project_j but
-		// not in project_i.
+	public Set<IJavaElement> getAddedShadowsBetween(IJavaProject jProjectJ,
+			IJavaProject jProjectI) {
 		Set<IJavaElement> shadowsInVersionI = null;
 		Set<IJavaElement> shadowsInVersionJ = null;
 		try {
@@ -112,26 +159,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 		Set<IJavaElement> addedShadowCol = getAddedShadowsBetween(
 				shadowsInVersionJ, shadowsInVersionI);
-
-		Collection<AdviceElement> newPointcuts = new ArrayList<AdviceElement>();
-		for (String adviceValue : oldPointcutToNewPointcutMap.values() )
-		try {
-			newPointcuts.add(AJUtil.extractAdviceElement(adviceValue, jProjectJ));
-		} catch (JavaModelException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		
-		for (IJavaElement addedShadow : addedShadowCol )
-			try {
-				changePredictionProvider.calculateChangeConfidenceForPointcuts(addedShadow, newPointcuts);
-			} catch (JavaModelException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
-
-		MessageDialog.openInformation(window.getShell(), "FraglightEvaluator",
-				"Fraglight evaluated");
+		return addedShadowCol;
 	}
 
 	private void removeDummyAdvice(

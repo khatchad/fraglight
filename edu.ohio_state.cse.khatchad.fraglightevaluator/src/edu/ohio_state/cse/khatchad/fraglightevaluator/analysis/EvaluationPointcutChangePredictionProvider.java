@@ -3,6 +3,8 @@
  */
 package edu.ohio_state.cse.khatchad.fraglightevaluator.analysis;
 
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
@@ -38,22 +40,16 @@ public class EvaluationPointcutChangePredictionProvider extends
 	}
 
 	@Override
-	protected Set<Pattern<IntentionArc<IElement>>> getPatternsDerivedFromPointcut(
-			AdviceElement newPointcut) {
-		
-		String newAdvicekey = Util.getKey(newPointcut);
-		String oldAdviceKey = this.oldPointcutToNewPointcutMap.inverse().get(newAdvicekey);
-		IProject project = AJUtil.getProject(newPointcut);
-		IJavaProject jProject = JavaCore.create(project);
-		
-		AdviceElement oldPointcut;
-		try {
-			oldPointcut = AJUtil.extractAdviceElement(oldAdviceKey, jProject);
-		} catch (JavaModelException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+	protected Set<AdviceElement> retreivePreviouslyAnalyzedPointcuts() {
+		Set<AdviceElement> ret = new LinkedHashSet<AdviceElement>();
+		Collection<AdviceElement> previouslyAnalyzedPointcuts = super.retreivePreviouslyAnalyzedPointcuts();
+		for ( AdviceElement oldPointcut : previouslyAnalyzedPointcuts ) {
+			String oldPointcutKey = Util.getKey(oldPointcut);
+			String newPointcutKey = this.oldPointcutToNewPointcutMap.get(oldPointcutKey);
+			
+			
 		}
-
-		return super.getPatternsDerivedFromPointcut(oldPointcut);
+			
+		return null;
 	}
 }
