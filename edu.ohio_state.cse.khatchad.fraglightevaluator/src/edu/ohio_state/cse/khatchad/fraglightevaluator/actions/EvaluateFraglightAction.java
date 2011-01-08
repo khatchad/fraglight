@@ -1,5 +1,6 @@
 package edu.ohio_state.cse.khatchad.fraglightevaluator.actions;
 
+import static edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil.extractAdviceElement;
 import static org.eclipse.core.resources.ResourcesPlugin.getWorkspace;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.ajdt.core.javaelements.AJCodeElement;
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
@@ -28,6 +30,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import edu.ohio_state.cse.khatchad.fraglight.core.analysis.model.JoinPointType;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
 import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
@@ -61,11 +64,14 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 		final String version_i = "FraglightTest1_v1";
 		final String version_j = "FraglightTest1_v2";
-		
-		BiMap<String,String> oldPointcutKeyToNewPointcutKeyMap = HashBiMap.create();
-		
-		oldPointcutKeyToNewPointcutKeyMap.put("p*A.aj'A&before", "p*A.aj'A&before2");
-		oldPointcutKeyToNewPointcutKeyMap.put("p*A.aj'A&after", "p*A.aj'A&after2");
+
+		BiMap<String, String> oldPointcutKeyToNewPointcutKeyMap = HashBiMap
+				.create();
+
+		oldPointcutKeyToNewPointcutKeyMap.put("p*A.aj'A&before",
+				"p*A.aj'A&before2");
+		oldPointcutKeyToNewPointcutKeyMap.put("p*A.aj'A&after",
+				"p*A.aj'A&after2");
 
 		IWorkspace workspace = getWorkspace();
 
@@ -73,25 +79,36 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 		IJavaProject jProjectI = getProject(version_i, workspace);
 		IJavaProject jProjectJ = getProject(version_j, workspace);
-		
+
 		Collection<AdviceElement> oldPointcuts = getPointcuts(
 				oldPointcutKeyToNewPointcutKeyMap.keySet(), jProjectI);
-		
-		Collection<AdviceElement> newPointcuts = getPointcuts(
-				oldPointcutKeyToNewPointcutKeyMap.values(), jProjectJ);
-		
-		//TODO: Make a map from oldpointcuts to newpointcuts (not just keys).
 
-		PointcutChangePredictionProvider changePredictionProvider = new EvaluationPointcutChangePredictionProvider(oldPointcutKeyToNewPointcutKeyMap);
+		//A map from oldpointcuts to newpointcuts (not just keys).
+		BiMap<AdviceElement, AdviceElement> oldPointcutToNewPointcutMap = HashBiMap
+				.create();
+		for (String oldPointcutKey : oldPointcutKeyToNewPointcutKeyMap.keySet())
+			try {
+				oldPointcutToNewPointcutMap.put(
+						extractAdviceElement(oldPointcutKey, jProjectI),
+						extractAdviceElement(oldPointcutKeyToNewPointcutKeyMap
+								.get(oldPointcutKey), jProjectJ));
+			} catch (JavaModelException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+
+		PointcutChangePredictionProvider changePredictionProvider = new EvaluationPointcutChangePredictionProvider(
+				oldPointcutToNewPointcutMap);
 		changePredictionProvider.analyzePointcuts(oldPointcuts);
 
-
-		// would like to have a set of join points that exist in project_j but
+		// A set of join points that exist in project_j but
 		// not in project_i.
 		Set<IJavaElement> addedShadowCol = getAddedShadowsBetween(jProjectJ,
 				jProjectI);
 		
-		for (IJavaElement addedShadow : addedShadowCol )
+		AJUtil.removeShadowsCorrespondingTo(addedShadowCol, JoinPointType.FIELD_SET);
+
+		for (IJavaElement addedShadow : addedShadowCol)
 			try {
 				changePredictionProvider.processNewJoinPointShadow(addedShadow);
 			} catch (JavaModelException e) {
@@ -99,30 +116,21 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 				throw new RuntimeException(e);
 			}
 
-//		Collection<AdviceElement> newPointcuts = new ArrayList<AdviceElement>();
-//		for (String adviceValue : oldPointcutToNewPointcutMap.values() )
-//		try {
-//			newPointcuts.add(AJUtil.extractAdviceElement(adviceValue, jProjectJ));
-//		} catch (JavaModelException e) {
-//			e.printStackTrace();
-//			throw new RuntimeException(e);
-//		}
-
 		MessageDialog.openInformation(window.getShell(), "FraglightEvaluator",
 				"Fraglight evaluated");
 	}
 
 	private Collection<AdviceElement> getPointcuts(
-			Collection<String> oldPointcutKeys,
-			IJavaProject jProjectI) {
+			Collection<String> oldPointcutKeys, IJavaProject jProjectI) {
 		Collection<AdviceElement> oldPointcuts = new ArrayList<AdviceElement>();
-		for (String adviceKey : oldPointcutKeys )
-		try {
-			oldPointcuts.add(AJUtil.extractAdviceElement(adviceKey, jProjectI));
-		} catch (JavaModelException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		for (String adviceKey : oldPointcutKeys)
+			try {
+				oldPointcuts.add(AJUtil.extractAdviceElement(adviceKey,
+						jProjectI));
+			} catch (JavaModelException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
 		return oldPointcuts;
 	}
 

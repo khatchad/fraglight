@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
@@ -29,13 +30,13 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider
 public class EvaluationPointcutChangePredictionProvider extends
 		PointcutChangePredictionProvider {
 
-	private BiMap<String, String> oldPointcutToNewPointcutMap;
+	private BiMap<AdviceElement, AdviceElement> oldPointcutToNewPointcutMap;
 
 	/**
 	 * @param oldPointcutToNewPointcutMap
 	 */
 	public EvaluationPointcutChangePredictionProvider(
-			BiMap<String, String> oldPointcutToNewPointcutMap) {
+			BiMap<AdviceElement, AdviceElement> oldPointcutToNewPointcutMap) {
 		this.oldPointcutToNewPointcutMap = oldPointcutToNewPointcutMap;
 	}
 
@@ -43,13 +44,22 @@ public class EvaluationPointcutChangePredictionProvider extends
 	protected Set<AdviceElement> retreivePreviouslyAnalyzedPointcuts() {
 		Set<AdviceElement> ret = new LinkedHashSet<AdviceElement>();
 		Collection<AdviceElement> previouslyAnalyzedPointcuts = super.retreivePreviouslyAnalyzedPointcuts();
-		for ( AdviceElement oldPointcut : previouslyAnalyzedPointcuts ) {
-			String oldPointcutKey = Util.getKey(oldPointcut);
-			String newPointcutKey = this.oldPointcutToNewPointcutMap.get(oldPointcutKey);
+		for ( AdviceElement oldPointcut : previouslyAnalyzedPointcuts ) 
+			ret.add(this.oldPointcutToNewPointcutMap.get(oldPointcut));
 			
-			
-		}
-			
-		return null;
+		return ret;
+	}
+
+	@Override
+	public void processNewJoinPointShadow(IJavaElement newJoinPointShadow)
+			throws JavaModelException {
+		clearPreviousPredictions();
+		calculateChangeConfidence(newJoinPointShadow);
+	}
+
+	@Override
+	protected Set<Pattern<IntentionArc<IElement>>> getPatternsDerivedFromPointcut(
+			AdviceElement advElem) {
+		return super.getPatternsDerivedFromPointcut(this.oldPointcutToNewPointcutMap.inverse().get(advElem));
 	}
 }

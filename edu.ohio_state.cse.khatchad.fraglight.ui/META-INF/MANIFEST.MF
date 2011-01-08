@@ -27,5 +27,6 @@ Import-Package: edu.ohio_state.cse.khatchad.fraglight.core.analysis,
  org.eclipse.core.resources,
  org.eclipse.mylyn.internal.java.ui,
  org.eclipse.mylyn.internal.java.ui.search
-Bundle-ClassPath: .
+Bundle-ClassPath: .,
+ lib/guava-r07.jar
 Export-Package: edu.ohio_state.cse.khatchad.fraglight.ui
