@@ -149,16 +149,16 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 		}
 	}
 
-	public Set<IJavaElement> getAddedShadowsBetween(IJavaProject jProjectJ,
+	private static Set<IJavaElement> getAddedShadowsBetween(IJavaProject jProjectJ,
 			IJavaProject jProjectI) {
 		Set<IJavaElement> shadowsInVersionI = null;
 		Set<IJavaElement> shadowsInVersionJ = null;
 		try {
 			shadowsInVersionI = AJUtil.getAdvisedJavaElements(jProjectI);
-			removeShadowsCorrespondingToAspects(shadowsInVersionI);
+			AJUtil.removeShadowsCorrespondingToAspects(shadowsInVersionI);
 
 			shadowsInVersionJ = AJUtil.getAdvisedJavaElements(jProjectJ);
-			removeShadowsCorrespondingToAspects(shadowsInVersionJ);
+			AJUtil.removeShadowsCorrespondingToAspects(shadowsInVersionJ);
 
 		} catch (JavaModelException e) {
 			e.printStackTrace();
@@ -168,16 +168,6 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 		Set<IJavaElement> addedShadowCol = getAddedShadowsBetween(
 				shadowsInVersionJ, shadowsInVersionI);
 		return addedShadowCol;
-	}
-
-	private void removeDummyAdvice(
-			Collection<? extends IJavaElement> adviceElements) {
-		for (Iterator<? extends IJavaElement> it = adviceElements.iterator(); it
-				.hasNext();) {
-			IJavaElement elem = it.next();
-			if (elem.getHandleIdentifier().contains("Dummy.aj"))
-				it.remove();
-		}
 	}
 
 	/**
@@ -218,17 +208,6 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 		for (IJavaElement elem : shadowCol)
 			ret.add(Util.getKey(elem));
 		return ret;
-	}
-
-	/**
-	 * @param shadowsInVersionI
-	 */
-	private void removeShadowsCorrespondingToAspects(Set<IJavaElement> shadowCol) {
-		for (Iterator<IJavaElement> it = shadowCol.iterator(); it.hasNext();) {
-			IJavaElement elem = it.next();
-			if (AJUtil.isRelatedToAspect(elem))
-				it.remove();
-		}
 	}
 
 	/**

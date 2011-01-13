@@ -10,6 +10,7 @@ import org.eclipse.mylyn.monitor.core.InteractionEvent.Kind;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -239,8 +240,9 @@ public class PointcutChangePredictionProvider extends
 				patternsDerivedFromPointcut);
 
 		logger.info("Calculating \\mu(jps) \\intersect \\delta(PCE).");
-		Set<Pattern<IntentionArc<IElement>>> patternsToConsider = Sets.intersection(
-				patternsMatchingJoinPoint, patternsDerivedFromPointcut);
+		Set<Pattern<IntentionArc<IElement>>> patternsToConsider = Sets
+				.intersection(patternsMatchingJoinPoint,
+						patternsDerivedFromPointcut);
 
 		// decide if the new join point is captured by the
 		// pointcut.
@@ -400,15 +402,15 @@ public class PointcutChangePredictionProvider extends
 		}
 
 		logger.info("Finding patterns that match the new join point shadow. This is the set \\mu(jps) in the paper.");
-		Set<Pattern<IntentionArc<IElement>>> patternsMatchingJoinPoint = findPatternsMatchingJoinPoint(
-				affectingJoinPoint, allPatterns, matcher);
+		Map<AdviceElement, Set<Pattern<IntentionArc<IElement>>>> pointcutToPatternsMatchingJoinPointMap = findPatternsMatchingJoinPoint(
+				affectingJoinPoint, pointcuts, matcher);
 
 		logger.log(Level.INFO,
 				"Calculating the change confidence value for all pointcuts.",
 				pointcuts);
 		for (AdviceElement advElem : pointcuts) {
 			calculateChangeConfidence(affectingJoinPoint,
-					patternsMatchingJoinPoint, advElem);
+					pointcutToPatternsMatchingJoinPointMap.get(advElem), advElem);
 		}
 
 	}
@@ -645,32 +647,44 @@ public class PointcutChangePredictionProvider extends
 
 	private Map<ICompilationUnit, CompilationUnit> typeToAST = new HashMap<ICompilationUnit, CompilationUnit>();
 
-	private Set<Pattern<IntentionArc<IElement>>> findPatternsMatchingJoinPoint(
+	protected Map<AdviceElement, Set<Pattern<IntentionArc<IElement>>>> findPatternsMatchingJoinPoint(
 			final IJavaElement affectingJoinPoint,
-			Set<Pattern<IntentionArc<IElement>>> allPatterns,
-			PatternMatcher matcher) {
-		Set<Pattern<IntentionArc<IElement>>> patternsMatchingJoinPoint = new LinkedHashSet<Pattern<IntentionArc<IElement>>>();
+			Collection<AdviceElement> pointcuts, PatternMatcher matcher) {
 
-		logger.log(Level.INFO, "Cycling through all patterns.", allPatterns);
-		for (Pattern<IntentionArc<IElement>> pattern : allPatterns) {
+		Map<AdviceElement, Set<Pattern<IntentionArc<IElement>>>> ret = new LinkedHashMap<AdviceElement, Set<Pattern<IntentionArc<IElement>>>>();
 
-			// get all java elements produced by the pattern.
-			logger.log(Level.INFO,
-					"Retrieving join point shadows produced by the pattern.",
-					pattern);
-			Set<IJavaElement> matchingJavaElementSet = matcher
-					.getMatchingJavaElements(pattern);
+		for (AdviceElement advElem : pointcuts) {
 
-			logger.log(Level.INFO,
-					"Found join point shadows matching the pattern.",
-					matchingJavaElementSet);
+			Set<Pattern<IntentionArc<IElement>>> allPatterns = this.analyzer.getPointcutToPatternSetMap().get(advElem);
 
-			if (matchingJavaElementSet.contains(affectingJoinPoint)) {
-				logger.info("Pattern matches new join point shadow.");
-				patternsMatchingJoinPoint.add(pattern);
+			logger.log(Level.INFO, "Cycling through all patterns.", allPatterns);
+			for (Pattern<IntentionArc<IElement>> pattern : allPatterns) {
+
+				// get all java elements produced by the pattern.
+				logger.log(
+						Level.INFO,
+						"Retrieving join point shadows produced by the pattern.",
+						pattern);
+				Set<IJavaElement> matchingJavaElementSet = matcher
+						.getMatchingJavaElements(pattern);
+
+				logger.log(Level.INFO,
+						"Found join point shadows matching the pattern.",
+						matchingJavaElementSet);
+
+				if (matchingJavaElementSet.contains(affectingJoinPoint)) {
+					logger.info("Pattern matches new join point shadow.");
+					
+					if ( !ret.containsKey(advElem) )
+						ret.put(advElem, new LinkedHashSet<Pattern<IntentionArc<IElement>>>());
+					
+					Set<Pattern<IntentionArc<IElement>>> patternsMatchingJoinPoint = ret.get(advElem);
+					patternsMatchingJoinPoint.add(pattern);
+				}
 			}
 		}
-		return patternsMatchingJoinPoint;
+		
+		return ret;
 	}
 
 	@Override
