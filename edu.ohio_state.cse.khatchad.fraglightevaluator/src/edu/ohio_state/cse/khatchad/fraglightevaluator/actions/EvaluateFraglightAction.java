@@ -3,20 +3,27 @@ package edu.ohio_state.cse.khatchad.fraglightevaluator.actions;
 import static edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil.extractAdviceElement;
 import static org.eclipse.core.resources.ResourcesPlugin.getWorkspace;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.ajdt.core.javaelements.AJCodeElement;
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
+import org.eclipse.core.internal.resources.Workspace;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Plugin;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -26,6 +33,11 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.jdom.DataConversionException;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -62,62 +74,114 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	 */
 	public void run(IAction action) {
 
-		final String version_i = "FraglightTest1_v1";
-		final String version_j = "FraglightTest1_v2";
+		Document xmlTestFile = null;
+		try {
+			xmlTestFile = getXMLTestFile();
+		} catch (JDOMException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 
-		BiMap<String, String> oldPointcutKeyToNewPointcutKeyMap = HashBiMap
-				.create();
+		Collection<Test> testCol = null;
+		try {
+			testCol = getTestCollection(xmlTestFile);
+		} catch (DataConversionException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 
-		oldPointcutKeyToNewPointcutKeyMap.put("p*A.aj'A&before",
-				"p*A.aj'A&before2");
-		oldPointcutKeyToNewPointcutKeyMap.put("p*A.aj'A&after",
-				"p*A.aj'A&after2");
+		for (Test test : testCol) {
 
-		IWorkspace workspace = getWorkspace();
+			BiMap<String, String> oldPointcutKeyToNewPointcutKeyMap = test
+					.getOldPointcutKeyToNewPointcutKeyMap();
 
-		buildWorkspace(workspace);
+			IWorkspace workspace = getWorkspace();
+			buildWorkspace(workspace);
 
-		IJavaProject jProjectI = getProject(version_i, workspace);
-		IJavaProject jProjectJ = getProject(version_j, workspace);
+			IJavaProject jProjectI = getProject(test.getProjectI().getName(),
+					workspace);
+			IJavaProject jProjectJ = getProject(test.getProjectJ().getName(),
+					workspace);
 
-		Collection<AdviceElement> oldPointcuts = getPointcuts(
-				oldPointcutKeyToNewPointcutKeyMap.keySet(), jProjectI);
+			Collection<AdviceElement> oldPointcuts = getPointcuts(
+					oldPointcutKeyToNewPointcutKeyMap.keySet(), jProjectI);
 
-		//A map from oldpointcuts to newpointcuts (not just keys).
-		BiMap<AdviceElement, AdviceElement> oldPointcutToNewPointcutMap = HashBiMap
-				.create();
-		for (String oldPointcutKey : oldPointcutKeyToNewPointcutKeyMap.keySet())
-			try {
-				oldPointcutToNewPointcutMap.put(
-						extractAdviceElement(oldPointcutKey, jProjectI),
-						extractAdviceElement(oldPointcutKeyToNewPointcutKeyMap
-								.get(oldPointcutKey), jProjectJ));
-			} catch (JavaModelException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
+			// A map from oldpointcuts to newpointcuts (not just keys).
+			BiMap<AdviceElement, AdviceElement> oldPointcutToNewPointcutMap = HashBiMap
+					.create();
+			for (String oldPointcutKey : oldPointcutKeyToNewPointcutKeyMap
+					.keySet())
+				try {
+					oldPointcutToNewPointcutMap.put(
+							extractAdviceElement(oldPointcutKey, jProjectI),
+							extractAdviceElement(
+									oldPointcutKeyToNewPointcutKeyMap
+											.get(oldPointcutKey), jProjectJ));
+				} catch (JavaModelException e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+
+			PointcutChangePredictionProvider changePredictionProvider = new EvaluationPointcutChangePredictionProvider(
+					oldPointcutToNewPointcutMap);
+			changePredictionProvider.analyzePointcuts(oldPointcuts);
+
+			// A set of join points that exist in project_j but
+			// not in project_i.
+			Set<IJavaElement> addedShadowCol = getAddedShadowsBetween(
+					jProjectJ, jProjectI);
+
+			// AJUtil.removeShadowsCorrespondingTo(addedShadowCol,
+			// JoinPointType.FIELD_SET);
+
+			for (IJavaElement addedShadow : addedShadowCol)
+				try {
+					changePredictionProvider
+							.processNewJoinPointShadow(addedShadow);
+				} catch (JavaModelException e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+
+			MessageDialog.openInformation(window.getShell(),
+					"FraglightEvaluator", "Fraglight evaluated");
+		}
+	}
+
+	/**
+	 * @param xmlTestFile
+	 * @return
+	 * @throws DataConversionException
+	 */
+	private Collection<Test> getTestCollection(Document document)
+			throws DataConversionException {
+		Collection<Test> ret = new ArrayList<Test>();
+		Element root = document.getRootElement();
+
+		@SuppressWarnings("unchecked")
+		List<Element> testElemCol = root.getChildren("test");
+		for (Element testElem : testElemCol) {
+			Test test = new Test(testElem);
+			ret.add(test);
+		}
+		return ret;
+	}
+
+	private static Document getXMLTestFile() throws JDOMException, IOException {
+		String[] commandLineArgs = Platform.getCommandLineArgs();
+		String fileName = null;
+		for (int i = 0; i < commandLineArgs.length; i++)
+			if (commandLineArgs[i].equals("-test")) {
+				fileName = commandLineArgs[i + 1];
+				break;
 			}
 
-		PointcutChangePredictionProvider changePredictionProvider = new EvaluationPointcutChangePredictionProvider(
-				oldPointcutToNewPointcutMap);
-		changePredictionProvider.analyzePointcuts(oldPointcuts);
-
-		// A set of join points that exist in project_j but
-		// not in project_i.
-		Set<IJavaElement> addedShadowCol = getAddedShadowsBetween(jProjectJ,
-				jProjectI);
-		
-		AJUtil.removeShadowsCorrespondingTo(addedShadowCol, JoinPointType.FIELD_SET);
-
-		for (IJavaElement addedShadow : addedShadowCol)
-			try {
-				changePredictionProvider.processNewJoinPointShadow(addedShadow);
-			} catch (JavaModelException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
-
-		MessageDialog.openInformation(window.getShell(), "FraglightEvaluator",
-				"Fraglight evaluated");
+		File file = new File(fileName);
+		SAXBuilder builder = new SAXBuilder();
+		return builder.build(file);
 	}
 
 	private Collection<AdviceElement> getPointcuts(
@@ -149,8 +213,8 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 		}
 	}
 
-	private static Set<IJavaElement> getAddedShadowsBetween(IJavaProject jProjectJ,
-			IJavaProject jProjectI) {
+	private static Set<IJavaElement> getAddedShadowsBetween(
+			IJavaProject jProjectJ, IJavaProject jProjectI) {
 		Set<IJavaElement> shadowsInVersionI = null;
 		Set<IJavaElement> shadowsInVersionJ = null;
 		try {

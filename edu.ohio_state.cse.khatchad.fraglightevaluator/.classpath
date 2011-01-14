@@ -8,5 +8,6 @@
 			<attribute name="javadoc_location" value="http://guava-libraries.googlecode.com/svn/trunk/javadoc/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/jdom.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
