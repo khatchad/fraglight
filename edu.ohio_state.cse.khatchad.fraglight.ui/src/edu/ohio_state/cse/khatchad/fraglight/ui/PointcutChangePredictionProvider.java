@@ -246,7 +246,7 @@ public class PointcutChangePredictionProvider extends
 
 		// decide if the new join point is captured by the
 		// pointcut.
-		boolean captured = AJUtil.isCapturedBy(affectingJoinPoint, advElem);
+		boolean captured = isCapturedBy(affectingJoinPoint, advElem);
 		logger.log(
 				Level.INFO,
 				"Decided if the new join point shadow is captured by the current pointcut.",
@@ -272,6 +272,11 @@ public class PointcutChangePredictionProvider extends
 
 			this.updateDOI(prediction);
 		}
+	}
+
+	protected boolean isCapturedBy(IJavaElement affectingJoinPoint,
+			AdviceElement advElem) throws JavaModelException {
+		return AJUtil.isCapturedBy(affectingJoinPoint, advElem);
 	}
 
 	protected Set<Pattern<IntentionArc<IElement>>> getPatternsDerivedFromPointcut(
@@ -408,7 +413,7 @@ public class PointcutChangePredictionProvider extends
 		logger.log(Level.INFO,
 				"Calculating the change confidence value for all pointcuts.",
 				pointcuts);
-		for (AdviceElement advElem : pointcuts) {
+		for (AdviceElement advElem : pointcutToPatternsMatchingJoinPointMap.keySet()) {
 			calculateChangeConfidence(affectingJoinPoint,
 					pointcutToPatternsMatchingJoinPointMap.get(advElem), advElem);
 		}
