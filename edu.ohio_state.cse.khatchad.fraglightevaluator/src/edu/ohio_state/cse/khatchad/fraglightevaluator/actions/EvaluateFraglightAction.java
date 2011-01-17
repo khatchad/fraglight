@@ -134,9 +134,6 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			Set<IJavaElement> addedShadowCol = getAddedShadowsBetween(
 					jProjectJ, jProjectI);
 
-			// AJUtil.removeShadowsCorrespondingTo(addedShadowCol,
-			// JoinPointType.FIELD_SET);
-
 			for (IJavaElement addedShadow : addedShadowCol)
 				try {
 					changePredictionProvider
@@ -159,10 +156,10 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	private Collection<Test> getTestCollection(Document document)
 			throws DataConversionException {
 		Collection<Test> ret = new ArrayList<Test>();
-		Element root = document.getRootElement();
+		Element evaluationElement = document.getRootElement();
 
 		@SuppressWarnings("unchecked")
-		List<Element> testElemCol = root.getChildren("test");
+		List<Element> testElemCol = evaluationElement.getChildren("test");
 		for (Element testElem : testElemCol) {
 			Test test = new Test(testElem);
 			ret.add(test);

@@ -85,12 +85,7 @@ public class Test {
 			projectJ = projectList.get(0);
 		}
 
-		if (testElem.getChildren("pointcutmap").size() > 0)
-			throw new IllegalStateException(
-					"A single test can't have more than one pointcut map.");
-
-		Element pointcutMapElem = (Element) testElem.getChildren("pointcutmap")
-				.get(0);
+		Element pointcutMapElem = (Element) testElem.getChild("pointcutmap");
 
 		for (Object obj : pointcutMapElem.getChildren("mapentry")) {
 			Element mapEntry = (Element) obj;
