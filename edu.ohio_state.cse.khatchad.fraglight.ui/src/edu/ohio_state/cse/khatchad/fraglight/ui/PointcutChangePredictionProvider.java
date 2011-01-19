@@ -76,6 +76,7 @@ import edu.ohio_state.cse.khatchad.fraglight.core.graph.IntentionArc;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.Pattern;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
+import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.Prediction.ChangeDirection;
 import edu.ohio_state.cse.khatchad.fraglight.ui.preferences.PreferenceConstants;
 
 /**
@@ -100,7 +101,23 @@ public class PointcutChangePredictionProvider extends
 	 *         Khatchadourian</a>
 	 * 
 	 */
-	public class Prediction {
+	public static class Prediction {
+		
+		public enum ChangeDirection {
+			POSITIVE('+'), NEGATIVE('-');
+			private char symbol;
+			ChangeDirection(char symbol) {
+				this.symbol = symbol;
+			}
+			@Override
+			public String toString() {
+				return String.valueOf(this.symbol);
+			}
+			
+			public static ChangeDirection valueOf(boolean captured) {
+				return captured ? NEGATIVE : POSITIVE;
+			}
+		};
 
 		private AdviceElement advice;
 
@@ -114,17 +131,20 @@ public class PointcutChangePredictionProvider extends
 
 		private Set<Pattern<IntentionArc<IElement>>> contributingPatterns;
 
+		private ChangeDirection changeDirection;
+
 		/**
 		 * @param advice
 		 * @param changeConfidence
 		 */
-		public Prediction(AdviceElement advice, double changeConfidence,
+		public Prediction(AdviceElement advice, double changeConfidence, ChangeDirection changeDirection,
 				IJavaElement affectingJoinPoint,
 				Set<Pattern<IntentionArc<IElement>>> contributingPatterns) {
 			this.advice = advice;
 			this.changeConfidence = changeConfidence;
 			this.affectingJoinPoint = affectingJoinPoint;
 			this.contributingPatterns = contributingPatterns;
+			this.changeDirection = changeDirection;
 		}
 
 		/**
@@ -155,6 +175,10 @@ public class PointcutChangePredictionProvider extends
 					+ this.affectingJoinPoint
 					+ " based on the contributing patterns "
 					+ this.contributingPatterns + ".";
+		}
+
+		public ChangeDirection getChangeDirection() {
+			return this.changeDirection;
 		}
 	}
 
@@ -263,9 +287,12 @@ public class PointcutChangePredictionProvider extends
 		// within the threshold interval.
 		if (changeConfidence >= this.highChangeConfidenceThreshold
 				|| changeConfidence <= this.lowChangeConfidenceThreshold) {
-			logger.info("The change confidence for this pointcut is in the threshold interval.");
+			
+			logger.info("The change confidence for this pointcut is within the threshold interval.");
+			
 			Prediction prediction = new Prediction(advElem, changeConfidence,
-					affectingJoinPoint, patternsToConsider);
+					ChangeDirection.valueOf(captured) , affectingJoinPoint, patternsToConsider);
+			
 			logger.log(Level.INFO, "Adding prediction to prediction set.",
 					prediction);
 			this.predictionSet.add(prediction);

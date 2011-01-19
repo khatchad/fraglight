@@ -4,6 +4,7 @@ import static edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil.extractAdvi
 import static org.eclipse.core.resources.ResourcesPlugin.getWorkspace;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,6 +40,8 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import au.com.bytecode.opencsv.CSVWriter;
+
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
@@ -47,7 +50,10 @@ import edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
 import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
+import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.Prediction;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.analysis.EvaluationPointcutChangePredictionProvider;
+import edu.ohio_state.cse.khatchad.fraglightevaluator.model.Test;
+import edu.ohio_state.cse.khatchad.fraglightevaluator.model.TestResult;
 
 /**
  * Our sample action implements workbench action delegate. The action proxy will
@@ -58,12 +64,20 @@ import edu.ohio_state.cse.khatchad.fraglightevaluator.analysis.EvaluationPointcu
  * @see IWorkbenchWindowActionDelegate
  */
 public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
+
+	private static final String FILE_NAME = "output.csv";
+
 	private IWorkbenchWindow window;
+
+	private CSVWriter writer;
 
 	/**
 	 * The constructor.
+	 * 
+	 * @throws IOException
 	 */
-	public EvaluateFraglightAction() {
+	public EvaluateFraglightAction() throws IOException {
+		writer = new CSVWriter(new FileWriter(FILE_NAME));
 	}
 
 	/**
@@ -73,6 +87,8 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	 * @see IWorkbenchWindowActionDelegate#run
 	 */
 	public void run(IAction action) {
+
+		writer.writeNext(TestResult.getHeader());
 
 		Document xmlTestFile = null;
 		try {
@@ -142,9 +158,25 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 					e.printStackTrace();
 					throw new RuntimeException(e);
 				}
+				
+			
+			for (Prediction prediction : changePredictionProvider
+					.getPredictionSet()) {
+
+				TestResult result = new TestResult(test, prediction);
+				String[] row = result.getRow();
+				this.writer.writeNext(row);
+			}
 
 			MessageDialog.openInformation(window.getShell(),
 					"FraglightEvaluator", "Fraglight evaluated");
+
+			try {
+				this.writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
 		}
 	}
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.ohio_state.cse.khatchad.fraglightevaluator.actions;
+package edu.ohio_state.cse.khatchad.fraglightevaluator.model;
 
 import java.util.ArrayList;
 import java.util.Collection;

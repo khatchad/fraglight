@@ -13,5 +13,10 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/edu.ohio_state.cse.khatchad.fraglightevaluator/lib/jdom-doc.jar!/apidocs"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/opencsv-2.2.jar" sourcepath="lib/opencsv-2.2-src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/edu.ohio_state.cse.khatchad.fraglightevaluator/lib/opencsv-2.2-doc.zip!/api"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
