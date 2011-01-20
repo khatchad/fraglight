@@ -4,8 +4,11 @@ import static edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil.extractAdvi
 import static org.eclipse.core.resources.ResourcesPlugin.getWorkspace;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -17,7 +20,6 @@ import java.util.Set;
 
 import org.eclipse.ajdt.core.javaelements.AJCodeElement;
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
-import org.eclipse.core.internal.resources.Workspace;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -46,6 +48,8 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.model.JoinPointType;
+import edu.ohio_state.cse.khatchad.fraglight.core.analysis.util.FileUtil;
+import edu.ohio_state.cse.khatchad.fraglight.core.analysis.util.TimeCollector;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
 import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
@@ -65,7 +69,10 @@ import edu.ohio_state.cse.khatchad.fraglightevaluator.model.TestResult;
  */
 public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
-	private static final String FILE_NAME = "output.csv";
+	protected static final String RESULT_PATH = new File(ResourcesPlugin
+			.getWorkspace().getRoot().getLocation().toOSString()
+			+ File.separator + "results").getPath()
+			+ File.separator;
 
 	private IWorkbenchWindow window;
 
@@ -73,11 +80,8 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 	/**
 	 * The constructor.
-	 * 
-	 * @throws IOException
 	 */
-	public EvaluateFraglightAction() throws IOException {
-		writer = new CSVWriter(new FileWriter(FILE_NAME));
+	public EvaluateFraglightAction() {
 	}
 
 	/**
@@ -87,8 +91,6 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	 * @see IWorkbenchWindowActionDelegate#run
 	 */
 	public void run(IAction action) {
-
-		writer.writeNext(TestResult.getHeader());
 
 		Document xmlTestFile = null;
 		try {
@@ -140,15 +142,20 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 					e.printStackTrace();
 					throw new RuntimeException(e);
 				}
+				
+			final long start = System.currentTimeMillis();
+			TimeCollector.clear();
 
 			PointcutChangePredictionProvider changePredictionProvider = new EvaluationPointcutChangePredictionProvider(
 					oldPointcutToNewPointcutMap);
 			changePredictionProvider.analyzePointcuts(oldPointcuts);
 
+			TimeCollector.start();
 			// A set of join points that exist in project_j but
 			// not in project_i.
 			Set<IJavaElement> addedShadowCol = getAddedShadowsBetween(
 					jProjectJ, jProjectI);
+			TimeCollector.stop();
 
 			for (IJavaElement addedShadow : addedShadowCol)
 				try {
@@ -159,6 +166,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 					throw new RuntimeException(e);
 				}
 				
+			final double secs = calculateTimeStatistics(start);
 			
 			for (Prediction prediction : changePredictionProvider
 					.getPredictionSet()) {
@@ -167,16 +175,16 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 				String[] row = result.getRow();
 				this.writer.writeNext(row);
 			}
-
-			MessageDialog.openInformation(window.getShell(),
-					"FraglightEvaluator", "Fraglight evaluated");
-
+			
 			try {
 				this.writer.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
+
+			MessageDialog.openInformation(window.getShell(),
+					"FraglightEvaluator", "Fraglight evaluated");
 		}
 	}
 
@@ -330,5 +338,32 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	 */
 	public void init(IWorkbenchWindow window) {
 		this.window = window;
+		
+		final File resultFolder = new File(RESULT_PATH);
+		if (!resultFolder.exists())
+			resultFolder.mkdir();
+
+		try {
+			final File aFile = new File(RESULT_PATH + "predictions.csv");
+			PrintWriter printWriter = FileUtil.getPrintWriter(aFile, false);
+			this.writer = new CSVWriter(printWriter);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		writer.writeNext(TestResult.getHeader());
+	}
+	
+	protected double calculateTimeStatistics(final long start) {
+		long end = System.currentTimeMillis();
+		
+		long collectedTime = TimeCollector.getCollectedTime();
+		long newStart = start + collectedTime;
+		final long elapsed = end - newStart;	
+		
+		TimeCollector.clear();
+		final double secs = (double) elapsed / 1000;
+		return secs;
 	}
 }
