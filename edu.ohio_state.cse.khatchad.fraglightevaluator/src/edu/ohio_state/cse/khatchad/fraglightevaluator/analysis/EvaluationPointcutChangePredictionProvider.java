@@ -23,6 +23,7 @@ import com.google.common.collect.BiMap;
 
 import ca.mcgill.cs.swevo.jayfx.model.IElement;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PatternMatcher;
+import edu.ohio_state.cse.khatchad.fraglight.core.analysis.util.TimeCollector;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.IntentionArc;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.Pattern;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil;
@@ -47,9 +48,9 @@ public class EvaluationPointcutChangePredictionProvider extends
 	}
 
 	@Override
-	protected Set<AdviceElement> retreivePreviouslyAnalyzedPointcuts() {
+	protected Set<AdviceElement> retreivePreviouslyAnalyzedPointcuts(TimeCollector timeCollector) {
 		Set<AdviceElement> ret = new LinkedHashSet<AdviceElement>();
-		Collection<AdviceElement> previouslyAnalyzedPointcuts = super.retreivePreviouslyAnalyzedPointcuts();
+		Collection<AdviceElement> previouslyAnalyzedPointcuts = super.retreivePreviouslyAnalyzedPointcuts(timeCollector);
 		for ( AdviceElement oldPointcut : previouslyAnalyzedPointcuts ) 
 			ret.add(this.oldPointcutToNewPointcutMap.get(oldPointcut));
 			
@@ -57,10 +58,10 @@ public class EvaluationPointcutChangePredictionProvider extends
 	}
 
 	@Override
-	public void processNewJoinPointShadow(IJavaElement newJoinPointShadow)
+	public void processNewJoinPointShadow(IJavaElement newJoinPointShadow, TimeCollector timeCollector)
 			throws JavaModelException {
-		clearPreviousPredictions();
-		calculateChangeConfidence(newJoinPointShadow);
+		clearPreviousPredictions(timeCollector);
+		calculateChangeConfidence(newJoinPointShadow, timeCollector);
 	}
 
 //	@Override
@@ -72,8 +73,9 @@ public class EvaluationPointcutChangePredictionProvider extends
 	@Override
 	protected Map<AdviceElement, Set<Pattern<IntentionArc<IElement>>>> findPatternsMatchingJoinPoint(
 			IJavaElement affectingJoinPoint,
-			Collection<AdviceElement> newPointcuts, PatternMatcher matcher) {
+			Collection<AdviceElement> newPointcuts, PatternMatcher matcher, TimeCollector timeCollector) {
 		
+		timeCollector.start();
 		ArrayList<AdviceElement> oldPointcuts = new ArrayList<AdviceElement>(newPointcuts);
 		
 		ListIterator<AdviceElement> iterator = oldPointcuts.listIterator();
@@ -82,9 +84,10 @@ public class EvaluationPointcutChangePredictionProvider extends
 			AdviceElement oldAdvice = this.oldPointcutToNewPointcutMap.inverse().get(newAdvice);
 			iterator.set(oldAdvice);
 		}
+		timeCollector.stop();
 		
 		return super.findPatternsMatchingJoinPoint(affectingJoinPoint, oldPointcuts,
-				matcher);
+				matcher, timeCollector);
 	}
 
 	@Override

@@ -9,6 +9,8 @@ import java.util.List;
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
 import org.eclipse.jdt.core.IJavaElement;
 
+import au.com.bytecode.opencsv.CSVWriter;
+
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.Prediction;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.Prediction.ChangeDirection;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.model.Test.Project;
@@ -18,9 +20,9 @@ import edu.ohio_state.cse.khatchad.fraglightevaluator.util.DatabaseUtil;
  * @author <a href="mailto:khatchad@cse.ohio-state.edu">Raffi Khatchadourian</a>
  * 
  */
-public class TestResult {
+public class PredictionTestResult {
 
-	public static final String HEADER = "Benchmark#From version#To version#Added joint point shadow#Pointcut that is predicted to change as a direct result#Predicted direction#Change confidene#Time";
+	public static final String HEADER = "Benchmark#From version#To version#Added joint point shadow#Pointcut that is predicted to change as a direct result#Predicted direction#Change confidene";
 
 	private String benchmarkName;
 
@@ -36,9 +38,7 @@ public class TestResult {
 	
 	private double changeConfidence;
 	
-	private double time = -1;
-	
-	public String[] getRow() {
+	private String[] getRow() {
 		List<String> ret = new ArrayList<String>(HEADER.split("#").length);
 		
 		ret.add(this.benchmarkName);
@@ -48,14 +48,13 @@ public class TestResult {
 		ret.add(DatabaseUtil.getKey(this.predictedPointcut));
 		ret.add(this.changeDirection.toString());
 		ret.add(String.valueOf(this.changeConfidence));
-		ret.add(String.valueOf(time));
 		
 		return ret.toArray(new String[0]);
 	}
 
-	public TestResult(Test test, Prediction prediction) {
-		String benchmarkNameI = getBenchmarkName(test.getProjectI());
-		String benchmarkNameJ = getBenchmarkName(test.getProjectJ());
+	public PredictionTestResult(Test test, Prediction prediction) {
+		String benchmarkNameI = test.getProjectI().getBenchmarkName();
+		String benchmarkNameJ = test.getProjectJ().getBenchmarkName();
 
 		// sanity check
 		if (!benchmarkNameI.equals(benchmarkNameJ))
@@ -72,14 +71,13 @@ public class TestResult {
 		this.changeConfidence = prediction.getChangeConfidence();
 	}
 
-	private static String getBenchmarkName(Project project) {
-		String projectName = project.getName();
-		String benchmarkName = projectName.substring(0,
-				projectName.indexOf('_'));
-		return benchmarkName;
-	}
-
 	public static String[] getHeader() {
 		return HEADER.split("#");
+	}
+
+	
+	public void write(CSVWriter writer) {
+		String[] row = this.getRow();
+		writer.writeNext(row);
 	}
 }

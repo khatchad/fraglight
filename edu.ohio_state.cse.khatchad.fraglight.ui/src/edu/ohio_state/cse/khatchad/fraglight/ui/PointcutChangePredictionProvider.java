@@ -72,6 +72,7 @@ import ca.mcgill.cs.swevo.jayfx.model.IElement;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.JoinPointShadowDifferenceAnalyzer;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PatternMatcher;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PointcutAnalyzer;
+import edu.ohio_state.cse.khatchad.fraglight.core.analysis.util.TimeCollector;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.IntentionArc;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.Pattern;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil;
@@ -132,11 +133,7 @@ public class PointcutChangePredictionProvider extends
 		private Set<Pattern<IntentionArc<IElement>>> contributingPatterns;
 
 		private ChangeDirection changeDirection;
-
-		/**
-		 * @param advice
-		 * @param changeConfidence
-		 */
+		
 		public Prediction(AdviceElement advice, double changeConfidence, ChangeDirection changeDirection,
 				IJavaElement affectingJoinPoint,
 				Set<Pattern<IntentionArc<IElement>>> contributingPatterns) {
@@ -237,7 +234,6 @@ public class PointcutChangePredictionProvider extends
 		}
 
 		int denominator = patternSet.size();
-		// TODO: Guard against the denominator being zero here.
 		if (denominator == 0)
 			return captured ? 1 : 0;
 
@@ -250,20 +246,26 @@ public class PointcutChangePredictionProvider extends
 	private void calculateChangeConfidence(
 			final IJavaElement affectingJoinPoint,
 			Set<Pattern<IntentionArc<IElement>>> patternsMatchingJoinPoint,
-			AdviceElement advElem) throws JavaModelException {
+			AdviceElement advElem, TimeCollector timeCollector) throws JavaModelException {
+
+		timeCollector.start();
 		logger.log(
 				Level.INFO,
 				"Finding the change confidence value for a particular pointcut.",
 				advElem);
+		timeCollector.stop();
 
 		Set<Pattern<IntentionArc<IElement>>> patternsDerivedFromPointcut = getPatternsDerivedFromPointcut(advElem);
 
+		timeCollector.start();
 		logger.log(
 				Level.INFO,
 				"Found patterns derived from the pointcut. This is \\delta(PCE) in the paper.",
 				patternsDerivedFromPointcut);
 
 		logger.info("Calculating \\mu(jps) \\intersect \\delta(PCE).");
+		timeCollector.stop();
+		
 		Set<Pattern<IntentionArc<IElement>>> patternsToConsider = Sets
 				.intersection(patternsMatchingJoinPoint,
 						patternsDerivedFromPointcut);
@@ -271,33 +273,45 @@ public class PointcutChangePredictionProvider extends
 		// decide if the new join point is captured by the
 		// pointcut.
 		boolean captured = isCapturedBy(affectingJoinPoint, advElem);
+		
+		timeCollector.start();
 		logger.log(
 				Level.INFO,
 				"Decided if the new join point shadow is captured by the current pointcut.",
 				captured);
+		timeCollector.stop();
 
 		// calculate the change confidence.
 		double changeConfidence = calculateChangeConfidence(captured,
 				patternsToConsider);
+		
+		timeCollector.start();
 		logger.log(Level.INFO, "Found the change confidence.", changeConfidence);
 
 		refreshThresholds();
+		timeCollector.stop();
 
 		// Only make a prediction if the change confidence is
 		// within the threshold interval.
 		if (changeConfidence >= this.highChangeConfidenceThreshold
 				|| changeConfidence <= this.lowChangeConfidenceThreshold) {
 			
+			timeCollector.start();
 			logger.info("The change confidence for this pointcut is within the threshold interval.");
+			timeCollector.stop();
 			
 			Prediction prediction = new Prediction(advElem, changeConfidence,
 					ChangeDirection.valueOf(captured) , affectingJoinPoint, patternsToConsider);
 			
+			timeCollector.start();
 			logger.log(Level.INFO, "Adding prediction to prediction set.",
 					prediction);
+			timeCollector.stop();
+			
 			this.predictionSet.add(prediction);
 
-			this.updateDOI(prediction);
+			//TODO: Need to record values somehow!
+			this.updateDOI(prediction, timeCollector);
 		}
 	}
 
@@ -347,7 +361,7 @@ public class PointcutChangePredictionProvider extends
 		return ContextCore.getContextManager().getActiveContext();
 	}
 
-	private void updateDOI(Prediction prediction) {
+	private void updateDOI(Prediction prediction, TimeCollector timeCollector) {
 
 		if (!ContextCore.getContextManager().isContextActive()) {
 			return;
@@ -359,39 +373,46 @@ public class PointcutChangePredictionProvider extends
 
 			AdviceElement advice = prediction.getAdvice();
 
+			timeCollector.start();
 			logger.log(
 					Level.INFO,
 					"Prediction is lower than threshold. Making element less interesting.",
 					new Object[] { this.getLowChangeConfidenceThreshold(),
 							advice });
+			timeCollector.stop();
 
 			IInteractionElement node = convertSelectionToInteractionElement(advice);
 
+			timeCollector.start();
 			logger.info("Originally, the interest level was "
 					+ node.getInterest().getValue());
+			timeCollector.stop();
 
 			// let's preserve uninterestingness here.
 			boolean manipulated = ContextCorePlugin.getContextManager()
 					.manipulateInterestForElement(node, false, false, true, ID,
 							true);
 
+			//TODO: I need to record this delta somehow.
+			timeCollector.start();
 			logger.info("Context " + (manipulated ? "was" : "was not")
 					+ " manipulated.");
-
 			logger.info("Now, the interest level is "
 					+ node.getInterest().getValue());
-
+			timeCollector.stop();
 		}
 
 		else if (changeConfidence >= this.getHighChangeConfidenceThreshold()) {
 
 			AdviceElement advice = prediction.getAdvice();
 
+			timeCollector.start();
 			logger.log(
 					Level.INFO,
 					"Prediction is higher than threshold. Making element more interesting.",
 					new Object[] { this.getHighChangeConfidenceThreshold(),
 							advice });
+			timeCollector.stop();
 
 			IInteractionContext activeContext = ContextCore.getContextManager()
 					.getActiveContext();
@@ -400,17 +421,21 @@ public class PointcutChangePredictionProvider extends
 					.getContextManager().processInteractionEvent(advice,
 							Kind.PREDICTION, ID, activeContext);
 
+			timeCollector.start();
 			logger.info("The interest level is now "
 					+ interactionElement.getInterest().getValue());
-
+			timeCollector.stop();
 		}
 	}
 
 	private void calculateChangeConfidenceForPointcuts(
 			final IJavaElement affectingJoinPoint,
-			Collection<AdviceElement> pointcuts) throws JavaModelException {
+			Collection<AdviceElement> pointcuts, TimeCollector timeCollector) throws JavaModelException {
 
+		timeCollector.start();
 		logger.info("Retrieving all available patterns associated with pointcuts.");
+		timeCollector.stop();
+		
 		Set<Pattern<IntentionArc<IElement>>> allPatterns = getAllPatterns();
 
 		short maximumAnalysisDepth = (short) FraglightUiPlugin.getDefault()
@@ -424,36 +449,50 @@ public class PointcutChangePredictionProvider extends
 		PatternMatcher matcher = new PatternMatcher(allPatterns,
 				maximumAnalysisDepth);
 
-		// let the matcher match patterns against code in the
-		// projects:
+		timeCollector.start();
+		logger.info("Matching old patterns with new base-code, I think.");
+		timeCollector.stop();
+		
 		try {
-			logger.info("Matching old patterns with new base-code, I think.");
-			matcher.analyze(pointcuts, this.monitor);
+			// let the matcher match patterns against code in the projects:
+			matcher.analyze(pointcuts, this.monitor, timeCollector);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 
+		timeCollector.start();
 		logger.info("Finding patterns that match the new join point shadow. This is the set \\mu(jps) in the paper.");
+		timeCollector.stop();
+		
 		Map<AdviceElement, Set<Pattern<IntentionArc<IElement>>>> pointcutToPatternsMatchingJoinPointMap = findPatternsMatchingJoinPoint(
-				affectingJoinPoint, pointcuts, matcher);
+				affectingJoinPoint, pointcuts, matcher, timeCollector);
 
+		timeCollector.start();
 		logger.log(Level.INFO,
 				"Calculating the change confidence value for all pointcuts.",
 				pointcuts);
+		timeCollector.stop();
+		
 		for (AdviceElement advElem : pointcutToPatternsMatchingJoinPointMap.keySet()) {
 			calculateChangeConfidence(affectingJoinPoint,
-					pointcutToPatternsMatchingJoinPointMap.get(advElem), advElem);
+					pointcutToPatternsMatchingJoinPointMap.get(advElem), advElem, timeCollector);
 		}
 
 	}
 
-	protected Set<AdviceElement> retreivePreviouslyAnalyzedPointcuts() {
+	protected Set<AdviceElement> retreivePreviouslyAnalyzedPointcuts(TimeCollector timeCollector) {
+		timeCollector.start();
 		logger.info("Retrieving all previously analyzed pointcuts.");
+		timeCollector.stop();
+		
 		Set<AdviceElement> pointcuts = this.analyzer
 				.getPointcutToPatternSetMap().keySet();
 
+		timeCollector.start();
 		logger.log(Level.INFO, "Obtained previously analyzed pointcuts.",
 				pointcuts);
+		timeCollector.stop();
+		
 		return pointcuts;
 	}
 
@@ -478,7 +517,7 @@ public class PointcutChangePredictionProvider extends
 			JavaCore.addElementChangedListener(this,
 					ElementChangedEvent.POST_RECONCILE);
 
-			analyzePointcuts();
+			analyzePointcuts(new TimeCollector());
 			break;
 		}
 
@@ -492,7 +531,7 @@ public class PointcutChangePredictionProvider extends
 			logger.info("De-registering as a java editor change listener.");
 			JavaCore.removeElementChangedListener(this);
 
-			clearPreviousPredictions();
+			clearPreviousPredictions(new TimeCollector());
 
 			// TODO: This is not correct.
 			// logger.info("Refreshing the change prediction view.");
@@ -514,7 +553,7 @@ public class PointcutChangePredictionProvider extends
 		}
 	}
 
-	private void analyzePointcuts() {
+	private void analyzePointcuts(TimeCollector timeCollector) {
 		// analyze pointcuts.
 		Collection<? extends AdviceElement> toAnalyze = null;
 
@@ -526,15 +565,22 @@ public class PointcutChangePredictionProvider extends
 
 			IWorkspace workspace = getWorkspace();
 			try {
+				
+				timeCollector.start();
 				logger.info("Building workspace fully.");
 				// TODO:Check if the workspace is on auto-build.
 				workspace.build(IncrementalProjectBuilder.FULL_BUILD,
 						this.monitor);
+				timeCollector.stop();
+				
 			} catch (CoreException e) {
 				throw new RuntimeException(e);
 			}
 
+			timeCollector.start();
 			logger.info("Obtaining all advice in the workspace.");
+			timeCollector.stop();
+			
 			toAnalyze = AJUtil.extractAdviceElements(workspace);
 		}
 
@@ -550,10 +596,10 @@ public class PointcutChangePredictionProvider extends
 					+ " analysis scope is not supported at this time.");
 		}
 
-		analyzePointcuts(toAnalyze);
+		analyzePointcuts(toAnalyze, timeCollector);
 	}
 
-	public void analyzePointcuts(Collection<? extends AdviceElement> toAnalyze) {
+	public void analyzePointcuts(Collection<? extends AdviceElement> toAnalyze, TimeCollector timeCollector) {
 		if (!toAnalyze.isEmpty()) {
 			try {
 				short maximumAnalysisDepth = (short) FraglightUiPlugin
@@ -562,12 +608,14 @@ public class PointcutChangePredictionProvider extends
 
 				this.analyzer.setMaximumAnalysisDepth(maximumAnalysisDepth);
 
+				timeCollector.start();
 				logger.log(
 						Level.INFO,
 						"Analyzing all bound pointcuts with particular maximum analysis depth.",
 						new Object[] { toAnalyze, maximumAnalysisDepth });
+				timeCollector.stop();
 
-				this.analyzer.analyze(toAnalyze, this.monitor);
+				this.analyzer.analyze(toAnalyze, this.monitor, timeCollector);
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
@@ -631,7 +679,7 @@ public class PointcutChangePredictionProvider extends
 							"Found new code-level join point shadow.",
 							newJoinPointShadow);
 					try {
-						processNewJoinPointShadow(newJoinPointShadow);
+						processNewJoinPointShadow(newJoinPointShadow, new TimeCollector());
 					} catch (JavaModelException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -681,7 +729,7 @@ public class PointcutChangePredictionProvider extends
 
 	protected Map<AdviceElement, Set<Pattern<IntentionArc<IElement>>>> findPatternsMatchingJoinPoint(
 			final IJavaElement affectingJoinPoint,
-			Collection<AdviceElement> pointcuts, PatternMatcher matcher) {
+			Collection<AdviceElement> pointcuts, PatternMatcher matcher, TimeCollector timeCollector) {
 
 		Map<AdviceElement, Set<Pattern<IntentionArc<IElement>>>> ret = new LinkedHashMap<AdviceElement, Set<Pattern<IntentionArc<IElement>>>>();
 
@@ -689,23 +737,34 @@ public class PointcutChangePredictionProvider extends
 
 			Set<Pattern<IntentionArc<IElement>>> allPatterns = this.analyzer.getPointcutToPatternSetMap().get(advElem);
 
+			timeCollector.start();
 			logger.log(Level.INFO, "Cycling through all patterns.", allPatterns);
+			timeCollector.stop();
+			
 			for (Pattern<IntentionArc<IElement>> pattern : allPatterns) {
 
 				// get all java elements produced by the pattern.
+				timeCollector.start();
 				logger.log(
 						Level.INFO,
 						"Retrieving join point shadows produced by the pattern.",
 						pattern);
+				timeCollector.stop();
+				
 				Set<IJavaElement> matchingJavaElementSet = matcher
 						.getMatchingJavaElements(pattern);
 
+				timeCollector.start();
 				logger.log(Level.INFO,
 						"Found join point shadows matching the pattern.",
 						matchingJavaElementSet);
+				timeCollector.stop();
 
 				if (matchingJavaElementSet.contains(affectingJoinPoint)) {
+					
+					timeCollector.start();
 					logger.info("Pattern matches new join point shadow.");
+					timeCollector.stop();
 					
 					if ( !ret.containsKey(advElem) )
 						ret.put(advElem, new LinkedHashSet<Pattern<IntentionArc<IElement>>>());
@@ -813,7 +872,7 @@ public class PointcutChangePredictionProvider extends
 						&& newJoinPointShadow.isStructureKnown()) {
 
 					logger.info("Found new method execution join point shadow.");
-					processNewJoinPointShadow(newJoinPointShadow);
+					processNewJoinPointShadow(newJoinPointShadow, new TimeCollector());
 				}
 				break;
 			}
@@ -823,9 +882,9 @@ public class PointcutChangePredictionProvider extends
 		}
 	}
 
-	public void processNewJoinPointShadow(final IJavaElement newJoinPointShadow)
+	public void processNewJoinPointShadow(final IJavaElement newJoinPointShadow, TimeCollector timeCollector)
 			throws JavaModelException {
-		clearPreviousPredictions();
+		clearPreviousPredictions(timeCollector);
 
 		// save the file.
 		saveAssociatedFile(newJoinPointShadow);
@@ -834,14 +893,18 @@ public class PointcutChangePredictionProvider extends
 		buildAssociatedProject(newJoinPointShadow);
 
 		// calculate the change confidence for every PCE.
-		calculateChangeConfidence(newJoinPointShadow);
+		calculateChangeConfidence(newJoinPointShadow, timeCollector);
 	}
 
 	protected void calculateChangeConfidence(
-			final IJavaElement newJoinPointShadow) throws JavaModelException {
+			final IJavaElement newJoinPointShadow, TimeCollector timeCollector) throws JavaModelException {
+		
+		timeCollector.start();
 		logger.info("Calculating the change confidence for every available pointcut.");
-		Set<AdviceElement> pointcuts = retreivePreviouslyAnalyzedPointcuts();
-		calculateChangeConfidenceForPointcuts(newJoinPointShadow, pointcuts);
+		timeCollector.stop();
+		
+		Set<AdviceElement> pointcuts = retreivePreviouslyAnalyzedPointcuts(timeCollector);
+		calculateChangeConfidenceForPointcuts(newJoinPointShadow, pointcuts, timeCollector);
 	}
 
 	protected void buildAssociatedProject(final IJavaElement newJoinPointShadow) {
@@ -864,9 +927,11 @@ public class PointcutChangePredictionProvider extends
 		icu.getBuffer().save(this.monitor, false);
 	}
 
-	protected void clearPreviousPredictions() {
+	protected void clearPreviousPredictions(TimeCollector timeCollector) {
+		timeCollector.start();
 		logger.info("Clearing previous prediction set.");
 		this.predictionSet.clear();
+		timeCollector.stop();
 	}
 
 	public void setHighChangeConfidenceThreshold(

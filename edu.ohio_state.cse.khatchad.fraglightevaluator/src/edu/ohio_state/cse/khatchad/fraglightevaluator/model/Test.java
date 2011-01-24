@@ -6,14 +6,26 @@ package edu.ohio_state.cse.khatchad.fraglightevaluator.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
+import org.eclipse.ajdt.core.javaelements.AdviceElement;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaModelException;
 import org.jdom.Attribute;
 import org.jdom.DataConversionException;
 import org.jdom.Element;
 
+import au.com.bytecode.opencsv.CSVWriter;
+
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+
+import edu.ohio_state.cse.khatchad.fraglight.core.analysis.util.TimeCollector;
+import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
+import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
+import edu.ohio_state.cse.khatchad.fraglight.ui.PredictionSet;
+import edu.ohio_state.cse.khatchad.fraglightevaluator.analysis.EvaluationPointcutChangePredictionProvider;
 
 /**
  * @author <a href="mailto:khatchad@cse.ohio-state.edu">Raffi Khatchadourian</a>
@@ -32,6 +44,13 @@ public class Test {
 		public String getName() {
 			return name;
 		}
+		
+		public String getBenchmarkName() {
+			String projectName = this.getName();
+			String benchmarkName = projectName.substring(0,
+					projectName.indexOf('_'));
+			return benchmarkName;
+		}
 
 		public void setVersion(int version) {
 			this.version = version;
@@ -42,12 +61,22 @@ public class Test {
 		}
 	}
 
+	private static final String HEADER = "Benchmark#From version#To version#Number of pointcuts#Number of added shadows#Number of predictions#Analysis time (s)#Prediction time (s)";
+
 	private Project projectI;
 
 	private Project projectJ;
 
-	BiMap<String, String> oldPointcutKeyToNewPointcutKeyMap = HashBiMap
+	private BiMap<String, String> oldPointcutKeyToNewPointcutKeyMap = HashBiMap
 			.create();
+
+	private double analysisTime;
+	
+	private double predictionTime;
+
+	private int numberOfAddedShadows;
+
+	private int numberOfPredictions;
 
 	/**
 	 * @param testElem
@@ -110,5 +139,92 @@ public class Test {
 
 	public BiMap<String, String> getOldPointcutKeyToNewPointcutKeyMap() {
 		return oldPointcutKeyToNewPointcutKeyMap;
+	}
+
+	/**
+	 * @param end
+	 */
+	public void setAnalysisTime(double analysisTime) {
+		this.analysisTime = analysisTime;
+	}
+
+	/**
+	 * @param size
+	 */
+	public void setNumberOfAddedShadows(int numberOfAddedShadows) {
+		this.numberOfAddedShadows = numberOfAddedShadows;
+	}
+
+	public void write(CSVWriter writer) {
+		String[] row = this.getRow();
+		writer.writeNext(row);	
+	}
+
+	private String[] getRow() {
+		List<Object> row = new ArrayList<Object>(HEADER.split("#").length);
+		
+		row.add(this.projectI.getBenchmarkName());
+		row.add(this.projectI.getVersion());
+		row.add(this.projectJ.getVersion());
+		row.add(this.oldPointcutKeyToNewPointcutKeyMap.size());
+		row.add(this.numberOfAddedShadows);
+		row.add(this.numberOfPredictions);
+		row.add(this.analysisTime);
+		row.add(this.predictionTime);
+		
+		String ret[] = new String[ row.size() ];
+		for ( int i = 0; i < row.size(); i++ )
+			ret[ i ] = row.get(i).toString();
+		return ret;
+	}
+
+	public void setPredictionTime(double predictionTime) {
+		this.predictionTime = predictionTime;
+	}
+
+	public void setNumberOfPredictions(int numberOfPredictions) {
+		this.numberOfPredictions = numberOfPredictions;
+	}
+
+	public PredictionSet run(
+			PointcutChangePredictionProvider changePredictionProvider,
+			Set<IJavaElement> addedShadowCol) {
+		TimeCollector predictionTimeCollector = new TimeCollector();
+		final long predictionTimeStart = System.currentTimeMillis();
+	
+		for (IJavaElement addedShadow : addedShadowCol)
+			try {
+	
+				changePredictionProvider.processNewJoinPointShadow(
+						addedShadow, predictionTimeCollector);
+			} catch (JavaModelException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+	
+		double predictionTimeEnd = Util.calculateTimeStatistics(
+				predictionTimeStart, predictionTimeCollector);
+		this.setPredictionTime(predictionTimeEnd);
+		this.setNumberOfPredictions(changePredictionProvider
+				.getPredictionSet().size());
+		
+		return changePredictionProvider.getPredictionSet();
+	}
+
+	public PointcutChangePredictionProvider createPointcutChangePredictionProvider(
+			Collection<AdviceElement> oldPointcuts,
+			BiMap<AdviceElement, AdviceElement> oldPointcutToNewPointcutMap) {
+		TimeCollector analysisTimeCollector = new TimeCollector();
+		final long analysisTimeStart = System.currentTimeMillis();
+	
+		PointcutChangePredictionProvider changePredictionProvider = new EvaluationPointcutChangePredictionProvider(
+				oldPointcutToNewPointcutMap);
+		changePredictionProvider.analyzePointcuts(oldPointcuts,
+				analysisTimeCollector);
+	
+		double analysisTimeEnd = Util.calculateTimeStatistics(
+				analysisTimeStart, analysisTimeCollector);
+		this.setAnalysisTime(analysisTimeEnd);
+		return changePredictionProvider;
 	}
 }

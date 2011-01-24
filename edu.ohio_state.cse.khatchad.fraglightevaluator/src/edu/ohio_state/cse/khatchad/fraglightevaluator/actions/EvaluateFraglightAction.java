@@ -49,15 +49,14 @@ import com.google.common.collect.HashBiMap;
 
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.model.JoinPointType;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.util.FileUtil;
-import edu.ohio_state.cse.khatchad.fraglight.core.analysis.util.TimeCollector;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
 import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.Prediction;
-import edu.ohio_state.cse.khatchad.fraglightevaluator.analysis.EvaluationPointcutChangePredictionProvider;
+import edu.ohio_state.cse.khatchad.fraglight.ui.PredictionSet;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.model.Test;
-import edu.ohio_state.cse.khatchad.fraglightevaluator.model.TestResult;
+import edu.ohio_state.cse.khatchad.fraglightevaluator.model.PredictionTestResult;
 
 /**
  * Our sample action implements workbench action delegate. The action proxy will
@@ -69,6 +68,16 @@ import edu.ohio_state.cse.khatchad.fraglightevaluator.model.TestResult;
  */
 public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
+	/**
+	 * 
+	 */
+	private static final String PREDICTION_FILENAME = "predictions.csv";
+
+	/**
+	 * 
+	 */
+	private static final String TEST_FILENAME = "tests.csv";
+
 	protected static final String RESULT_PATH = new File(ResourcesPlugin
 			.getWorkspace().getRoot().getLocation().toOSString()
 			+ File.separator + "results").getPath()
@@ -76,7 +85,9 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 	private IWorkbenchWindow window;
 
-	private CSVWriter writer;
+	private CSVWriter predictionWriter;
+
+	private CSVWriter testWriter;
 
 	/**
 	 * The constructor.
@@ -117,74 +128,75 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 					.getOldPointcutKeyToNewPointcutKeyMap();
 
 			IWorkspace workspace = getWorkspace();
+			
 			buildWorkspace(workspace);
 
 			IJavaProject jProjectI = getProject(test.getProjectI().getName(),
 					workspace);
+			
 			IJavaProject jProjectJ = getProject(test.getProjectJ().getName(),
 					workspace);
 
 			Collection<AdviceElement> oldPointcuts = getPointcuts(
 					oldPointcutKeyToNewPointcutKeyMap.keySet(), jProjectI);
 
-			// A map from oldpointcuts to newpointcuts (not just keys).
-			BiMap<AdviceElement, AdviceElement> oldPointcutToNewPointcutMap = HashBiMap
-					.create();
-			for (String oldPointcutKey : oldPointcutKeyToNewPointcutKeyMap
-					.keySet())
-				try {
-					oldPointcutToNewPointcutMap.put(
-							extractAdviceElement(oldPointcutKey, jProjectI),
-							extractAdviceElement(
-									oldPointcutKeyToNewPointcutKeyMap
-											.get(oldPointcutKey), jProjectJ));
-				} catch (JavaModelException e) {
-					e.printStackTrace();
-					throw new RuntimeException(e);
-				}
-				
-			final long start = System.currentTimeMillis();
-			TimeCollector.clear();
+			// A map from old pointcuts to new pointcuts (not just keys).
+			BiMap<AdviceElement, AdviceElement> oldPointcutToNewPointcutMap = createOldPointcutToNewPointcutMap(
+					oldPointcutKeyToNewPointcutKeyMap, jProjectI, jProjectJ);
 
-			PointcutChangePredictionProvider changePredictionProvider = new EvaluationPointcutChangePredictionProvider(
-					oldPointcutToNewPointcutMap);
-			changePredictionProvider.analyzePointcuts(oldPointcuts);
+			PointcutChangePredictionProvider changePredictionProvider = test.createPointcutChangePredictionProvider(
+					oldPointcuts, oldPointcutToNewPointcutMap);
 
-			TimeCollector.start();
-			// A set of join points that exist in project_j but
-			// not in project_i.
+			// A set of join points that exist in project_j but not in project_i.
 			Set<IJavaElement> addedShadowCol = getAddedShadowsBetween(
 					jProjectJ, jProjectI);
-			TimeCollector.stop();
+			test.setNumberOfAddedShadows(addedShadowCol.size());
 
-			for (IJavaElement addedShadow : addedShadowCol)
-				try {
-					changePredictionProvider
-							.processNewJoinPointShadow(addedShadow);
-				} catch (JavaModelException e) {
-					e.printStackTrace();
-					throw new RuntimeException(e);
-				}
-				
-			final double secs = calculateTimeStatistics(start);
-			
-			for (Prediction prediction : changePredictionProvider
-					.getPredictionSet()) {
+			PredictionSet predictionSet = test.run(changePredictionProvider, addedShadowCol);
 
-				TestResult result = new TestResult(test, prediction);
-				String[] row = result.getRow();
-				this.writer.writeNext(row);
-			}
+			reportResults(test, predictionSet);
 			
+			test.write(this.testWriter);
+		}
+		
+		try {
+			this.predictionWriter.close();
+			this.testWriter.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		
+		MessageDialog.openInformation(window.getShell(),
+				"FraglightEvaluator", "Fraglight evaluated");
+	}
+
+	private static BiMap<AdviceElement, AdviceElement> createOldPointcutToNewPointcutMap(
+			BiMap<String, String> oldPointcutKeyToNewPointcutKeyMap,
+			IJavaProject jProjectI, IJavaProject jProjectJ) {
+		BiMap<AdviceElement, AdviceElement> oldPointcutToNewPointcutMap = HashBiMap
+				.create();
+		for (String oldPointcutKey : oldPointcutKeyToNewPointcutKeyMap
+				.keySet())
 			try {
-				this.writer.close();
-			} catch (IOException e) {
+				oldPointcutToNewPointcutMap.put(
+						extractAdviceElement(oldPointcutKey, jProjectI),
+						extractAdviceElement(
+								oldPointcutKeyToNewPointcutKeyMap
+										.get(oldPointcutKey), jProjectJ));
+			} catch (JavaModelException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
+		return oldPointcutToNewPointcutMap;
+	}
 
-			MessageDialog.openInformation(window.getShell(),
-					"FraglightEvaluator", "Fraglight evaluated");
+	private void reportResults(Test test, PredictionSet predictionSet) {
+		for (Prediction prediction : predictionSet) {
+
+			PredictionTestResult result = new PredictionTestResult(test,
+					prediction);
+			result.write(this.predictionWriter);
 		}
 	}
 
@@ -338,32 +350,24 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	 */
 	public void init(IWorkbenchWindow window) {
 		this.window = window;
-		
+
 		final File resultFolder = new File(RESULT_PATH);
 		if (!resultFolder.exists())
 			resultFolder.mkdir();
 
 		try {
-			final File aFile = new File(RESULT_PATH + "predictions.csv");
-			PrintWriter printWriter = FileUtil.getPrintWriter(aFile, false);
-			this.writer = new CSVWriter(printWriter);
-		}
-		catch (IOException e) {
+			this.testWriter = getWriter(TEST_FILENAME);
+			this.predictionWriter = getWriter(PREDICTION_FILENAME);
+		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		writer.writeNext(TestResult.getHeader());
+		predictionWriter.writeNext(PredictionTestResult.getHeader());
 	}
-	
-	protected double calculateTimeStatistics(final long start) {
-		long end = System.currentTimeMillis();
-		
-		long collectedTime = TimeCollector.getCollectedTime();
-		long newStart = start + collectedTime;
-		final long elapsed = end - newStart;	
-		
-		TimeCollector.clear();
-		final double secs = (double) elapsed / 1000;
-		return secs;
+
+	private static CSVWriter getWriter(String fileName) throws IOException {
+		final File aFile = new File(RESULT_PATH + fileName);
+		PrintWriter printWriter = FileUtil.getPrintWriter(aFile, false);
+		return new CSVWriter(printWriter);
 	}
 }
