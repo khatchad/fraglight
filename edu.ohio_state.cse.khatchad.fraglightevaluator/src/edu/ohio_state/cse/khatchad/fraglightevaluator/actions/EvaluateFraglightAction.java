@@ -102,6 +102,8 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	 * @see IWorkbenchWindowActionDelegate#run
 	 */
 	public void run(IAction action) {
+		
+		initReporters();
 
 		Document xmlTestFile = null;
 		try {
@@ -350,7 +352,9 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	 */
 	public void init(IWorkbenchWindow window) {
 		this.window = window;
+	}
 
+	private void initReporters() {
 		final File resultFolder = new File(RESULT_PATH);
 		if (!resultFolder.exists())
 			resultFolder.mkdir();
@@ -362,6 +366,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
+		testWriter.writeNext(Test.getHeader());
 		predictionWriter.writeNext(PredictionTestResult.getHeader());
 	}
 

@@ -436,7 +436,7 @@ public class PointcutChangePredictionProvider extends
 		logger.info("Retrieving all available patterns associated with pointcuts.");
 		timeCollector.stop();
 		
-		Set<Pattern<IntentionArc<IElement>>> allPatterns = getAllPatterns();
+		Set<Pattern<IntentionArc<IElement>>> allPatterns = getAllPatterns(timeCollector);
 
 		short maximumAnalysisDepth = (short) FraglightUiPlugin.getDefault()
 				.getPreferenceStore()
@@ -786,11 +786,14 @@ public class PointcutChangePredictionProvider extends
 		System.out.println("Find related was called.");
 	}
 
-	private Set<Pattern<IntentionArc<IElement>>> getAllPatterns() {
+	private Set<Pattern<IntentionArc<IElement>>> getAllPatterns(TimeCollector timeCollector) {
 		Collection<Set<Pattern<IntentionArc<IElement>>>> allPatternSets = this.analyzer
 				.getPointcutToPatternSetMap().values();
 
+		timeCollector.start();
 		logger.info("Flattening all sets of patterns to a single set of patterns.");
+		timeCollector.stop();
+		
 		Set<Pattern<IntentionArc<IElement>>> allPatterns = new LinkedHashSet<Pattern<IntentionArc<IElement>>>();
 		for (Set<Pattern<IntentionArc<IElement>>> patternSet : allPatternSets) {
 			allPatterns.addAll(patternSet);

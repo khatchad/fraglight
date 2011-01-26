@@ -22,7 +22,7 @@ import edu.ohio_state.cse.khatchad.fraglightevaluator.util.DatabaseUtil;
  */
 public class PredictionTestResult {
 
-	public static final String HEADER = "Benchmark#From version#To version#Added joint point shadow#Pointcut that is predicted to change as a direct result#Predicted direction#Change confidene";
+	private static final String HEADER = "Benchmark#From version#To version#Added joint point shadow#Pointcut that is predicted to change as a direct result#Predicted direction#Change confidene";
 
 	private String benchmarkName;
 

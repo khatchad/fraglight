@@ -159,6 +159,10 @@ public class Test {
 		String[] row = this.getRow();
 		writer.writeNext(row);	
 	}
+	
+	public static String[] getHeader() {
+		return HEADER.split("#");
+	}
 
 	private String[] getRow() {
 		List<Object> row = new ArrayList<Object>(HEADER.split("#").length);
