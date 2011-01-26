@@ -10,7 +10,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.Shell;
 
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.model.Suggestion;
-import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.Prediction;
+import edu.ohio_state.cse.khatchad.fraglight.ui.Prediction;
 
 @SuppressWarnings("restriction")
 public class DoubleClickAction extends Action {

@@ -53,7 +53,7 @@ import edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
 import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
-import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.Prediction;
+import edu.ohio_state.cse.khatchad.fraglight.ui.Prediction;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PredictionSet;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.model.Test;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.model.PredictionTestResult;

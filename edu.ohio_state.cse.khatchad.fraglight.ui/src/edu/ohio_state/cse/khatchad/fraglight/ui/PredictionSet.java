@@ -8,7 +8,6 @@ import java.beans.PropertyChangeSupport;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
-import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.Prediction;
 
 /**
  * @author <a href="mailto:khatchad@cse.ohio-state.edu">Raffi Khatchadourian</a>

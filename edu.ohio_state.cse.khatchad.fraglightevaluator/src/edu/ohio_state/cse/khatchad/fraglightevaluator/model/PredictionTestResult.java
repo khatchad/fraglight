@@ -3,6 +3,8 @@
  */
 package edu.ohio_state.cse.khatchad.fraglightevaluator.model;
 
+import static edu.ohio_state.cse.khatchad.fraglightevaluator.util.DatabaseUtil.getKey;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,8 +13,10 @@ import org.eclipse.jdt.core.IJavaElement;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
-import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.Prediction;
-import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.Prediction.ChangeDirection;
+import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
+import edu.ohio_state.cse.khatchad.fraglight.ui.Prediction;
+import edu.ohio_state.cse.khatchad.fraglight.ui.Prediction.ChangeDirection;
+import edu.ohio_state.cse.khatchad.fraglight.ui.Prediction.InterestDirection;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.model.Test.Project;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.util.DatabaseUtil;
 
@@ -22,7 +26,7 @@ import edu.ohio_state.cse.khatchad.fraglightevaluator.util.DatabaseUtil;
  */
 public class PredictionTestResult {
 
-	private static final String HEADER = "Benchmark#From version#To version#Added joint point shadow#Pointcut that is predicted to change as a direct result#Predicted direction#Change confidene";
+	private static final String HEADER = "Benchmark#From version#To version#Added joint point shadow#Pointcut that is predicted to change as a direct result#Predicted direction#DOI Manipulation#Original DOI value#New DOI value#Change confidene";
 
 	private String benchmarkName;
 
@@ -36,20 +40,29 @@ public class PredictionTestResult {
 	
 	private ChangeDirection changeDirection;
 	
+	private InterestDirection interestDirection;
+	
+	private double originalInterestLevel;
+	
+	private double newInterestLevel;
+	
 	private double changeConfidence;
 	
 	private String[] getRow() {
-		List<String> ret = new ArrayList<String>(HEADER.split("#").length);
+		List<Object> row = new ArrayList<Object>(HEADER.split("#").length);
 		
-		ret.add(this.benchmarkName);
-		ret.add(String.valueOf(this.fromVersion));
-		ret.add(String.valueOf(this.toVersion));
-		ret.add(DatabaseUtil.getKey(this.addedJoinPointShadow));
-		ret.add(DatabaseUtil.getKey(this.predictedPointcut));
-		ret.add(this.changeDirection.toString());
-		ret.add(String.valueOf(this.changeConfidence));
+		row.add(this.benchmarkName);
+		row.add(this.fromVersion);
+		row.add(this.toVersion);
+		row.add(getKey(this.addedJoinPointShadow));
+		row.add(getKey(this.predictedPointcut));
+		row.add(this.changeDirection);
+		row.add(this.interestDirection);
+		row.add(this.originalInterestLevel);
+		row.add(this.newInterestLevel);
+		row.add(this.changeConfidence);
 		
-		return ret.toArray(new String[0]);
+		return Util.toStringArray(row);
 	}
 
 	public PredictionTestResult(Test test, Prediction prediction) {
@@ -69,12 +82,14 @@ public class PredictionTestResult {
 		this.predictedPointcut = prediction.getAdvice();
 		this.changeDirection = prediction.getChangeDirection();
 		this.changeConfidence = prediction.getChangeConfidence();
+		this.interestDirection = prediction.getInterestDirection();
+		this.originalInterestLevel = prediction.getOriginalInterestLevel();
+		this.newInterestLevel = prediction.getNewInterestLevel();
 	}
 
 	public static String[] getHeader() {
 		return HEADER.split("#");
 	}
-
 	
 	public void write(CSVWriter writer) {
 		String[] row = this.getRow();

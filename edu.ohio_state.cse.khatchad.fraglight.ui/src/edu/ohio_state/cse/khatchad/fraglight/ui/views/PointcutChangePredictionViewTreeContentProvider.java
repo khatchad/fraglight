@@ -7,7 +7,7 @@ import org.eclipse.jface.viewers.Viewer;
 
 import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
-import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.Prediction;
+import edu.ohio_state.cse.khatchad.fraglight.ui.Prediction;
 
 public class PointcutChangePredictionViewTreeContentProvider implements
 		ITreeContentProvider {

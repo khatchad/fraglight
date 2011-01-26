@@ -176,10 +176,7 @@ public class Test {
 		row.add(this.analysisTime);
 		row.add(this.predictionTime);
 		
-		String ret[] = new String[ row.size() ];
-		for ( int i = 0; i < row.size(); i++ )
-			ret[ i ] = row.get(i).toString();
-		return ret;
+		return Util.toStringArray(row);
 	}
 
 	public void setPredictionTime(double predictionTime) {

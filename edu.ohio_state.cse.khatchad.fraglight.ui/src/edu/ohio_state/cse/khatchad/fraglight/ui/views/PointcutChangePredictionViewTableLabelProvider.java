@@ -24,7 +24,7 @@ import ca.mcgill.cs.swevo.jayfx.model.IElement;
 
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.IntentionArc;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.Pattern;
-import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.Prediction;
+import edu.ohio_state.cse.khatchad.fraglight.ui.Prediction;
 
 class PointcutChangePredictionViewTableLabelProvider extends LabelProvider implements
 		ITableLabelProvider {
