@@ -68,14 +68,10 @@ import edu.ohio_state.cse.khatchad.fraglightevaluator.model.PredictionTestResult
  */
 public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
-	/**
-	 * 
-	 */
 	private static final String PREDICTION_FILENAME = "predictions.csv";
+	
+	private static final String PATTERN_FILENAME = "contributing_patterns.csv";
 
-	/**
-	 * 
-	 */
 	private static final String TEST_FILENAME = "tests.csv";
 
 	protected static final String RESULT_PATH = new File(ResourcesPlugin
@@ -86,6 +82,8 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	private IWorkbenchWindow window;
 
 	private CSVWriter predictionWriter;
+	
+	private CSVWriter contributingPatternWriter;
 
 	private CSVWriter testWriter;
 
@@ -163,6 +161,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 		
 		try {
 			this.predictionWriter.close();
+			this.contributingPatternWriter.close();
 			this.testWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -198,7 +197,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 			PredictionTestResult result = new PredictionTestResult(test,
 					prediction);
-			result.write(this.predictionWriter);
+			result.write(this.predictionWriter, this.contributingPatternWriter);
 		}
 	}
 
@@ -362,12 +361,14 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 		try {
 			this.testWriter = getWriter(TEST_FILENAME);
 			this.predictionWriter = getWriter(PREDICTION_FILENAME);
+			this.contributingPatternWriter = getWriter(PATTERN_FILENAME);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 		testWriter.writeNext(Test.getHeader());
-		predictionWriter.writeNext(PredictionTestResult.getHeader());
+		predictionWriter.writeNext(PredictionTestResult.getPredictionHeader());
+		contributingPatternWriter.writeNext(PredictionTestResult.getPatternHeader());
 	}
 
 	private static CSVWriter getWriter(String fileName) throws IOException {
