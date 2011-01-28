@@ -146,7 +146,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 			PointcutChangePredictionProvider changePredictionProvider = test.createPointcutChangePredictionProvider(
 					oldPointcuts, oldPointcutToNewPointcutMap);
-
+			
 			// A set of join points that exist in project_j but not in project_i.
 			Set<IJavaElement> addedShadowCol = getAddedShadowsBetween(
 					jProjectJ, jProjectI);

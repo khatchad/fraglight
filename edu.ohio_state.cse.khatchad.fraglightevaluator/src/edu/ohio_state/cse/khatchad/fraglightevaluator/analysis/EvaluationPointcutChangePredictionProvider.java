@@ -60,7 +60,6 @@ public class EvaluationPointcutChangePredictionProvider extends
 	@Override
 	public void processNewJoinPointShadow(IJavaElement newJoinPointShadow, TimeCollector timeCollector)
 			throws JavaModelException {
-		clearPreviousPredictions(timeCollector);
 		calculateChangeConfidence(newJoinPointShadow, timeCollector);
 	}
 
