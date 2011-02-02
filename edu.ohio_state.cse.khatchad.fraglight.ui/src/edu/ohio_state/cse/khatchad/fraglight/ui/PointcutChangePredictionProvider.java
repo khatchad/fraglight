@@ -5,20 +5,15 @@ package edu.ohio_state.cse.khatchad.fraglight.ui;
 
 import static java.lang.Math.abs;
 import static org.eclipse.core.resources.ResourcesPlugin.getWorkspace;
-import org.eclipse.mylyn.monitor.core.InteractionEvent.Kind;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
 
 import org.eclipse.ajdt.core.javaelements.AJCodeElement;
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
@@ -26,10 +21,8 @@ import org.eclipse.ajdt.mylyn.ui.AspectJStructureBridge;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Plugin;
 import org.eclipse.jdt.core.ElementChangedEvent;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IElementChangedListener;
@@ -37,13 +30,8 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaElementDelta;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.compiler.IProblem;
-import org.eclipse.jdt.core.dom.ASTMatcher;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.internal.ui.javaeditor.CompilationUnitEditor;
 import org.eclipse.jdt.internal.ui.javaeditor.EditorUtility;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.mylyn.context.core.AbstractContextStructureBridge;
 import org.eclipse.mylyn.context.core.ContextChangeEvent;
 import org.eclipse.mylyn.context.core.ContextCore;
@@ -51,24 +39,13 @@ import org.eclipse.mylyn.context.core.IInteractionContext;
 import org.eclipse.mylyn.context.core.IInteractionElement;
 import org.eclipse.mylyn.internal.context.core.ContextCorePlugin;
 import org.eclipse.mylyn.internal.context.core.IActiveSearchOperation;
-import org.eclipse.mylyn.internal.java.ui.JavaStructureBridge;
 import org.eclipse.mylyn.internal.java.ui.search.AbstractJavaRelationProvider;
-import org.eclipse.mylyn.monitor.core.InteractionEvent;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.IEditorSite;
-import org.eclipse.ui.IFileEditorMapping;
-import org.eclipse.ui.IPartListener;
-import org.eclipse.ui.IPartListener2;
-import org.eclipse.ui.IPartService;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchPartReference;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.mylyn.monitor.core.InteractionEvent.Kind;
+
+import ca.mcgill.cs.swevo.jayfx.model.IElement;
 
 import com.google.common.collect.Sets;
 
-import ca.mcgill.cs.swevo.jayfx.model.IElement;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.JoinPointShadowDifferenceAnalyzer;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PatternMatcher;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PointcutAnalyzer;

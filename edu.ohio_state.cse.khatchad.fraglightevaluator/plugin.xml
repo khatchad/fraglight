@@ -25,6 +25,18 @@
                id="edu.ohio_state.cse.khatchad.fraglightevaluator.actions.EvaluateFraglightAction">
          </action>
       </actionSet>
+   </extension>	
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.ajdt.core.javaelements.AdviceElement"
+            adaptable="true"
+            id="edu.ohio_state.cse.khatchad.fraglightevaluator.object.contribution">
+         <action
+               label="Copy Key"
+               class="edu.ohio_state.cse.khatchad.fraglightevaluator.actions.CopyJavaElementKeyAction"
+               id="edu.ohio_state.cse.khatchad.fraglightevaluator.actions.CopyJavaElementKeyAction">
+         </action>
+      </objectContribution>
    </extension>
-
 </plugin>

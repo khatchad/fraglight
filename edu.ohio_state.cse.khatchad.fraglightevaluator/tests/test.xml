@@ -15,6 +15,9 @@
 		<pointcutmap>
 			<mapentry old="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around" 
 				      new="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around2" />
+				      
+			<mapentry old="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;" 
+				      new="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;" />
 		</pointcutmap>
 	</test>
 	
