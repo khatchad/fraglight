@@ -55,6 +55,7 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
 import edu.ohio_state.cse.khatchad.fraglight.ui.Prediction;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PredictionSet;
+import edu.ohio_state.cse.khatchad.fraglightevaluator.analysis.GraphCachingPatternMatcher;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.model.Test;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.model.PredictionTestResult;
 
@@ -153,6 +154,13 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			test.setNumberOfAddedShadows(addedShadowCol.size());
 
 			PredictionSet predictionSet = test.run(changePredictionProvider, addedShadowCol);
+			
+			double totalGraphConstructionTime = GraphCachingPatternMatcher.getTotalGraphContructionTime();
+			
+			//aggregate graph construction time.
+			test.addToPredictionTime(totalGraphConstructionTime * (test.getNumberOfAddedShadows() - 1));
+			
+			GraphCachingPatternMatcher.clearCache();
 
 			reportResults(test, predictionSet);
 			

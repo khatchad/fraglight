@@ -59,6 +59,11 @@ public class Test {
 		public int getVersion() {
 			return version;
 		}
+
+		@Override
+		public String toString() {
+			return this.getBenchmarkName() + ",v" + this.getVersion();
+		}
 	}
 
 	private static final String HEADER = "Benchmark#From version#To version#Number of pointcuts#Number of added shadows#Number of predictions#Analysis time (s)#Prediction time (s)";
@@ -195,7 +200,6 @@ public class Test {
 	
 		for (IJavaElement addedShadow : addedShadowCol)
 			try {
-	
 				changePredictionProvider.processNewJoinPointShadow(
 						addedShadow, predictionTimeCollector);
 			} catch (JavaModelException e) {
@@ -227,5 +231,21 @@ public class Test {
 				analysisTimeStart, analysisTimeCollector);
 		this.setAnalysisTime(analysisTimeEnd);
 		return changePredictionProvider;
+	}
+
+	@Override
+	public String toString() {
+		return "[" + this.projectI + " -> " + this.projectJ + "]";
+	}
+
+	public void addToPredictionTime(double value) {
+		this.predictionTime += value;
+	}
+
+	/**
+	 * @return
+	 */
+	public int getNumberOfAddedShadows() {
+		return this.numberOfAddedShadows;
 	}
 }

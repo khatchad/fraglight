@@ -63,12 +63,6 @@ public class EvaluationPointcutChangePredictionProvider extends
 		calculateChangeConfidence(newJoinPointShadow, timeCollector);
 	}
 
-//	@Override
-//	protected Set<Pattern<IntentionArc<IElement>>> getPatternsDerivedFromPointcut(
-//			AdviceElement advElem) {
-//		return super.getPatternsDerivedFromPointcut(this.oldPointcutToNewPointcutMap.inverse().get(advElem));
-//	}
-
 	@Override
 	protected Map<AdviceElement, Set<Pattern<IntentionArc<IElement>>>> findPatternsMatchingJoinPoint(
 			IJavaElement affectingJoinPoint,
@@ -94,5 +88,14 @@ public class EvaluationPointcutChangePredictionProvider extends
 			AdviceElement oldAdvElem) throws JavaModelException {
 		AdviceElement newAdvElem = this.oldPointcutToNewPointcutMap.get(oldAdvElem);
 		return super.isCapturedBy(affectingJoinPoint, newAdvElem);
+	}
+
+	@Override
+	protected PatternMatcher createPatternMatcher(
+			Set<Pattern<IntentionArc<IElement>>> allPatterns,
+			short maximumAnalysisDepth) {
+		PatternMatcher matcher = new GraphCachingPatternMatcher(allPatterns,
+				maximumAnalysisDepth);
+		return matcher;
 	}
 }

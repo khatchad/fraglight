@@ -350,7 +350,7 @@ public class PointcutChangePredictionProvider extends
 		 * TODO: Instead of seeding with the old patterns, maybe I can use the
 		 * old graph and build it incrementally.
 		 */
-		PatternMatcher matcher = new PatternMatcher(allPatterns,
+		PatternMatcher matcher = createPatternMatcher(allPatterns,
 				maximumAnalysisDepth);
 
 		timeCollector.start();
@@ -384,6 +384,14 @@ public class PointcutChangePredictionProvider extends
 					advElem, timeCollector);
 		}
 
+	}
+
+	protected PatternMatcher createPatternMatcher(
+			Set<Pattern<IntentionArc<IElement>>> allPatterns,
+			short maximumAnalysisDepth) {
+		PatternMatcher matcher = new PatternMatcher(allPatterns,
+				maximumAnalysisDepth);
+		return matcher;
 	}
 
 	protected Set<AdviceElement> retreivePreviouslyAnalyzedPointcuts(
