@@ -36,7 +36,7 @@ public class CopyJavaElementKeyAction implements
 		if (!selectedAdvice.isEmpty()) {
 
 			AdviceElement advice = selectedAdvice.iterator().next();
-			String key = Util.getKey(advice);
+			String key = Util.getKey(advice).replace("&", "&amp;");
 			if (key.length() > 0) {
 				Clipboard clipboard = new Clipboard(Display.getDefault());
 				TextTransfer textTransfer = TextTransfer.getInstance();

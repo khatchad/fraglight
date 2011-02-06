@@ -351,7 +351,7 @@ public class PointcutChangePredictionProvider extends
 		 * old graph and build it incrementally.
 		 */
 		PatternMatcher matcher = createPatternMatcher(allPatterns,
-				maximumAnalysisDepth);
+				maximumAnalysisDepth, timeCollector);
 
 		timeCollector.start();
 		logger.info("Matching old patterns with new base-code, I think.");
@@ -388,7 +388,7 @@ public class PointcutChangePredictionProvider extends
 
 	protected PatternMatcher createPatternMatcher(
 			Set<Pattern<IntentionArc<IElement>>> allPatterns,
-			short maximumAnalysisDepth) {
+			short maximumAnalysisDepth, TimeCollector timeCollector) {
 		PatternMatcher matcher = new PatternMatcher(allPatterns,
 				maximumAnalysisDepth);
 		return matcher;
