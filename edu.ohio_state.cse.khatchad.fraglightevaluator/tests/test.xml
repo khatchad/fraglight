@@ -161,7 +161,7 @@
 
 			<mapentry
 				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"
-				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
+				new="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
 
 			<mapentry
 				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"
@@ -283,7 +283,7 @@
 
 			<mapentry
 				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"
-				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
+				new="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
 
 			<mapentry
 				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"
@@ -414,7 +414,7 @@
 
 			<mapentry
 				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"
-				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
+				new="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
 
 			<mapentry
 				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"
@@ -545,7 +545,7 @@
 
 			<mapentry
 				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"
-				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
+				new="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
 
 			<mapentry
 				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"
