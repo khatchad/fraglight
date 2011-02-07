@@ -86,7 +86,7 @@
 
 			<mapentry
 				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"
-				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
+				new="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
 
 			<mapentry
 				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"
@@ -586,10 +586,14 @@
 			<mapentry
 				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"
 				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"></mapentry>
-				
-			<mapentry old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;" new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"></mapentry>
-			
-			<mapentry old="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;" new="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;2"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;"
+				new="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;2"></mapentry>
 
 			<mapentry
 				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;"
