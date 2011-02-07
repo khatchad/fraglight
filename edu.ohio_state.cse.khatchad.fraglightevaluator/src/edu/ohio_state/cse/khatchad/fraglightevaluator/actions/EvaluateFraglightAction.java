@@ -58,6 +58,7 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.PredictionSet;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.analysis.GraphCachingPatternMatcher;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.model.Test;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.model.PredictionTestResult;
+import edu.ohio_state.cse.khatchad.fraglightevaluator.util.PostMan;
 
 /**
  * Our sample action implements workbench action delegate. The action proxy will
@@ -176,8 +177,25 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			throw new RuntimeException(e);
 		}
 		
+		notifyMe();
+		
 		MessageDialog.openInformation(window.getShell(),
 				"FraglightEvaluator", "Fraglight evaluated");
+	}
+
+	private void notifyMe() {
+		PostMan.postMail("Done", "Done", "khatchad@cse.ohio-state.edu",
+				"khatchad@cse.ohio-state.edu");
+		if (System.getProperty("os.name").equalsIgnoreCase("Mac OS X"))
+			try {
+				Runtime.getRuntime().exec(
+						"/usr/local/bin/growlnotify -n Eclipse -a Eclipse -m "
+								+ this.getClass().getSimpleName()
+								+ " is done");
+			}
+			catch (final IOException e) {
+				System.err.println("Can't send notification.");
+			}
 	}
 
 	private static BiMap<AdviceElement, AdviceElement> createOldPointcutToNewPointcutMap(

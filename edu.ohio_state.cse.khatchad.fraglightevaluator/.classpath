@@ -18,5 +18,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/edu.ohio_state.cse.khatchad.fraglightevaluator/lib/opencsv-2.2-doc.zip!/api"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/mail-1.4.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
