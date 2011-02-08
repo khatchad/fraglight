@@ -212,14 +212,16 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 						oldPointcutKey, jProjectI);
 
 				if (oldPointcut == null)
-					throw new IllegalStateException("Old pointcut is null");
+					throw new IllegalStateException("Old pointcut with key " + oldPointcutKey + "is null.");
 
+				final String newPointcutKey = oldPointcutKeyToNewPointcutKeyMap.get(oldPointcutKey);
+				
 				final AdviceElement newPointcut = extractAdviceElement(
-						oldPointcutKeyToNewPointcutKeyMap.get(oldPointcutKey),
+						newPointcutKey,
 						jProjectJ);
 
 				if (newPointcut == null)
-					throw new IllegalStateException("New pointcut is null");
+					throw new IllegalStateException("New pointcut new key " + newPointcutKey + "is null");
 
 				oldPointcutToNewPointcutMap.put(oldPointcut, newPointcut);
 			} catch (JavaModelException e) {
