@@ -32,4 +32,5 @@ Import-Package: edu.ohio_state.cse.khatchad.fraglight.core.analysis,
 Bundle-ClassPath: .,
  lib/guava-r07.jar,
  lib/jdom.jar,
- lib/opencsv-2.2.jar
+ lib/opencsv-2.2.jar,
+ lib/mail-1.4.3.jar
