@@ -71,7 +71,7 @@ import edu.ohio_state.cse.khatchad.fraglightevaluator.util.PostMan;
 public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 	private static final String PREDICTION_FILENAME = "predictions.csv";
-	
+
 	private static final String PATTERN_FILENAME = "contributing_patterns.csv";
 
 	private static final String TEST_FILENAME = "tests.csv";
@@ -84,7 +84,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	private IWorkbenchWindow window;
 
 	private CSVWriter predictionWriter;
-	
+
 	private CSVWriter contributingPatternWriter;
 
 	private CSVWriter testWriter;
@@ -102,7 +102,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	 * @see IWorkbenchWindowActionDelegate#run
 	 */
 	public void run(IAction action) {
-		
+
 		initReporters();
 
 		Document xmlTestFile = null;
@@ -130,12 +130,12 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 					.getOldPointcutKeyToNewPointcutKeyMap();
 
 			IWorkspace workspace = getWorkspace();
-			
+
 			buildWorkspace(workspace);
 
 			IJavaProject jProjectI = getProject(test.getProjectI().getName(),
 					workspace);
-			
+
 			IJavaProject jProjectJ = getProject(test.getProjectJ().getName(),
 					workspace);
 
@@ -146,28 +146,33 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			BiMap<AdviceElement, AdviceElement> oldPointcutToNewPointcutMap = createOldPointcutToNewPointcutMap(
 					oldPointcutKeyToNewPointcutKeyMap, jProjectI, jProjectJ);
 
-			PointcutChangePredictionProvider changePredictionProvider = test.createPointcutChangePredictionProvider(
-					oldPointcuts, oldPointcutToNewPointcutMap);
-			
-			// A set of join points that exist in project_j but not in project_i.
+			PointcutChangePredictionProvider changePredictionProvider = test
+					.createPointcutChangePredictionProvider(oldPointcuts,
+							oldPointcutToNewPointcutMap);
+
+			// A set of join points that exist in project_j but not in
+			// project_i.
 			Set<IJavaElement> addedShadowCol = getAddedShadowsBetween(
 					jProjectJ, jProjectI);
 			test.setNumberOfAddedShadows(addedShadowCol.size());
 
-			PredictionSet predictionSet = test.run(changePredictionProvider, addedShadowCol);
-			
-			double totalGraphConstructionTime = GraphCachingPatternMatcher.getTotalGraphContructionTime();
-			
-			//aggregate graph construction time.
-			test.addToPredictionTime(totalGraphConstructionTime * (test.getNumberOfAddedShadows() - 1));
-			
+			PredictionSet predictionSet = test.run(changePredictionProvider,
+					addedShadowCol);
+
+			double totalGraphConstructionTime = GraphCachingPatternMatcher
+					.getTotalGraphContructionTime();
+
+			// aggregate graph construction time.
+			test.addToPredictionTime(totalGraphConstructionTime
+					* (test.getNumberOfAddedShadows() - 1));
+
 			GraphCachingPatternMatcher.clearCache();
 
 			reportResults(test, predictionSet);
-			
+
 			test.write(this.testWriter);
 		}
-		
+
 		try {
 			this.predictionWriter.close();
 			this.contributingPatternWriter.close();
@@ -176,11 +181,11 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		
+
 		notifyMe();
-		
-		MessageDialog.openInformation(window.getShell(),
-				"FraglightEvaluator", "Fraglight evaluated");
+
+		MessageDialog.openInformation(window.getShell(), "FraglightEvaluator",
+				"Fraglight evaluated");
 	}
 
 	private void notifyMe() {
@@ -190,10 +195,8 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			try {
 				Runtime.getRuntime().exec(
 						"/usr/local/bin/growlnotify -n Eclipse -a Eclipse -m "
-								+ this.getClass().getSimpleName()
-								+ " is done");
-			}
-			catch (final IOException e) {
+								+ this.getClass().getSimpleName() + " is done");
+			} catch (final IOException e) {
 				System.err.println("Can't send notification.");
 			}
 	}
@@ -203,14 +206,22 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			IJavaProject jProjectI, IJavaProject jProjectJ) {
 		BiMap<AdviceElement, AdviceElement> oldPointcutToNewPointcutMap = HashBiMap
 				.create();
-		for (String oldPointcutKey : oldPointcutKeyToNewPointcutKeyMap
-				.keySet())
+		for (String oldPointcutKey : oldPointcutKeyToNewPointcutKeyMap.keySet())
 			try {
-				oldPointcutToNewPointcutMap.put(
-						extractAdviceElement(oldPointcutKey, jProjectI),
-						extractAdviceElement(
-								oldPointcutKeyToNewPointcutKeyMap
-										.get(oldPointcutKey), jProjectJ));
+				final AdviceElement oldPointcut = extractAdviceElement(
+						oldPointcutKey, jProjectI);
+
+				if (oldPointcut == null)
+					throw new IllegalStateException("Old pointcut is null");
+
+				final AdviceElement newPointcut = extractAdviceElement(
+						oldPointcutKeyToNewPointcutKeyMap.get(oldPointcutKey),
+						jProjectJ);
+
+				if (newPointcut == null)
+					throw new IllegalStateException("New pointcut is null");
+
+				oldPointcutToNewPointcutMap.put(oldPointcut, newPointcut);
 			} catch (JavaModelException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
@@ -394,7 +405,8 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 		}
 		testWriter.writeNext(Test.getHeader());
 		predictionWriter.writeNext(PredictionTestResult.getPredictionHeader());
-		contributingPatternWriter.writeNext(PredictionTestResult.getPatternHeader());
+		contributingPatternWriter.writeNext(PredictionTestResult
+				.getPatternHeader());
 	}
 
 	private static CSVWriter getWriter(String fileName) throws IOException {
