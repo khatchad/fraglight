@@ -9,6 +9,7 @@
 	<!-- </pointcutmap> -->
 	<!-- </test> -->
 
+	<!--  
 	<test>
 		<project name="HealthWatcherAO_01_Base" version="1" />
 		<project name="HealthWatcherAO_02_Command" version="2" />
@@ -76,6 +77,7 @@
 
 		</pointcutmap>
 	</test>
+	-->
 	<test>
 		<project name="HealthWatcherAO_02_Command" version="2" />
 		<project name="HealthWatcherAO_03_State" version="3" />
@@ -150,6 +152,7 @@
 
 		</pointcutmap>
 	</test>
+	<!-- 
 	<test>
 		<project name="HealthWatcherAO_03_State" version="3" />
 		<project name="HealthWatcherAO_04_Observer" version="4" />
@@ -1031,4 +1034,5 @@
 				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"></mapentry>
 		</pointcutmap>
 	</test>
+	-->
 </evaluation>
