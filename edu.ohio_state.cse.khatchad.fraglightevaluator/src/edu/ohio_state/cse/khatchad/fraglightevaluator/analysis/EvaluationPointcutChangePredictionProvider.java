@@ -108,7 +108,8 @@ public class EvaluationPointcutChangePredictionProvider extends
 
 		timeCollector.start();
 		prefs = Preferences.userNodeForPackage(this.getClass());
-		boolean useGraphCaching = prefs.getBoolean(USE_GRAPH_CACHING, false);
+//		boolean useGraphCaching = prefs.getBoolean(USE_GRAPH_CACHING, false);
+		boolean useGraphCaching = false;
 		timeCollector.stop();
 
 		PatternMatcher matcher;
