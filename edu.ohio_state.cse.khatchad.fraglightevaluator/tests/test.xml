@@ -1076,11 +1076,37 @@
 			<mapentry
 				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"
 				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"></mapentry>
-			<mapentry new="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;" old="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"></mapentry>
-			<mapentry new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;" old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"></mapentry>
-			<mapentry new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2" old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"></mapentry>
-			<mapentry new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;" old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"></mapentry>
-			<mapentry old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2" new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;3"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"
+				old="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;3"></mapentry>
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="MobilePhoto_v3" version="3"></project>
+		<project name="MobilePhoto_v4" version="4"></project>
+		<pointcutmap>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QBaseController;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qjavax.microedition.lcdui.CommandListener;3"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QBaseController;2"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QBaseController;"></mapentry>
+			<mapentry old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;2" new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;2"></mapentry>
 		</pointcutmap>
 	</test>
 </evaluation>
