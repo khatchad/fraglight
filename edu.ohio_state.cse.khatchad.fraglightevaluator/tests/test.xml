@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <evaluation>
-	<!--  
-	<test>
-		<project name="FraglightTest1_v1" version="1" />
-		<project name="FraglightTest1_v2" version="2" />
-		<pointcutmap>
-			<mapentry old="p*A.aj'A&amp;before" new="p*A.aj'A&amp;before2" />
-			<mapentry old="p*A.aj'A&amp;after" new="p*A.aj'A&amp;after2" />
-		</pointcutmap>
-	</test>
-	-->
+	<!-- <test> <project name="FraglightTest1_v1" version="1" /> <project name="FraglightTest1_v2" 
+		version="2" /> <pointcutmap> <mapentry old="p*A.aj'A&amp;before" new="p*A.aj'A&amp;before2" 
+		/> <mapentry old="p*A.aj'A&amp;after" new="p*A.aj'A&amp;after2" /> </pointcutmap> 
+		</test> -->
 
 	<test>
 		<project name="HealthWatcherAO_01_Base" version="1" />
@@ -1033,5 +1027,55 @@
 				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"></mapentry>
 		</pointcutmap>
 	</test>
-	
+	<test>
+		<project name="MobilePhoto_v2" version="2"></project>
+		<project name="MobilePhoto_v3" version="3"></project>
+		<pointcutmap>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QBaseController;"
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QBaseController;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;"
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QBaseController;2"
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QBaseController;2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;2"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;3"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;2"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;6"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;3"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;3"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;4"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;4"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;5"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;5"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around2"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;3"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QAlbumData;"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QAlbumData;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QString;&amp;QAlbumData;"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QString;&amp;QAlbumData;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"></mapentry>
+		</pointcutmap>
+	</test>
 </evaluation>
