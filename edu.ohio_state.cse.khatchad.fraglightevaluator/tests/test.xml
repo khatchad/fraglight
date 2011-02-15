@@ -1142,14 +1142,132 @@
 			<mapentry
 				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QString;&amp;QAlbumData;"
 				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QString;&amp;QAlbumData;"></mapentry>
-			<mapentry new="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;" old="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"></mapentry>
-			<mapentry new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;" old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"></mapentry>
-			<mapentry new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2" old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"></mapentry>
-			<mapentry new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;" old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"></mapentry>
-			<mapentry new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2" old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"></mapentry>
-			<mapentry old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QBaseController;&amp;QString;" new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QBaseController;&amp;QString;"></mapentry>
-			<mapentry old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QBaseController;&amp;QCommand;&amp;QDisplayable;" new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QBaseController;&amp;QCommand;&amp;QDisplayable;"></mapentry>
-			<mapentry old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before&amp;QBaseController;&amp;\[QImageData;&amp;QPhotoListScreen;" new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before&amp;QBaseController;&amp;\[QImageData;&amp;QPhotoListScreen;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"
+				old="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QBaseController;&amp;QString;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QBaseController;&amp;QString;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QBaseController;&amp;QCommand;&amp;QDisplayable;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QBaseController;&amp;QCommand;&amp;QDisplayable;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before&amp;QBaseController;&amp;\[QImageData;&amp;QPhotoListScreen;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before&amp;QBaseController;&amp;\[QImageData;&amp;QPhotoListScreen;"></mapentry>
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="MobilePhoto_v4" version="4"></project>
+		<project name="MobilePhoto_v5" version="5"></project>
+		<pointcutmap>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qjavax.microedition.lcdui.CommandListener;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qjavax.microedition.lcdui.CommandListener;3" />
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;3"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qjavax.microedition.lcdui.CommandListener;2"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qjavax.microedition.lcdui.CommandListener;4"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;2"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;4"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;2"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;3"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;3"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;4"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;4"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;5"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;5"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around2"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around2"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QAlbumData;"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QAlbumData;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QString;&amp;QAlbumData;"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QString;&amp;QAlbumData;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"
+				old="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QCommand;"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QCommand;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QImageData;"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QImageData;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after&amp;Qjavax.microedition.lcdui.CommandListener;&amp;\[QImageData;&amp;QPhotoListScreen;"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after&amp;Qjavax.microedition.lcdui.CommandListener;&amp;\[QImageData;&amp;QPhotoListScreen;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after&amp;QPhotoListScreen;"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after&amp;QPhotoListScreen;"></mapentry>
+			<mapentry
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;QImageUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;QImageUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"></mapentry>
+			<mapentry
+				new="lancs.midp.mobilephoto.optional.favourites*PersisteFavoritesAspect.aj'PersisteFavoritesAspect&amp;around&amp;QImageData;"
+				old="lancs.midp.mobilephoto.optional.favourites*PersisteFavoritesAspect.aj'PersisteFavoritesAspect&amp;around&amp;QImageData;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QString;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QString;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QCommand;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QCommand;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before&amp;Qjavax.microedition.lcdui.CommandListener;&amp;\[QImageData;&amp;QPhotoListScreen;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before&amp;Qjavax.microedition.lcdui.CommandListener;&amp;\[QImageData;&amp;QPhotoListScreen;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QPhotoListScreen;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QPhotoListScreen;"></mapentry>
+			<mapentry
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageData;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageData;"></mapentry>
 		</pointcutmap>
 	</test>
 </evaluation>
