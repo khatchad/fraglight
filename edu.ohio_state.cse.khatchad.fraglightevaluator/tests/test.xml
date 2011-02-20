@@ -1371,7 +1371,8 @@
 				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QPhotoListScreen;"
 				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QPhotoListScreen;"></mapentry>
 			<mapentry
-				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"></mapentry>
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"></mapentry>
 			<mapentry
 				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageData;"
 				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageData;"></mapentry>
