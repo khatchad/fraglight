@@ -253,7 +253,14 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 		@SuppressWarnings("unchecked")
 		List<Element> testElemCol = evaluationElement.getChildren("test");
 		for (Element testElem : testElemCol) {
-			Test test = new Test(testElem);
+			Test test = null;
+			try {
+				test = new Test(testElem);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
 			ret.add(test);
 		}
 		return ret;

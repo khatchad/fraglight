@@ -125,9 +125,17 @@ public class Test {
 			Element mapEntry = (Element) obj;
 
 			Attribute oldAttribute = mapEntry.getAttribute("old");
+			
+			if ( oldAttribute == null )
+				throw new IllegalStateException("Old element is missing for " + mapEntry);
+			
 			String oldKey = oldAttribute.getValue();
 
 			Attribute newAttribute = mapEntry.getAttribute("new");
+			
+			if ( newAttribute == null )
+				throw new IllegalStateException("New element is missing for " + mapEntry); 
+			
 			String newKey = newAttribute.getValue();
 
 			oldPointcutKeyToNewPointcutKeyMap.put(oldKey, newKey);
