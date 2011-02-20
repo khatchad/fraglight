@@ -1461,8 +1461,6 @@
 				old="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;after&amp;QMainUIMidlet;"
 				new="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;after&amp;QMainUIMidlet;"></mapentry>
 			<mapentry
-				old="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;around&amp;Qubc.midp.mobilephoto.core.ui.controller.AbstractController;&amp;QString;"></mapentry>
-			<mapentry
 				old="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;after&amp;QPhotoViewController;&amp;Qjavax.microedition.lcdui.Form;"
 				new="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;after&amp;QPhotoViewController;&amp;QObject;"></mapentry>
 			<mapentry
