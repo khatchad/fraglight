@@ -26,6 +26,8 @@ import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
  */
 public class CopyJavaElementKeyAction implements
 		IWorkbenchWindowActionDelegate {
+	
+	private static final boolean XML_OUTPUT = false;
 
 	private IStructuredSelection aSelection;
 
@@ -36,7 +38,13 @@ public class CopyJavaElementKeyAction implements
 		if (!selectedAdvice.isEmpty()) {
 
 			AdviceElement advice = selectedAdvice.iterator().next();
-			String key = Util.getKey(advice).replace("&", "&amp;");
+			
+			String key;
+			if ( XML_OUTPUT )
+				key = Util.getKey(advice).replace("&", "&amp;");
+			else
+				key = Util.getKey(advice);
+				
 			if (key.length() > 0) {
 				Clipboard clipboard = new Clipboard(Display.getDefault());
 				TextTransfer textTransfer = TextTransfer.getInstance();
