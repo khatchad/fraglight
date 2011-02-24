@@ -27,7 +27,7 @@
       <view
             category="org.eclipse.ajdt.ui.cat"
             class="edu.ohio_state.cse.khatchad.fraglight.ui.views.PointcutChangePredictionView"
-            icon="icons/sample.gif"
+            icon="icons/fraglight.gif"
             id="edu.ohio_state.cse.khatchad.fraglight.ui.views.PointcutChangePredictionView"
             name="Pointcut Change Prediction View">
       </view>
