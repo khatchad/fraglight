@@ -427,12 +427,13 @@ public class PointcutChangePredictionProvider extends
 						+ ".");
 			}
 
+			analyzePointcuts(new TimeCollector());
+
 			// register as a Java editor change listener.
 			logger.info("Registering as a java editor change listener.");
 			JavaCore.addElementChangedListener(this,
 					ElementChangedEvent.POST_RECONCILE);
 
-			analyzePointcuts(new TimeCollector());
 			break;
 		}
 
@@ -448,11 +449,6 @@ public class PointcutChangePredictionProvider extends
 
 			clearPreviousPredictions(new TimeCollector());
 
-			// TODO: This is not correct.
-			// logger.info("Refreshing the change prediction view.");
-			// FraglightUiPlugin.getDefault().getChangePredictionView()
-			// .getViewer().refresh();
-
 			// TODO: Only write the XML file when an XML file already exists
 			// implies that the patterns have been rebuilt since last load.
 			// try {
@@ -464,6 +460,8 @@ public class PointcutChangePredictionProvider extends
 			// catch (CoreException e) {
 			// throw new RuntimeException("Error writing XML file.", e);
 			// }
+			
+			break;
 		}
 		}
 	}
@@ -678,6 +676,11 @@ public class PointcutChangePredictionProvider extends
 						"Found join point shadows matching the pattern.",
 						matchingJavaElementSet);
 				timeCollector.stop();
+				
+				//sanity check.
+				timeCollector.start();
+				sanityCheck(matchingJavaElementSet, affectingJoinPoint);
+				timeCollector.stop();
 
 				if (matchingJavaElementSet.contains(affectingJoinPoint)) {
 
@@ -697,6 +700,16 @@ public class PointcutChangePredictionProvider extends
 		}
 
 		return ret;
+	}
+
+	private void sanityCheck(Set<IJavaElement> matchingJavaElementSet,
+			IJavaElement affectingJoinPoint) {
+		boolean contains = matchingJavaElementSet.contains(affectingJoinPoint);
+		boolean myContains = false;
+		for ( IJavaElement javaElem : matchingJavaElementSet )
+			myContains |= javaElem.toString().equals(affectingJoinPoint.toString());
+		if ( myContains != contains )
+			throw new IllegalStateException("String equality does not match object equality.");
 	}
 
 	@Override

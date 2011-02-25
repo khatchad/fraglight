@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<evaluation>
+	<test>
+		<project name="FraglightCodeElementTest_v1" version="1" />
+		<project name="FraglightCodeElementTest_v2" version="2" />
+		<pointcutmap>
+			<mapentry old="p*A.aj'A&amp;before" new="p*A.aj'A&amp;before2" />
+			<mapentry old="p*A.aj'A&amp;after" new="p*A.aj'A&amp;after2"></mapentry>
+		</pointcutmap>
+	</test>
+<!--	<test>-->
+<!--		<project name="FraglightTest1_v1" version="1" />-->
+<!--		<project name="FraglightTest1_v2" version="2" />-->
+<!--		<pointcutmap>-->
+<!--			<mapentry old="p*A.aj'A&amp;before" new="p*A.aj'A&amp;before2" />-->
+<!--			<mapentry old="p*A.aj'A&amp;after" new="p*A.aj'A&amp;after2" />-->
+<!--		</pointcutmap>-->
+<!--	</test>-->
+</evaluation>

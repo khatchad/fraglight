@@ -189,8 +189,6 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	}
 
 	private void notifyMe() {
-		PostMan.postMail("Done", "Done", "khatchad@cse.ohio-state.edu",
-				"khatchad@cse.ohio-state.edu");
 		if (System.getProperty("os.name").equalsIgnoreCase("Mac OS X"))
 			try {
 				Runtime.getRuntime().exec(
@@ -199,6 +197,9 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			} catch (final IOException e) {
 				System.err.println("Can't send notification.");
 			}
+		else
+			PostMan.postMail("Done", "Done", "khatchad@cse.ohio-state.edu",
+					"khatchad@cse.ohio-state.edu");
 	}
 
 	private static BiMap<AdviceElement, AdviceElement> createOldPointcutToNewPointcutMap(
@@ -212,16 +213,18 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 						oldPointcutKey, jProjectI);
 
 				if (oldPointcut == null)
-					throw new IllegalStateException("Old pointcut with key " + oldPointcutKey + "is null.");
+					throw new IllegalStateException("Old pointcut with key "
+							+ oldPointcutKey + "is null.");
 
-				final String newPointcutKey = oldPointcutKeyToNewPointcutKeyMap.get(oldPointcutKey);
-				
+				final String newPointcutKey = oldPointcutKeyToNewPointcutKeyMap
+						.get(oldPointcutKey);
+
 				final AdviceElement newPointcut = extractAdviceElement(
-						newPointcutKey,
-						jProjectJ);
+						newPointcutKey, jProjectJ);
 
 				if (newPointcut == null)
-					throw new IllegalStateException("New pointcut new key " + newPointcutKey + "is null");
+					throw new IllegalStateException("New pointcut new key "
+							+ newPointcutKey + "is null");
 
 				oldPointcutToNewPointcutMap.put(oldPointcut, newPointcut);
 			} catch (JavaModelException e) {
@@ -256,8 +259,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			Test test = null;
 			try {
 				test = new Test(testElem);
-			}
-			catch(Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
