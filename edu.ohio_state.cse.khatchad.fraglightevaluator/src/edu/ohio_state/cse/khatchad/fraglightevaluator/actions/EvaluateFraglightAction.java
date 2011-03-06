@@ -160,8 +160,8 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 					jProjectJ, jProjectI);
 			test.setAddedShadowCol(addedShadowCol);
 
-			PredictionSet predictionSet = test.run(changePredictionProvider,
-					addedShadowCol);
+			PredictionSet predictionSet = new PredictionSet();
+				//test.run(changePredictionProvider, addedShadowCol);
 
 			double totalGraphConstructionTime = GraphCachingPatternMatcher
 					.getTotalGraphContructionTime();
@@ -245,7 +245,6 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 	private void reportResults(Test test, PredictionSet predictionSet) {
 		for (Prediction prediction : predictionSet) {
-
 			PredictionTestResult result = new PredictionTestResult(test,
 					prediction);
 			result.write(this.predictionWriter, this.contributingPatternWriter);
