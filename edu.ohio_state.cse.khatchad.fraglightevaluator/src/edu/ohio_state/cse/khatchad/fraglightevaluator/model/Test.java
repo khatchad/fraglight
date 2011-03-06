@@ -166,6 +166,7 @@ public class Test {
 		
 		for ( IJavaElement addedShadow : this.addedShadowCol ) {
 			String[] addedShadowRow = this.getAddedShadowRow(addedShadow);
+			addedShadowsWriter.writeNext(addedShadowRow);
 		}
 	}
 	
