@@ -75,6 +75,8 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	private static final String PATTERN_FILENAME = "contributing_patterns.csv";
 
 	private static final String TEST_FILENAME = "tests.csv";
+	
+	private static final String ADDED_SHADOWS_FILENAME = "added_shadows.csv";
 
 	protected static final String RESULT_PATH = new File(ResourcesPlugin
 			.getWorkspace().getRoot().getLocation().toOSString()
@@ -88,6 +90,8 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	private CSVWriter contributingPatternWriter;
 
 	private CSVWriter testWriter;
+	
+	private CSVWriter addedShadowsWriter;
 
 	/**
 	 * The constructor.
@@ -154,7 +158,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			// project_i.
 			Set<IJavaElement> addedShadowCol = getAddedShadowsBetween(
 					jProjectJ, jProjectI);
-			test.setNumberOfAddedShadows(addedShadowCol.size());
+			test.setAddedShadowCol(addedShadowCol);
 
 			PredictionSet predictionSet = test.run(changePredictionProvider,
 					addedShadowCol);
@@ -164,19 +168,17 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 			// aggregate graph construction time.
 			test.addToPredictionTime(totalGraphConstructionTime
-					* (test.getNumberOfAddedShadows() - 1));
+					* (test.getAddedShadowCol().size() - 1));
 
 			GraphCachingPatternMatcher.clearCache();
 
 			reportResults(test, predictionSet);
 
-			test.write(this.testWriter);
+			test.write(this.testWriter, this.addedShadowsWriter);
 		}
 
 		try {
-			this.predictionWriter.close();
-			this.contributingPatternWriter.close();
-			this.testWriter.close();
+			closeReporters();
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -186,6 +188,13 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 		MessageDialog.openInformation(window.getShell(), "FraglightEvaluator",
 				"Fraglight evaluated");
+	}
+
+	private void closeReporters() throws IOException {
+		this.predictionWriter.close();
+		this.contributingPatternWriter.close();
+		this.testWriter.close();
+		this.addedShadowsWriter.close();
 	}
 
 	private void notifyMe() {
@@ -410,11 +419,13 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			this.testWriter = getWriter(TEST_FILENAME);
 			this.predictionWriter = getWriter(PREDICTION_FILENAME);
 			this.contributingPatternWriter = getWriter(PATTERN_FILENAME);
+			this.addedShadowsWriter = getWriter(ADDED_SHADOWS_FILENAME);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		testWriter.writeNext(Test.getHeader());
+		testWriter.writeNext(Test.getTestHeader());
+		addedShadowsWriter.writeNext(Test.getAddedShadowsHeader());
 		predictionWriter.writeNext(PredictionTestResult.getPredictionHeader());
 		contributingPatternWriter.writeNext(PredictionTestResult
 				.getPatternHeader());

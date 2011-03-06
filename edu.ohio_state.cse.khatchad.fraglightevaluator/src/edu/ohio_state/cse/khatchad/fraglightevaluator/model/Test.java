@@ -66,7 +66,9 @@ public class Test {
 		}
 	}
 
-	private static final String HEADER = "Benchmark#From version#To version#Number of pointcuts#Number of added shadows#Number of predictions#Analysis time (s)#Prediction time (s)";
+	private static final String TEST_HEADER = "Benchmark#From version#To version#Number of pointcuts#Number of added shadows#Number of predictions#Analysis time (s)#Prediction time (s)";
+
+	private static final String ADDED_SHADOWS_HEADER = "Benchmark#From version#To version#Added shadow";
 
 	private Project projectI;
 
@@ -79,9 +81,9 @@ public class Test {
 	
 	private double predictionTime;
 
-	private int numberOfAddedShadows;
-
 	private int numberOfPredictions;
+
+	private Collection<IJavaElement> addedShadowCol;
 
 	/**
 	 * @param testElem
@@ -154,40 +156,49 @@ public class Test {
 		return oldPointcutKeyToNewPointcutKeyMap;
 	}
 
-	/**
-	 * @param end
-	 */
 	public void setAnalysisTime(double analysisTime) {
 		this.analysisTime = analysisTime;
 	}
 
-	/**
-	 * @param size
-	 */
-	public void setNumberOfAddedShadows(int numberOfAddedShadows) {
-		this.numberOfAddedShadows = numberOfAddedShadows;
-	}
-
-	public void write(CSVWriter writer) {
-		String[] row = this.getRow();
-		writer.writeNext(row);	
+	public void write(CSVWriter testWriter, CSVWriter addedShadowsWriter) {
+		String[] testRow = this.getTestRow();
+		testWriter.writeNext(testRow);	
+		
+		for ( IJavaElement addedShadow : this.addedShadowCol ) {
+			String[] addedShadowRow = this.getAddedShadowRow(addedShadow);
+		}
 	}
 	
-	public static String[] getHeader() {
-		return HEADER.split("#");
+	public static String[] getTestHeader() {
+		return TEST_HEADER.split("#");
+	}
+	
+	public static String[] getAddedShadowsHeader() {
+		return ADDED_SHADOWS_HEADER.split("#");
 	}
 
-	private String[] getRow() {
-		List<Object> row = new ArrayList<Object>(HEADER.split("#").length);
+	private String[] getTestRow() {
+		List<Object> row = new ArrayList<Object>(TEST_HEADER.split("#").length);
 		
 		row.add(this.projectI.getBenchmarkName());
 		row.add(this.projectI.getVersion());
 		row.add(this.projectJ.getVersion());
 		row.add(this.oldPointcutKeyToNewPointcutKeyMap.size());
-		row.add(this.numberOfAddedShadows);
+		row.add(this.addedShadowCol.size());
 		row.add(this.numberOfPredictions);
 		row.add(this.analysisTime);
 		row.add(this.predictionTime);
+		
+		return Util.toStringArray(row);
+	}
+	
+	private String[] getAddedShadowRow(IJavaElement addedShadow) {
+		List<Object> row = new ArrayList<Object>(ADDED_SHADOWS_HEADER.split("#").length);
+		
+		row.add(this.projectI.getBenchmarkName());
+		row.add(this.projectI.getVersion());
+		row.add(this.projectJ.getVersion());
+		row.add(Util.getKey(addedShadow));
 		
 		return Util.toStringArray(row);
 	}
@@ -250,10 +261,11 @@ public class Test {
 		this.predictionTime += value;
 	}
 
-	/**
-	 * @return
-	 */
-	public int getNumberOfAddedShadows() {
-		return this.numberOfAddedShadows;
+	public void setAddedShadowCol(Collection<IJavaElement> addedShadowCol) {
+		this.addedShadowCol = addedShadowCol;
+	}
+
+	public Collection<IJavaElement> getAddedShadowCol() {
+		return addedShadowCol;
 	}
 }
