@@ -33,9 +33,19 @@ import edu.ohio_state.cse.khatchad.fraglightevaluator.analysis.EvaluationPointcu
  */
 public class Test {
 
-	public class Project {
+	public static class Project {
+
+		private static final String SHADOWS_HEADER = "Benchmark#Version#Shadow";
+
+		private static final String ADVICE_HEADER = "Benchmark#Version#Advice";
+
 		private String name;
+
 		private int version;
+
+		private Set<IJavaElement> shadows;
+
+		private Collection<AdviceElement> advice;
 
 		public void setName(String name) {
 			this.name = name;
@@ -44,7 +54,7 @@ public class Test {
 		public String getName() {
 			return name;
 		}
-		
+
 		public String getBenchmarkName() {
 			String projectName = this.getName();
 			String benchmarkName = projectName.substring(0,
@@ -64,6 +74,64 @@ public class Test {
 		public String toString() {
 			return this.getBenchmarkName() + ",v" + this.getVersion();
 		}
+
+		public void setAdvice(Collection<AdviceElement> oldPointcuts) {
+			this.advice = oldPointcuts;
+		}
+
+		public Collection<AdviceElement> getAdvice() {
+			return advice;
+		}
+
+		public void setShadows(Set<IJavaElement> shadows) {
+			this.shadows = shadows;
+		}
+
+		public Set<IJavaElement> getShadows() {
+			return shadows;
+		}
+
+		public static String[] getShadowsHeader() {
+			return SHADOWS_HEADER.split("#");
+		}
+
+		public static String[] getAdviceHeader() {
+			return ADVICE_HEADER.split("#");
+		}
+
+		private String[] getShadowRow(IJavaElement shadow) {
+			List<Object> row = new ArrayList<Object>(
+					SHADOWS_HEADER.split("#").length);
+
+			row.add(this.getBenchmarkName());
+			row.add(this.getVersion());
+			row.add(Util.getKey(shadow));
+
+			return Util.toStringArray(row);
+		}
+
+		private String[] getAdviceRow(IJavaElement advice) {
+			List<Object> row = new ArrayList<Object>(
+					ADVICE_HEADER.split("#").length);
+
+			row.add(this.getBenchmarkName());
+			row.add(this.getVersion());
+			row.add(Util.getKey(advice));
+
+			return Util.toStringArray(row);
+		}
+		
+		public void write(CSVWriter shadowsWriter, CSVWriter adviceWriter) {
+			for ( IJavaElement shadow : this.shadows ) {
+				String[] shadowRow = this.getShadowRow(shadow);
+				shadowsWriter.writeNext(shadowRow);
+			}
+			
+			for ( IJavaElement shadow : this.advice) {
+				String[] adviceRow = this.getAdviceRow(shadow);
+				adviceWriter.writeNext(adviceRow);
+			}
+		}
 	}
 
 	private static final String TEST_HEADER = "Benchmark#From version#To version#Number of pointcuts#Number of added shadows#Number of predictions#Analysis time (s)#Prediction time (s)";
@@ -78,7 +146,7 @@ public class Test {
 			.create();
 
 	private double analysisTime;
-	
+
 	private double predictionTime;
 
 	private int numberOfPredictions;
@@ -90,6 +158,7 @@ public class Test {
 	 * @throws DataConversionException
 	 */
 	public Test(Element testElem) throws DataConversionException {
+		@SuppressWarnings("unchecked")
 		List<Element> projectElemCol = testElem.getChildren("project");
 
 		List<Project> projectList = new ArrayList<Project>(2);
@@ -127,17 +196,19 @@ public class Test {
 			Element mapEntry = (Element) obj;
 
 			Attribute oldAttribute = mapEntry.getAttribute("old");
-			
-			if ( oldAttribute == null )
-				throw new IllegalStateException("Old element is missing for " + mapEntry);
-			
+
+			if (oldAttribute == null)
+				throw new IllegalStateException("Old element is missing for "
+						+ mapEntry);
+
 			String oldKey = oldAttribute.getValue();
 
 			Attribute newAttribute = mapEntry.getAttribute("new");
-			
-			if ( newAttribute == null )
-				throw new IllegalStateException("New element is missing for " + mapEntry); 
-			
+
+			if (newAttribute == null)
+				throw new IllegalStateException("New element is missing for "
+						+ mapEntry);
+
 			String newKey = newAttribute.getValue();
 
 			oldPointcutKeyToNewPointcutKeyMap.put(oldKey, newKey);
@@ -162,25 +233,25 @@ public class Test {
 
 	public void write(CSVWriter testWriter, CSVWriter addedShadowsWriter) {
 		String[] testRow = this.getTestRow();
-		testWriter.writeNext(testRow);	
-		
-		for ( IJavaElement addedShadow : this.addedShadowCol ) {
+		testWriter.writeNext(testRow);
+
+		for (IJavaElement addedShadow : this.addedShadowCol) {
 			String[] addedShadowRow = this.getAddedShadowRow(addedShadow);
 			addedShadowsWriter.writeNext(addedShadowRow);
 		}
 	}
-	
+
 	public static String[] getTestHeader() {
 		return TEST_HEADER.split("#");
 	}
-	
+
 	public static String[] getAddedShadowsHeader() {
 		return ADDED_SHADOWS_HEADER.split("#");
 	}
 
 	private String[] getTestRow() {
 		List<Object> row = new ArrayList<Object>(TEST_HEADER.split("#").length);
-		
+
 		row.add(this.projectI.getBenchmarkName());
 		row.add(this.projectI.getVersion());
 		row.add(this.projectJ.getVersion());
@@ -189,18 +260,19 @@ public class Test {
 		row.add(this.numberOfPredictions);
 		row.add(this.analysisTime);
 		row.add(this.predictionTime);
-		
+
 		return Util.toStringArray(row);
 	}
-	
+
 	private String[] getAddedShadowRow(IJavaElement addedShadow) {
-		List<Object> row = new ArrayList<Object>(ADDED_SHADOWS_HEADER.split("#").length);
-		
+		List<Object> row = new ArrayList<Object>(
+				ADDED_SHADOWS_HEADER.split("#").length);
+
 		row.add(this.projectI.getBenchmarkName());
 		row.add(this.projectI.getVersion());
 		row.add(this.projectJ.getVersion());
 		row.add(Util.getKey(addedShadow));
-		
+
 		return Util.toStringArray(row);
 	}
 
@@ -217,22 +289,22 @@ public class Test {
 			Set<IJavaElement> addedShadowCol) {
 		TimeCollector predictionTimeCollector = new TimeCollector();
 		final long predictionTimeStart = System.currentTimeMillis();
-	
+
 		for (IJavaElement addedShadow : addedShadowCol)
 			try {
-				changePredictionProvider.processNewJoinPointShadow(
-						addedShadow, predictionTimeCollector);
+				changePredictionProvider.processNewJoinPointShadow(addedShadow,
+						predictionTimeCollector);
 			} catch (JavaModelException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
-	
+
 		double predictionTimeEnd = Util.calculateTimeStatistics(
 				predictionTimeStart, predictionTimeCollector);
 		this.setPredictionTime(predictionTimeEnd);
-		this.setNumberOfPredictions(changePredictionProvider
-				.getPredictionSet().size());
-		
+		this.setNumberOfPredictions(changePredictionProvider.getPredictionSet()
+				.size());
+
 		return changePredictionProvider.getPredictionSet();
 	}
 
@@ -241,12 +313,12 @@ public class Test {
 			BiMap<AdviceElement, AdviceElement> oldPointcutToNewPointcutMap) {
 		TimeCollector analysisTimeCollector = new TimeCollector();
 		final long analysisTimeStart = System.currentTimeMillis();
-	
+
 		PointcutChangePredictionProvider changePredictionProvider = new EvaluationPointcutChangePredictionProvider(
 				oldPointcutToNewPointcutMap);
 		changePredictionProvider.analyzePointcuts(oldPointcuts,
 				analysisTimeCollector);
-	
+
 		double analysisTimeEnd = Util.calculateTimeStatistics(
 				analysisTimeStart, analysisTimeCollector);
 		this.setAnalysisTime(analysisTimeEnd);

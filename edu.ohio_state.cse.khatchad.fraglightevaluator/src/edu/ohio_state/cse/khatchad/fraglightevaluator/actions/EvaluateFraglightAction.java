@@ -58,6 +58,7 @@ import edu.ohio_state.cse.khatchad.fraglight.ui.PredictionSet;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.analysis.GraphCachingPatternMatcher;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.model.Test;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.model.PredictionTestResult;
+import edu.ohio_state.cse.khatchad.fraglightevaluator.model.Test.Project;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.util.PostMan;
 
 /**
@@ -77,6 +78,10 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	private static final String TEST_FILENAME = "tests.csv";
 	
 	private static final String ADDED_SHADOWS_FILENAME = "added_shadows.csv";
+	
+	private static final String SHADOWS_FILENAME = "shadows.csv";
+	
+	private static final String ADVICE_FILENAME = "advice.csv";
 
 	protected static final String RESULT_PATH = new File(ResourcesPlugin
 			.getWorkspace().getRoot().getLocation().toOSString()
@@ -92,12 +97,10 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	private CSVWriter testWriter;
 	
 	private CSVWriter addedShadowsWriter;
-
-	/**
-	 * The constructor.
-	 */
-	public EvaluateFraglightAction() {
-	}
+	
+	private CSVWriter shadowsWriter;
+	
+	private CSVWriter adviceWriter;
 
 	/**
 	 * The action has been activated. The argument of the method represents the
@@ -130,11 +133,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 		for (Test test : testCol) {
 
-			BiMap<String, String> oldPointcutKeyToNewPointcutKeyMap = test
-					.getOldPointcutKeyToNewPointcutKeyMap();
-
 			IWorkspace workspace = getWorkspace();
-
 			buildWorkspace(workspace);
 
 			IJavaProject jProjectI = getProject(test.getProjectI().getName(),
@@ -142,13 +141,18 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 			IJavaProject jProjectJ = getProject(test.getProjectJ().getName(),
 					workspace);
+			
+			BiMap<String, String> oldPointcutKeyToNewPointcutKeyMap = test
+					.getOldPointcutKeyToNewPointcutKeyMap();
 
 			Collection<AdviceElement> oldPointcuts = getPointcuts(
 					oldPointcutKeyToNewPointcutKeyMap.keySet(), jProjectI);
+			test.getProjectI().setAdvice(oldPointcuts);
 
 			// A map from old pointcuts to new pointcuts (not just keys).
 			BiMap<AdviceElement, AdviceElement> oldPointcutToNewPointcutMap = createOldPointcutToNewPointcutMap(
 					oldPointcutKeyToNewPointcutKeyMap, jProjectI, jProjectJ);
+			test.getProjectJ().setAdvice(oldPointcutToNewPointcutMap.keySet());
 
 			PointcutChangePredictionProvider changePredictionProvider = test
 					.createPointcutChangePredictionProvider(oldPointcuts,
@@ -157,7 +161,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			// A set of join points that exist in project_j but not in
 			// project_i.
 			Set<IJavaElement> addedShadowCol = getAddedShadowsBetween(
-					jProjectJ, jProjectI);
+					jProjectJ, test.getProjectI(), jProjectI, test.getProjectJ());
 			test.setAddedShadowCol(addedShadowCol);
 
 			PredictionSet predictionSet = new PredictionSet();
@@ -195,6 +199,8 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 		this.contributingPatternWriter.close();
 		this.testWriter.close();
 		this.addedShadowsWriter.close();
+		this.shadowsWriter.close();
+		this.adviceWriter.close();
 	}
 
 	private void notifyMe() {
@@ -320,15 +326,17 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	}
 
 	private static Set<IJavaElement> getAddedShadowsBetween(
-			IJavaProject jProjectJ, IJavaProject jProjectI) {
+			IJavaProject jProjectJ, Project projectJ, IJavaProject jProjectI, Project projectI) {
 		Set<IJavaElement> shadowsInVersionI = null;
 		Set<IJavaElement> shadowsInVersionJ = null;
 		try {
 			shadowsInVersionI = AJUtil.getAdvisedJavaElements(jProjectI);
 			AJUtil.removeShadowsCorrespondingToAspects(shadowsInVersionI);
+			projectI.setShadows(shadowsInVersionI);
 
 			shadowsInVersionJ = AJUtil.getAdvisedJavaElements(jProjectJ);
 			AJUtil.removeShadowsCorrespondingToAspects(shadowsInVersionJ);
+			projectJ.setShadows(shadowsInVersionJ);
 
 		} catch (JavaModelException e) {
 			e.printStackTrace();
@@ -419,6 +427,8 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			this.predictionWriter = getWriter(PREDICTION_FILENAME);
 			this.contributingPatternWriter = getWriter(PATTERN_FILENAME);
 			this.addedShadowsWriter = getWriter(ADDED_SHADOWS_FILENAME);
+			this.shadowsWriter = getWriter(SHADOWS_FILENAME);
+			this.adviceWriter = getWriter(ADVICE_FILENAME);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
