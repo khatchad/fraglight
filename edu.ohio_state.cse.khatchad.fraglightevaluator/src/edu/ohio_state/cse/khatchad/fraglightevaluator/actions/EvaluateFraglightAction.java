@@ -177,8 +177,6 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			GraphCachingPatternMatcher.clearCache();
 
 			reportResults(test, predictionSet);
-
-			test.write(this.testWriter, this.addedShadowsWriter);
 		}
 
 		try {
@@ -255,6 +253,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 					prediction);
 			result.write(this.predictionWriter, this.contributingPatternWriter);
 		}
+		test.write();
 	}
 
 	/**
@@ -277,9 +276,18 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
+			
+			assignReportersToTest(test);
 			ret.add(test);
 		}
 		return ret;
+	}
+
+	private void assignReportersToTest(Test test) {
+		test.setAddedShadowsWriter(addedShadowsWriter);
+		test.setAdviceWriter(adviceWriter);
+		test.setShadowsWriter(shadowsWriter);
+		test.setTestWriter(testWriter);
 	}
 
 	private static Document getXMLTestFile() throws JDOMException, IOException {
@@ -438,6 +446,8 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 		predictionWriter.writeNext(PredictionTestResult.getPredictionHeader());
 		contributingPatternWriter.writeNext(PredictionTestResult
 				.getPatternHeader());
+		shadowsWriter.writeNext(Test.Project.getShadowsHeader());
+		adviceWriter.writeNext(Test.Project.getAdviceHeader());
 	}
 
 	private static CSVWriter getWriter(String fileName) throws IOException {

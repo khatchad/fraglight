@@ -120,14 +120,14 @@ public class Test {
 
 			return Util.toStringArray(row);
 		}
-		
+
 		public void write(CSVWriter shadowsWriter, CSVWriter adviceWriter) {
-			for ( IJavaElement shadow : this.shadows ) {
+			for (IJavaElement shadow : this.shadows) {
 				String[] shadowRow = this.getShadowRow(shadow);
 				shadowsWriter.writeNext(shadowRow);
 			}
-			
-			for ( IJavaElement shadow : this.advice) {
+
+			for (IJavaElement shadow : this.advice) {
 				String[] adviceRow = this.getAdviceRow(shadow);
 				adviceWriter.writeNext(adviceRow);
 			}
@@ -152,6 +152,14 @@ public class Test {
 	private int numberOfPredictions;
 
 	private Collection<IJavaElement> addedShadowCol;
+
+	private CSVWriter testWriter;
+
+	private CSVWriter addedShadowsWriter;
+
+	private CSVWriter shadowsWriter;
+
+	private CSVWriter adviceWriter;
 
 	/**
 	 * @param testElem
@@ -231,7 +239,8 @@ public class Test {
 		this.analysisTime = analysisTime;
 	}
 
-	public void write(CSVWriter testWriter, CSVWriter addedShadowsWriter) {
+	public void write() {
+
 		String[] testRow = this.getTestRow();
 		testWriter.writeNext(testRow);
 
@@ -239,6 +248,9 @@ public class Test {
 			String[] addedShadowRow = this.getAddedShadowRow(addedShadow);
 			addedShadowsWriter.writeNext(addedShadowRow);
 		}
+
+		this.projectI.write(shadowsWriter, adviceWriter);
+		this.projectJ.write(shadowsWriter, adviceWriter);
 	}
 
 	public static String[] getTestHeader() {
@@ -340,5 +352,21 @@ public class Test {
 
 	public Collection<IJavaElement> getAddedShadowCol() {
 		return addedShadowCol;
+	}
+
+	public void setTestWriter(CSVWriter testWriter) {
+		this.testWriter = testWriter;
+	}
+
+	public void setAddedShadowsWriter(CSVWriter addedShadowsWriter) {
+		this.addedShadowsWriter = addedShadowsWriter;
+	}
+
+	public void setShadowsWriter(CSVWriter shadowsWriter) {
+		this.shadowsWriter = shadowsWriter;
+	}
+
+	public void setAdviceWriter(CSVWriter adviceWriter) {
+		this.adviceWriter = adviceWriter;
 	}
 }
