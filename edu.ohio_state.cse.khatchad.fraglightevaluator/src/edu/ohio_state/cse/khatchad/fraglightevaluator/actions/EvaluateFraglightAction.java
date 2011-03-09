@@ -36,6 +36,8 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.mylyn.context.core.ContextCore;
+import org.eclipse.mylyn.context.core.IInteractionElement;
 import org.jdom.DataConversionException;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -46,6 +48,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.ImmutableBiMap.Builder;
 
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.model.JoinPointType;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.util.FileUtil;
@@ -76,17 +79,21 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	private static final String PATTERN_FILENAME = "contributing_patterns.csv";
 
 	private static final String TEST_FILENAME = "tests.csv";
-	
+
 	private static final String ADDED_SHADOWS_FILENAME = "added_shadows.csv";
-	
+
 	private static final String SHADOWS_FILENAME = "shadows.csv";
-	
+
 	private static final String ADVICE_FILENAME = "advice.csv";
+
+	private static final String DOI_FILENAME = "doi.csv";
 
 	protected static final String RESULT_PATH = new File(ResourcesPlugin
 			.getWorkspace().getRoot().getLocation().toOSString()
 			+ File.separator + "results").getPath()
 			+ File.separator;
+
+	private static final String DOI_HEADER = "Benchmark#Element#DOI value";
 
 	private IWorkbenchWindow window;
 
@@ -95,12 +102,14 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	private CSVWriter contributingPatternWriter;
 
 	private CSVWriter testWriter;
-	
+
 	private CSVWriter addedShadowsWriter;
-	
+
 	private CSVWriter shadowsWriter;
-	
+
 	private CSVWriter adviceWriter;
+
+	private CSVWriter DOIWriter;
 
 	/**
 	 * The action has been activated. The argument of the method represents the
@@ -141,7 +150,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 			IJavaProject jProjectJ = getProject(test.getProjectJ().getName(),
 					workspace);
-			
+
 			BiMap<String, String> oldPointcutKeyToNewPointcutKeyMap = test
 					.getOldPointcutKeyToNewPointcutKeyMap();
 
@@ -161,11 +170,12 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			// A set of join points that exist in project_j but not in
 			// project_i.
 			Set<IJavaElement> addedShadowCol = getAddedShadowsBetween(
-					jProjectJ, test.getProjectI(), jProjectI, test.getProjectJ());
+					jProjectJ, test.getProjectI(), jProjectI,
+					test.getProjectJ());
 			test.setAddedShadowCol(addedShadowCol);
 
-			PredictionSet predictionSet = new PredictionSet();
-				//test.run(changePredictionProvider, addedShadowCol);
+			PredictionSet predictionSet = test.run(changePredictionProvider,
+					addedShadowCol);
 
 			double totalGraphConstructionTime = GraphCachingPatternMatcher
 					.getTotalGraphContructionTime();
@@ -178,6 +188,8 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 
 			reportResults(test, predictionSet);
 		}
+
+		reportDOIValues();
 
 		try {
 			closeReporters();
@@ -192,6 +204,37 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 				"Fraglight evaluated");
 	}
 
+	private void reportDOIValues() {
+
+		if (!ContextCore.getContextManager().isContextActive()) {
+			return;
+		}
+
+		List<IInteractionElement> allElements = ContextCore.getContextManager()
+				.getActiveContext().getAllElements();
+		for (IInteractionElement elem : allElements) {
+			String[] row = getDOIrow(elem);
+			this.DOIWriter.writeNext(row);
+		}
+	}
+
+	private static String[] getDOIrow(IInteractionElement elem) {
+		List<Object> row = new ArrayList<Object>(DOI_HEADER.split("#").length);
+
+		IJavaElement javaElement = JavaCore.create(elem.getHandleIdentifier());
+		IProject project = Util.getProject(javaElement);
+		String benchmarkName = Util.getBenchmarkName(project);
+		row.add(benchmarkName);
+
+		String key = Util.getKey(javaElement);
+		row.add(key);
+
+		double value = elem.getInterest().getValue();
+		row.add(value);
+
+		return Util.toStringArray(row);
+	}
+
 	private void closeReporters() throws IOException {
 		this.predictionWriter.close();
 		this.contributingPatternWriter.close();
@@ -199,6 +242,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 		this.addedShadowsWriter.close();
 		this.shadowsWriter.close();
 		this.adviceWriter.close();
+		this.DOIWriter.close();
 	}
 
 	private void notifyMe() {
@@ -276,7 +320,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
-			
+
 			assignReportersToTest(test);
 			ret.add(test);
 		}
@@ -334,7 +378,8 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 	}
 
 	private static Set<IJavaElement> getAddedShadowsBetween(
-			IJavaProject jProjectJ, Project projectJ, IJavaProject jProjectI, Project projectI) {
+			IJavaProject jProjectJ, Project projectJ, IJavaProject jProjectI,
+			Project projectI) {
 		Set<IJavaElement> shadowsInVersionI = null;
 		Set<IJavaElement> shadowsInVersionJ = null;
 		try {
@@ -437,6 +482,7 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 			this.addedShadowsWriter = getWriter(ADDED_SHADOWS_FILENAME);
 			this.shadowsWriter = getWriter(SHADOWS_FILENAME);
 			this.adviceWriter = getWriter(ADVICE_FILENAME);
+			this.DOIWriter = getWriter(DOI_FILENAME);
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -448,6 +494,14 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 				.getPatternHeader());
 		shadowsWriter.writeNext(Test.Project.getShadowsHeader());
 		adviceWriter.writeNext(Test.Project.getAdviceHeader());
+		this.DOIWriter.writeNext(getDOIHeader());
+	}
+
+	/**
+	 * @return
+	 */
+	private static String[] getDOIHeader() {
+		return DOI_HEADER.split("#");
 	}
 
 	private static CSVWriter getWriter(String fileName) throws IOException {
