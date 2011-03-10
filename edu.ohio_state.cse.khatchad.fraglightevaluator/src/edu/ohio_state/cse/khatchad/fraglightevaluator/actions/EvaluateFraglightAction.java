@@ -18,8 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.ajdt.core.AspectJCore;
 import org.eclipse.ajdt.core.javaelements.AJCodeElement;
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
+import org.eclipse.ajdt.core.javaelements.IAspectJElement;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -214,15 +216,22 @@ public class EvaluateFraglightAction implements IWorkbenchWindowActionDelegate {
 				.getActiveContext().getAllElements();
 		for (IInteractionElement elem : allElements) {
 			String[] row = getDOIrow(elem);
-			this.DOIWriter.writeNext(row);
+			
+			if ( row != null )
+				this.DOIWriter.writeNext(row);
 		}
 	}
 
 	private static String[] getDOIrow(IInteractionElement elem) {
 		List<Object> row = new ArrayList<Object>(DOI_HEADER.split("#").length);
 
-		IJavaElement javaElement = JavaCore.create(elem.getHandleIdentifier());
-		IProject project = Util.getProject(javaElement);
+		final String handleIdentifier = elem.getHandleIdentifier();
+		IJavaElement javaElement = AspectJCore.create(handleIdentifier);
+		
+		if ( javaElement == null || !(javaElement instanceof AdviceElement) )
+			return null;
+		
+		IJavaProject project = javaElement.getJavaProject();
 		String benchmarkName = Util.getBenchmarkName(project);
 		row.add(benchmarkName);
 
