@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            label="Fraglight Evaluation Action Set"
+            visible="true"
+            id="edu.ohio_state.cse.khatchad.fraglightevaluator.actionSet">
+         <menu
+               label="Fraglight &amp;Evaluation"
+               id="fraglightEvaluationMenu">
+            <separator
+                  name="fraglightEvaluationGroup">
+            </separator>
+         </menu>
+         <action
+               label="Evaluate &amp;Fraglight"
+               icon="icons/sample.gif"
+               class="edu.ohio_state.cse.khatchad.fraglightevaluator.actions.EvaluateFraglightAction"
+               tooltip="Evaluate Fraglight"
+               menubarPath="fraglightEvaluationMenu/fraglightEvaluationGroup"
+               toolbarPath="fraglightEvaluationGroup"
+               id="edu.ohio_state.cse.khatchad.fraglightevaluator.actions.EvaluateFraglightAction">
+         </action>
+      </actionSet>
+   </extension>	
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.ajdt.core.javaelements.AdviceElement"
+            adaptable="true"
+            id="edu.ohio_state.cse.khatchad.fraglightevaluator.object.contribution">
+         <action
+               label="Copy Key"
+               class="edu.ohio_state.cse.khatchad.fraglightevaluator.actions.CopyJavaElementKeyAction"
+               id="edu.ohio_state.cse.khatchad.fraglightevaluator.actions.CopyJavaElementKeyAction">
+         </action>
+      </objectContribution>
+   </extension>
+</plugin>

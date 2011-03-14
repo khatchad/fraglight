@@ -1,0 +1,1649 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<evaluation>
+	<test>
+		<project name="HealthWatcherAO_01_Base" version="1" />
+		<project name="HealthWatcherAO_02_Command" version="2" />
+		<pointcutmap>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"
+				new="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;" />
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"
+				new="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;" />
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;" />
+
+			<mapentry
+				old="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around"
+				new="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around2" />
+
+			<mapentry
+				old="healthwatcher.aspects.distribution*HWServerDistribution.aj'HWServerDistribution&amp;around"
+				new="healthwatcher.aspects.distribution*HWServerDistribution.aj'HWServerDistribution&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;2"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;2"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;2"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"
+				new="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"
+				new="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"></mapentry>
+
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="HealthWatcherAO_02_Command" version="2" />
+		<project name="HealthWatcherAO_03_State" version="3" />
+		<pointcutmap>
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"
+				new="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"
+				new="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;" />
+
+			<mapentry
+				old="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around"
+				new="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.distribution*HWServerDistribution.aj'HWServerDistribution&amp;around"
+				new="healthwatcher.aspects.distribution*HWServerDistribution.aj'HWServerDistribution&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"
+				new="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"
+				new="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"></mapentry>
+
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="HealthWatcherAO_03_State" version="3" />
+		<project name="HealthWatcherAO_04_Observer" version="4" />
+
+		<pointcutmap>
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"
+				new="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"
+				new="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;" />
+
+			<mapentry
+				old="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around"
+				new="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.distribution*HWServerDistribution.aj'HWServerDistribution&amp;around"
+				new="healthwatcher.aspects.distribution*HWServerDistribution.aj'HWServerDistribution&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QDate;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QDate;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;I&amp;QAnimalComplaint;&amp;QAnimalComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;I&amp;QAnimalComplaint;&amp;QAnimalComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;I&amp;QComplaint;&amp;QComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;I&amp;QComplaint;&amp;QComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;I&amp;I&amp;I&amp;I&amp;QString;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;I&amp;I&amp;I&amp;I&amp;QString;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;I&amp;QFoodComplaint;&amp;QFoodComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;I&amp;QFoodComplaint;&amp;QFoodComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;I&amp;QSpecialComplaint;&amp;QSpecialComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;I&amp;QSpecialComplaint;&amp;QSpecialComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QString;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QString;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"
+				new="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"
+				new="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"></mapentry>
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="HealthWatcherAO_04_Observer" version="4" />
+		<project name="HealthWatcherAO_05_Adapter" version="5" />
+		<pointcutmap>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"
+				new="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"
+				new="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;" />
+
+			<mapentry
+				old="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around"
+				new="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.distribution*HWServerDistribution.aj'HWServerDistribution&amp;around"
+				new="healthwatcher.aspects.distribution*HWServerDistribution.aj'HWServerDistribution&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWUpdateObserverExceptionHandler.aj'HWUpdateObserverExceptionHandler&amp;around&amp;QCommandServlet;"
+				new="healthwatcher.aspects.exceptionHandling*HWUpdateObserverExceptionHandler.aj'HWUpdateObserverExceptionHandler&amp;around&amp;QCommandServlet;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;"
+				new="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QDate;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QDate;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;I&amp;QAnimalComplaint;&amp;QAnimalComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;I&amp;QAnimalComplaint;&amp;QAnimalComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;I&amp;QComplaint;&amp;QComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;I&amp;QComplaint;&amp;QComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;I&amp;I&amp;I&amp;I&amp;QString;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;I&amp;I&amp;I&amp;I&amp;QString;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;I&amp;QFoodComplaint;&amp;QFoodComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;I&amp;QFoodComplaint;&amp;QFoodComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;I&amp;QSpecialComplaint;&amp;QSpecialComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;I&amp;QSpecialComplaint;&amp;QSpecialComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QString;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QString;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"
+				new="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"
+				new="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"></mapentry>
+
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="HealthWatcherAO_05_Adapter" version="5"></project>
+		<project name="HealthWatcherAO_06_Factory" version="6"></project>
+		<pointcutmap>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"
+				new="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"
+				new="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;" />
+
+			<mapentry
+				old="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around"
+				new="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.distribution*HWServerDistribution.aj'HWServerDistribution&amp;around"
+				new="healthwatcher.aspects.distribution*HWServerDistribution.aj'HWServerDistribution&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWUpdateObserverExceptionHandler.aj'HWUpdateObserverExceptionHandler&amp;around&amp;QCommandServlet;"
+				new="healthwatcher.aspects.exceptionHandling*HWUpdateObserverExceptionHandler.aj'HWUpdateObserverExceptionHandler&amp;around&amp;QCommandServlet;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;"
+				new="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QDate;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QDate;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;I&amp;QAnimalComplaint;&amp;QAnimalComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;I&amp;QAnimalComplaint;&amp;QAnimalComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;I&amp;QComplaint;&amp;QComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;I&amp;QComplaint;&amp;QComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;I&amp;I&amp;I&amp;I&amp;QString;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;I&amp;I&amp;I&amp;I&amp;QString;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;I&amp;QFoodComplaint;&amp;QFoodComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;I&amp;QFoodComplaint;&amp;QFoodComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;I&amp;QSpecialComplaint;&amp;QSpecialComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;I&amp;QSpecialComplaint;&amp;QSpecialComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QString;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QString;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"
+				new="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"
+				new="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"></mapentry>
+
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="HealthWatcherAO_06_Factory" version="6"></project>
+		<project name="HealthWatcherAO_07_Adapter" version="7"></project>
+		<pointcutmap>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"
+				new="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"
+				new="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;" />
+
+			<mapentry
+				old="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around"
+				new="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.distribution*HWServerDistribution.aj'HWServerDistribution&amp;around"
+				new="healthwatcher.aspects.distribution*HWServerDistribution.aj'HWServerDistribution&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWUpdateObserverExceptionHandler.aj'HWUpdateObserverExceptionHandler&amp;around&amp;QCommandServlet;"
+				new="healthwatcher.aspects.exceptionHandling*HWUpdateObserverExceptionHandler.aj'HWUpdateObserverExceptionHandler&amp;around&amp;QCommandServlet;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;"
+				new="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;2"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QDate;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QDate;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;I&amp;QAnimalComplaint;&amp;QAnimalComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;I&amp;QAnimalComplaint;&amp;QAnimalComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;I&amp;QComplaint;&amp;QComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;I&amp;QComplaint;&amp;QComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;I&amp;I&amp;I&amp;I&amp;QString;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;I&amp;I&amp;I&amp;I&amp;QString;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;I&amp;QFoodComplaint;&amp;QFoodComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;I&amp;QFoodComplaint;&amp;QFoodComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;I&amp;QSpecialComplaint;&amp;QSpecialComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;I&amp;QSpecialComplaint;&amp;QSpecialComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QString;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QString;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"
+				new="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"
+				new="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"></mapentry>
+
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="HealthWatcherAO_07_Adapter" version="7"></project>
+		<project name="HealthWatcherAO_08_Factory" version="8"></project>
+		<pointcutmap>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"
+				new="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"
+				new="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;2"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;2"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;"
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around"
+				new="healthwatcher.aspects.distribution*HWClientDistribution.aj'HWClientDistribution&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWUpdateObserverExceptionHandler.aj'HWUpdateObserverExceptionHandler&amp;around&amp;QCommandServlet;"
+				new="healthwatcher.aspects.exceptionHandling*HWUpdateObserverExceptionHandler.aj'HWUpdateObserverExceptionHandler&amp;around&amp;QCommandServlet;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;"
+				new="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QDate;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QDate;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;I&amp;QAnimalComplaint;&amp;QAnimalComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;I&amp;QAnimalComplaint;&amp;QAnimalComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;I&amp;QComplaint;&amp;QComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;I&amp;QComplaint;&amp;QComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;I&amp;I&amp;I&amp;I&amp;QString;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;I&amp;I&amp;I&amp;I&amp;QString;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;I&amp;QFoodComplaint;&amp;QFoodComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;I&amp;QFoodComplaint;&amp;QFoodComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;I&amp;QSpecialComplaint;&amp;QSpecialComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;I&amp;QSpecialComplaint;&amp;QSpecialComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QString;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QString;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"
+				old="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"
+				new="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"></mapentry>
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="HealthWatcherAO_08_Factory" version="8"></project>
+		<project name="HealthWatcherAO_09_Evolution" version="9"></project>
+		<pointcutmap>
+
+			<mapentry
+				new="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"
+				old="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"
+				new="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;3"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;2"
+				new="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;4"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;2"
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;2"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;"
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.distribution*RMIClientDistribution.aj'RMIClientDistribution&amp;around"
+				old="healthwatcher.aspects.distribution*RMIClientDistribution.aj'RMIClientDistribution&amp;around"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				old="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				new="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				old="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.exceptionHandling*HWUpdateObserverExceptionHandler.aj'HWUpdateObserverExceptionHandler&amp;around&amp;QCommandServlet;"
+				old="healthwatcher.aspects.exceptionHandling*HWUpdateObserverExceptionHandler.aj'HWUpdateObserverExceptionHandler&amp;around&amp;QCommandServlet;"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;"
+				old="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QDate;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QDate;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;I&amp;QAnimalComplaint;&amp;QAnimalComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;I&amp;QAnimalComplaint;&amp;QAnimalComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;I&amp;QComplaint;&amp;QComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;I&amp;QComplaint;&amp;QComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;I&amp;I&amp;I&amp;I&amp;QString;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;I&amp;I&amp;I&amp;I&amp;QString;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;I&amp;QFoodComplaint;&amp;QFoodComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;I&amp;QFoodComplaint;&amp;QFoodComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;I&amp;QSpecialComplaint;&amp;QSpecialComplaintState;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;I&amp;QSpecialComplaint;&amp;QSpecialComplaintState;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QString;&amp;QString;&amp;QAddress;"
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QString;&amp;QString;&amp;QAddress;"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"
+				old="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"></mapentry>
+
+			<mapentry
+				old="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"
+				new="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"></mapentry>
+
+			<mapentry
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"></mapentry>
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="HealthWatcherAO_09_Evolution" version="9"></project>
+		<project name="HealthWatcherAO_10_ExceptionHandling" version="10"></project>
+		<pointcutmap>
+			<mapentry
+				new="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"
+				old="healthwatcher.aspects.concurrency*HWLocalSynchronization.aj'HWLocalSynchronization&amp;around&amp;QObject;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"
+				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;2"
+				old="healthwatcher.aspects.concurrency*HWManagedSynchronization.aj'HWManagedSynchronization&amp;before&amp;QObject;2"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;2"
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;after&amp;QComplaint;2"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;afterReturning&amp;QComplaint;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;"
+				old="healthwatcher.aspects.concurrency*HWTimestamp.aj'HWTimestamp&amp;around&amp;QComplaint;&amp;QComplaintRepositoryRDB;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.distribution*RMIClientDistribution.aj'RMIClientDistribution&amp;around"
+				old="healthwatcher.aspects.distribution*RMIClientDistribution.aj'RMIClientDistribution&amp;around"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.distribution*RMIServerDistribution.aj'RMIServerDistribution&amp;around"
+				old="healthwatcher.aspects.distribution*RMIServerDistribution.aj'RMIServerDistribution&amp;around"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				old="healthwatcher.aspects.exceptionHandling*HWDistributionExceptionHandler.aj'HWDistributionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				old="healthwatcher.aspects.exceptionHandling*HWPersistenceExceptionHandler.aj'HWPersistenceExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"
+				old="healthwatcher.aspects.exceptionHandling*HWTransactionExceptionHandler.aj'HWTransactionExceptionHandler&amp;around&amp;QHttpServletResponse;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.exceptionHandling*HWUpdateObserverExceptionHandler.aj'HWUpdateObserverExceptionHandler&amp;around&amp;QCommandServlet;"
+				old="healthwatcher.aspects.exceptionHandling*HWUpdateObserverExceptionHandler.aj'HWUpdateObserverExceptionHandler&amp;around&amp;QCommandServlet;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;after"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"
+				old="healthwatcher.aspects.patterns*ServletCommanding.aj'ServletCommanding&amp;before&amp;QHttpServletRequest;&amp;QHttpServletResponse;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;"
+				old="healthwatcher.aspects.patterns*UpdateStateObserver.aj'UpdateStateObserver&amp;after&amp;QSubject;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;"
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QDate;&amp;QString;&amp;QAddress;"
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;QAnimalComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QDate;&amp;QString;&amp;QAddress;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;I&amp;QAnimalComplaint;&amp;QAnimalComplaintState;"
+				old="healthwatcher.aspects.patterns.complaintState*AnimalComplaintStateAspect.aj'AnimalComplaintStateAspect&amp;after&amp;I&amp;QAnimalComplaint;&amp;QAnimalComplaintState;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;"
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;"
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;QComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;I&amp;QComplaint;&amp;QComplaintState;"
+				old="healthwatcher.aspects.patterns.complaintState*ComplaintStateAspect.aj'ComplaintStateAspect&amp;after&amp;I&amp;QComplaint;&amp;QComplaintState;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;"
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;QFoodComplaint;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;I&amp;QFoodComplaint;&amp;QFoodComplaintState;"
+				old="healthwatcher.aspects.patterns.complaintState*FoodComplaintStateAspect.aj'FoodComplaintStateAspect&amp;after&amp;I&amp;QFoodComplaint;&amp;QFoodComplaintState;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;I&amp;QSpecialComplaint;&amp;QSpecialComplaintState;"
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;I&amp;QSpecialComplaint;&amp;QSpecialComplaintState;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;"
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QString;&amp;QString;&amp;QAddress;"
+				old="healthwatcher.aspects.patterns.complaintState*SpecialComplaintStateAspect.aj'SpecialComplaintStateAspect&amp;after&amp;QSpecialComplaint;&amp;QString;&amp;QString;&amp;QString;&amp;QString;&amp;QEmployee;&amp;I&amp;QDate;&amp;QDate;&amp;QAddress;&amp;S&amp;QString;&amp;QString;&amp;QAddress;"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"
+				old="healthwatcher.aspects.persistence*HWDataCollection.aj'HWDataCollection&amp;around"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"
+				old="healthwatcher.aspects.persistence*HWPersistence.aj'HWPersistence&amp;before"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterReturning"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;afterThrowing"></mapentry>
+			<mapentry
+				new="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"
+				old="healthwatcher.aspects.persistence*HWTransactionManagement.aj'HWTransactionManagement&amp;before"></mapentry>
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="MobilePhoto_v2" version="2"></project>
+		<project name="MobilePhoto_v3" version="3"></project>
+		<pointcutmap>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QBaseController;"
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QBaseController;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;"
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QBaseController;2"
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QBaseController;2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;2"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;3"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;2"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;6"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;3"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;3"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;4"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;4"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;5"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;5"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around2"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;3"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QAlbumData;"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QAlbumData;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QString;&amp;QAlbumData;"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QString;&amp;QAlbumData;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"
+				old="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;3"></mapentry>
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="MobilePhoto_v3" version="3"></project>
+		<project name="MobilePhoto_v4" version="4"></project>
+		<pointcutmap>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QBaseController;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qjavax.microedition.lcdui.CommandListener;3"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QBaseController;2"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QBaseController;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;2"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QBaseController;2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;2"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;2"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;3"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;3"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;4"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;4"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;5"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;5"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around2"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around2"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QAlbumData;"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QAlbumData;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QString;&amp;QAlbumData;"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QString;&amp;QAlbumData;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"
+				old="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QBaseController;&amp;QString;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QBaseController;&amp;QString;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QBaseController;&amp;QCommand;&amp;QDisplayable;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QBaseController;&amp;QCommand;&amp;QDisplayable;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before&amp;QBaseController;&amp;\[QImageData;&amp;QPhotoListScreen;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before&amp;QBaseController;&amp;\[QImageData;&amp;QPhotoListScreen;"></mapentry>
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="MobilePhoto_v4" version="4"></project>
+		<project name="MobilePhoto_v5" version="5"></project>
+		<pointcutmap>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qjavax.microedition.lcdui.CommandListener;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qjavax.microedition.lcdui.CommandListener;3" />
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;3"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qjavax.microedition.lcdui.CommandListener;2"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qjavax.microedition.lcdui.CommandListener;4"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;2"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;4"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;2"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;3"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;3"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;4"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;4"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;5"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;5"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around2"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around2"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QAlbumData;"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QAlbumData;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QString;&amp;QAlbumData;"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QString;&amp;QAlbumData;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"
+				old="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QCommand;"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QCommand;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QImageData;"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QImageData;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after&amp;Qjavax.microedition.lcdui.CommandListener;&amp;\[QImageData;&amp;QPhotoListScreen;"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after&amp;Qjavax.microedition.lcdui.CommandListener;&amp;\[QImageData;&amp;QPhotoListScreen;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after&amp;QPhotoListScreen;"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after&amp;QPhotoListScreen;"></mapentry>
+			<mapentry
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;QImageUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;QImageUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"></mapentry>
+			<mapentry
+				new="lancs.midp.mobilephoto.optional.favourites*PersisteFavoritesAspect.aj'PersisteFavoritesAspect&amp;around&amp;QImageData;"
+				old="lancs.midp.mobilephoto.optional.favourites*PersisteFavoritesAspect.aj'PersisteFavoritesAspect&amp;around&amp;QImageData;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QString;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QString;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QCommand;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QCommand;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before&amp;Qjavax.microedition.lcdui.CommandListener;&amp;\[QImageData;&amp;QPhotoListScreen;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before&amp;Qjavax.microedition.lcdui.CommandListener;&amp;\[QImageData;&amp;QPhotoListScreen;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QPhotoListScreen;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QPhotoListScreen;"></mapentry>
+			<mapentry
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageData;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageData;"></mapentry>
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="MobilePhoto_v5" version="5"></project>
+		<project name="MobilePhoto_v6" version="6"></project>
+		<pointcutmap>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qjavax.microedition.lcdui.CommandListener;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qjavax.microedition.lcdui.CommandListener;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qjavax.microedition.lcdui.CommandListener;2"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qjavax.microedition.lcdui.CommandListener;2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;2"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;2"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;3"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;3"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;4"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;4"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;5"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;5"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around2"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QAlbumData;"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QAlbumData;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QString;&amp;QAlbumData;"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around&amp;QString;&amp;QString;&amp;QAlbumData;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"
+				new="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"></mapentry>
+			<mapentry
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.copyPhoto*CopyPhotoAspect.aj'CopyPhotoAspect&amp;before&amp;QPhotoController;&amp;QString;&amp;QPhotoViewScreen;"
+				new="lancs.midp.mobilephoto.optional.copyPhoto*CopyPhotoAspect.aj'CopyPhotoAspect&amp;before&amp;QPhotoController;&amp;QString;&amp;QPhotoViewScreen;"></mapentry>
+			<mapentry
+				new="lancs.midp.mobilephoto.optional.copyPhoto*CopyPhotoAspect.aj'CopyPhotoAspect&amp;afterReturning&amp;QImage;&amp;QPhotoViewScreen;"
+				old="lancs.midp.mobilephoto.optional.copyPhoto*CopyPhotoAspect.aj'CopyPhotoAspect&amp;afterReturning&amp;QImage;&amp;QPhotoViewScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QCommand;"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QCommand;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QImageData;"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QImageData;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after&amp;Qjavax.microedition.lcdui.CommandListener;&amp;\[QImageData;&amp;QPhotoListScreen;"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after&amp;Qjavax.microedition.lcdui.CommandListener;&amp;\[QImageData;&amp;QPhotoListScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after&amp;QPhotoListScreen;"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after&amp;QPhotoListScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;QImageUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around&amp;QImageUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*PersisteFavoritesAspect.aj'PersisteFavoritesAspect&amp;around&amp;QImageData;"
+				new="lancs.midp.mobilephoto.optional.favourites*PersisteFavoritesAspect.aj'PersisteFavoritesAspect&amp;around&amp;QImageData;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QString;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QString;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QCommand;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;Qjavax.microedition.lcdui.CommandListener;&amp;QCommand;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before&amp;Qjavax.microedition.lcdui.CommandListener;&amp;\[QImageData;&amp;QPhotoListScreen;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before&amp;Qjavax.microedition.lcdui.CommandListener;&amp;\[QImageData;&amp;QPhotoListScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QPhotoListScreen;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QPhotoListScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageData;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QImageData;"></mapentry>
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="MobilePhoto_v6" version="6"></project>
+		<project name="MobilePhoto_v7" version="7"></project>
+		<pointcutmap>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QAlbumController;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QAlbumController;2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QAlbumController;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QAlbumController;2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;6"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;2"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;7"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around4"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;3"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;8"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;4"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;9"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;5"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;0"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around2"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around5"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"
+				new="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;3"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;4"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;3"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;4"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.copyPhoto*CopyPhotoAspect.aj'CopyPhotoAspect&amp;afterReturning&amp;QImage;&amp;QPhotoViewScreen;"
+				new="lancs.midp.mobilephoto.optional.copyPhoto*CopyPhotoAspect.aj'CopyPhotoAspect&amp;afterReturning&amp;QImage;&amp;QPhotoViewScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around4"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after2"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after3"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around2"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around5"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around3"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around6"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*PersisteFavoritesAspect.aj'PersisteFavoritesAspect&amp;around"
+				new="lancs.midp.mobilephoto.optional.favourites*PersisteFavoritesAspect.aj'PersisteFavoritesAspect&amp;around2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;afterReturning&amp;QImage;&amp;QPhotoViewScreen;"
+				new="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;afterReturning&amp;QImage;&amp;QPhotoViewScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;around&amp;QPhotoViewScreen;"
+				new="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;around&amp;QPhotoViewScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;after&amp;QMainUIMidlet;"
+				new="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;after&amp;QMainUIMidlet;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;after&amp;QPhotoViewController;&amp;Qjavax.microedition.lcdui.Form;"
+				new="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;after&amp;QPhotoViewController;&amp;QObject;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;around"
+				new="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;around4"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;around2"
+				new="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;around3"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around4"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after2"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around2"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around5"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around3"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around6"></mapentry>
+		</pointcutmap>
+	</test>
+	<test>
+		<project name="MobilePhoto_v7" version="7"></project>
+		<project name="MobilePhoto_v8" version="8"></project>
+		<pointcutmap>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QAlbumController;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;QAlbumController;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QAlbumController;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QAlbumController;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qubc.midp.mobilephoto.core.ui.controller.AbstractController;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;QString;&amp;Qubc.midp.mobilephoto.core.ui.controller.AbstractController;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;Qubc.midp.mobilephoto.core.ui.controller.AbstractController;"
+				new="lancs.midp.aspects.exceptionblocks*ControllerAspectEH.aj'ControllerAspectEH&amp;around&amp;Qubc.midp.mobilephoto.core.ui.controller.AbstractController;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;2"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;3"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;3"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;4"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;4"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;5"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QRecordStoreException;5"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around2"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;afterThrowing&amp;QException;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"
+				new="lancs.midp.aspects.exceptionblocks*DataModelAspectEH.aj'DataModelAspectEH&amp;around3"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"
+				new="lancs.midp.aspects.exceptionblocks*SCreensAspectEH.aj'SCreensAspectEH&amp;around&amp;QAlbumData;&amp;QString;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QString;&amp;QException;2"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;"></mapentry>
+			<mapentry
+				old="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"
+				new="lancs.midp.aspects.exceptionblocks*UtilAspectEH.aj'UtilAspectEH&amp;afterThrowing&amp;QException;2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.alternative.music*MusicAspect.aj'MusicAspect&amp;before&amp;QMainUIMidlet;"
+				new="lancs.midp.mobilephoto.alternative.music*MusicAspect.aj'MusicAspect&amp;before&amp;QMainUIMidlet;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.alternative.music*MusicAspect.aj'MusicAspect&amp;after&amp;QMainUIMidlet;"
+				new="lancs.midp.mobilephoto.alternative.music*MusicAspect.aj'MusicAspect&amp;after&amp;QMainUIMidlet;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.alternative.music*MusicAspect.aj'MusicAspect&amp;around&amp;QMediaController;&amp;QCommand;"
+				new="lancs.midp.mobilephoto.alternative.music*MusicAspect.aj'MusicAspect&amp;around&amp;QMediaController;&amp;QCommand;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.alternative.music*MusicAspect.aj'MusicAspect&amp;after&amp;QAlbumData;&amp;QMediaController;"
+				new="lancs.midp.mobilephoto.alternative.music*MusicAspect.aj'MusicAspect&amp;after&amp;QAlbumData;&amp;QMediaController;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.alternative.music*MusicAspect.aj'MusicAspect&amp;after&amp;QMediaListScreen;"
+				new="lancs.midp.mobilephoto.alternative.music*MusicAspect.aj'MusicAspect&amp;after&amp;QMediaListScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.alternative.music*MusicAspect.aj'MusicAspect&amp;afterReturning&amp;QAbstractController;&amp;QMediaListScreen;"
+				new="lancs.midp.mobilephoto.alternative.music*MusicAspect.aj'MusicAspect&amp;afterReturning&amp;QAbstractController;&amp;QMediaListScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.alternative.music*MusicAspect.aj'MusicAspect&amp;afterReturning&amp;QAddMediaToAlbum;"
+				new="lancs.midp.mobilephoto.alternative.music*MusicAspect.aj'MusicAspect&amp;afterReturning&amp;QAddMediaToAlbum;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.alternative.photo*PhotoAspect.aj'PhotoAspect&amp;before&amp;QMainUIMidlet;"
+				new="lancs.midp.mobilephoto.alternative.photo*PhotoAspect.aj'PhotoAspect&amp;before&amp;QMainUIMidlet;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.alternative.photo*PhotoAspect.aj'PhotoAspect&amp;around&amp;QMediaController;&amp;QCommand;"
+				new="lancs.midp.mobilephoto.alternative.photo*PhotoAspect.aj'PhotoAspect&amp;around&amp;QMediaController;&amp;QCommand;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.alternative.photo*PhotoAspect.aj'PhotoAspect&amp;after&amp;QMediaListScreen;"
+				new="lancs.midp.mobilephoto.alternative.photo*PhotoAspect.aj'PhotoAspect&amp;after&amp;QMediaListScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.alternative.photo*PhotoAspect.aj'PhotoAspect&amp;afterReturning&amp;QAbstractController;&amp;QMediaListScreen;"
+				new="lancs.midp.mobilephoto.alternative.photo*PhotoAspect.aj'PhotoAspect&amp;afterReturning&amp;QAbstractController;&amp;QMediaListScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.alternative.photoMusic*PhotoAndMusicAspect.aj'PhotoAndMusicAspect&amp;after&amp;QMainUIMidlet;"
+				new="lancs.midp.mobilephoto.alternative.photoMusic*PhotoAndMusicAspect.aj'PhotoAndMusicAspect&amp;after&amp;QMainUIMidlet;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.alternative.photoMusic*PhotoAndMusicAspect.aj'PhotoAndMusicAspect&amp;around&amp;QBaseController;"
+				new="lancs.midp.mobilephoto.alternative.photoMusic*PhotoAndMusicAspect.aj'PhotoAndMusicAspect&amp;around&amp;QBaseController;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.alternative.photoMusic*PhotoOrMusicAspect.aj'PhotoOrMusicAspect&amp;before&amp;QAlbumListScreen;"
+				new="lancs.midp.mobilephoto.alternative.photoMusic*PhotoOrMusicAspect.aj'PhotoOrMusicAspect&amp;before&amp;QAlbumListScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.copyPhoto*CopyPhotoAspect.aj'CopyPhotoAspect&amp;around&amp;Qubc.midp.mobilephoto.core.ui.controller.AbstractController;&amp;QString;"
+				new="lancs.midp.mobilephoto.optional.copyPhoto*CopyPhotoAspect.aj'CopyPhotoAspect&amp;around&amp;Qubc.midp.mobilephoto.core.ui.controller.AbstractController;&amp;QString;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.copyPhoto*CopyPhotoAspect.aj'CopyPhotoAspect&amp;afterReturning&amp;QImage;&amp;QPhotoViewScreen;"
+				new="lancs.midp.mobilephoto.optional.copyPhoto*CopyPhotoAspect.aj'CopyPhotoAspect&amp;afterReturning&amp;QImage;&amp;QPhotoViewScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around4"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after3"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after2"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around2"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around5"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after&amp;QMultiMediaData;&amp;QMediaData;&amp;QString;"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;after&amp;QMultiMediaData;&amp;QMediaData;&amp;QString;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around3"
+				new="lancs.midp.mobilephoto.optional.favourites*FavouritesAspect.aj'FavouritesAspect&amp;around6"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.favourites*PersisteFavoritesAspect.aj'PersisteFavoritesAspect&amp;around"
+				new="lancs.midp.mobilephoto.optional.favourites*PersisteFavoritesAspect.aj'PersisteFavoritesAspect&amp;around2"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;afterReturning&amp;QImage;&amp;QPhotoViewScreen;"
+				new="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;afterReturning&amp;QImage;&amp;QPhotoViewScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;around&amp;QPhotoViewScreen;"
+				new="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;around&amp;QPhotoViewScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;after&amp;QMainUIMidlet;"
+				new="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;after&amp;QMainUIMidlet;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;around&amp;QMediaController;&amp;QString;"
+				new="lancs.midp.mobilephoto.optional.sms*SMSAspect.aj'SMSAspect&amp;around&amp;QMediaController;&amp;QString;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QMediaController;&amp;QString;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QMediaController;&amp;QString;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QMediaController;&amp;QCommand;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QMediaController;&amp;QCommand;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before&amp;QMediaListController;&amp;\[QMediaData;&amp;QMediaListScreen;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;before&amp;QMediaListController;&amp;\[QMediaData;&amp;QMediaListScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QMediaListScreen;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QMediaListScreen;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QMediaUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QMediaUtil;&amp;QString;&amp;QString;&amp;QString;&amp;I&amp;QString;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QMediaData;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;around&amp;QMediaData;"></mapentry>
+			<mapentry
+				old="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QMultiMediaData;&amp;QMediaData;&amp;QString;"
+				new="lancs.midp.mobilephoto.optional.sorting*CountViewsAspect.aj'CountViewsAspect&amp;after&amp;QMultiMediaData;&amp;QMediaData;&amp;QString;"></mapentry>
+		</pointcutmap>
+	</test>
+</evaluation>
