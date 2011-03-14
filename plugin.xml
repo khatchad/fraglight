@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.mylyn.context.core.relationProviders">
+      <provider
+            class="edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider"
+            contentType="java">
+      </provider>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="edu.ohio_state.cse.khatchad.fraglight.ui.preferences.PreferencePage"
+            id="edu.ohio_state.cse.khatchad.fraglight.ui.preferences.PreferencePage"
+            name="Fraglight">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="edu.ohio_state.cse.khatchad.fraglight.ui.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="edu.ohio_state.cse.khatchad.fraglight.ui.pointcutchangepredictionview"
+            name="Sample Category">
+      </category>
+      <view
+            category="edu.ohio_state.cse.khatchad.fraglight.ui.pointcutchangepredictionview"
+            class="edu.ohio_state.cse.khatchad.fraglight.ui.views.PointcutChangePredictionView"
+            icon="icons/sample.gif"
+            id="edu.ohio_state.cse.khatchad.fraglight.ui.views.PointcutChangePredictionView"
+            name="Pointcut Change Prediction View">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               id="edu.ohio_state.cse.khatchad.fraglight.ui.views.PointcutChangePredictionView"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+
+</plugin>
