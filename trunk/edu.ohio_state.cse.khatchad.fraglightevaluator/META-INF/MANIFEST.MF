@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: FraglightEvaluator
 Bundle-SymbolicName: edu.ohio_state.cse.khatchad.fraglightevaluator; singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.0
 Bundle-Activator: edu.ohio_state.cse.khatchad.fraglightevaluator.Activator
 Bundle-Vendor: Ohio State University
 Require-Bundle: org.eclipse.ui,
