@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Fraglight Pointcut Change Predictor UI
 Bundle-SymbolicName: edu.ohio_state.cse.khatchad.fraglight.ui;singleton:=true
-Bundle-Version: 0.1
+Bundle-Version: 1.0.0
 Bundle-Activator: edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin
 Bundle-Vendor: Ohio State University
 Require-Bundle: org.eclipse.ui,
