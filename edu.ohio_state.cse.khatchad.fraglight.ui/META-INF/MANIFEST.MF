@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Fraglight Pointcut Change Predictor UI
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: edu.ohio_state.cse.khatchad.fraglight.ui;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin
-Bundle-Vendor: Ohio State University
+Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.mylyn.context.core;bundle-version="[3.0.0,4.0.0)",
@@ -29,4 +29,14 @@ Import-Package: edu.ohio_state.cse.khatchad.fraglight.core.analysis,
  org.eclipse.mylyn.internal.java.ui.search
 Bundle-ClassPath: .,
  lib/guava-r07.jar
-Export-Package: edu.ohio_state.cse.khatchad.fraglight.ui
+Export-Package: com.google.common.annotations,
+ com.google.common.base,
+ com.google.common.base.internal;x-internal:=true,
+ com.google.common.collect,
+ com.google.common.io,
+ com.google.common.net,
+ com.google.common.primitives,
+ com.google.common.util.concurrent,
+ edu.ohio_state.cse.khatchad.fraglight.ui,
+ edu.ohio_state.cse.khatchad.fraglight.ui.preferences,
+ edu.ohio_state.cse.khatchad.fraglight.ui.views

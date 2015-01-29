@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: AspectJ Plugin Tools
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: edu.ohio_state.cse.khatchad.fraglight.core;singleton:=true
 Bundle-Version: 1.0
-Bundle-Vendor: Ohio State University
+Bundle-Vendor: %Bundle-Vendor
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-ActivationPolicy: lazy
 Export-Package: ca.mcgill.cs.swevo.jayfx,
