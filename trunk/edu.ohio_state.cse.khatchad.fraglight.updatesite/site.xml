@@ -3,12 +3,5 @@
    <description name="Fraglight Update Site" url="http://svn.codespot.com/a/eclipselabs.org/fraglight/trunk/edu.ohio_state.cse.khatchad.fraglight.updatesite">
       Update site for the Fraglight Pointcut Change Predictor.
    </description>
-   <feature url="features/edu.ohio_state.cse.khatchad.fraglight.feature_1.0.0.jar" id="edu.ohio_state.cse.khatchad.fraglight.feature" version="1.0.0">
-      <category name="edu.ohio_state.cse.khatchad.fraglight.category"/>
-   </feature>
-   <category-def name="edu.ohio_state.cse.khatchad.fraglight.category" label="Fraglight">
-      <description>
-         The main category for the Fraglight Pointcut Change Predictor.
-      </description>
-   </category-def>
+   <feature url="features/edu.ohio_state.cse.khatchad.fraglight.feature_1.0.0.jar" id="edu.ohio_state.cse.khatchad.fraglight.feature" version="1.0.0"/>
 </site>
