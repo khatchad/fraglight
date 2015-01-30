@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="edu.ohio_state.cse.khatchad.fraglight.feature"
-      label="Fraglight Pointcut Change Predictor Feature"
+      label="Fraglight Pointcut Change Predictor"
       version="1.0.0"
       provider-name="Ohio State University">
 
