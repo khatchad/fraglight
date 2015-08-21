@@ -38,10 +38,9 @@ Parameter descriptions are as follows:
 
 ## Demonstration
 
-These are Adobe Flash videos demonstrating a simple use case with *fraglight*. Please open then with your web browser that has a flash plug-in installed:
+This is an Adobe Flash video demonstrating a simple use case with *fraglight*. Please open then with your web browser that has a flash plug-in installed:
 
-  * [Mylyn context screencast part 1](http://svn.codespot.com/a/eclipselabs.org/fraglight/trunk/images/demo1.swf)
-  * [Mylyn context screencast part 2](http://svn.codespot.com/a/eclipselabs.org/fraglight/trunk/images/demo2.swf)
+  * [Mylyn context screencast](https://raw.githubusercontent.com/khatchad/fraglight/master/images/fraglight_demo.swf)
 
 ## News
 
@@ -49,5 +48,5 @@ Please subscribe to our [google group](http://groups.google.com/group/fraglight-
 
 ## Limitations
 
-Due to a present [Eclipse framework limitation](https://bugs.eclipse.org/bugs/show_bug.cgi?id=310046), the AJDT is not able to reconcile AspectJ code without first saving it to disk. As such, our prototype implementation saves the current editor buffer every time it detects a new join point has being added. We plan to add in-memory reconciliation to the AJDT as part of #1 to make fraglight would be more developer-friendly.
+Due to a present [Eclipse framework limitation](https://bugs.eclipse.org/bugs/show_bug.cgi?id=310046), the AJDT is not able to reconcile AspectJ code without first saving it to disk. As such, our prototype implementation saves the current editor buffer every time it detects a new join point has being added. We plan to add in-memory reconciliation to the AJDT as part of [issue #1](https://github.com/khatchad/fraglight/issues/1) to make fraglight would be more developer-friendly.
 
