@@ -38,22 +38,7 @@ Parameter descriptions are as follows:
 
 ## Demonstration
 
-<!-- copy and paste. Modify height and width if desired. -->
- <object id="scPlayer"  width="1241" height="778" type="application/x-shockwave-flash" data="http://content.screencast.com/users/khatchad333/folders/Default/media/637eb105-e6e1-4e31-b4ee-6468b4eac15a/bootstrap.swf" >
- <param name="movie" value="http://content.screencast.com/users/khatchad333/folders/Default/media/637eb105-e6e1-4e31-b4ee-6468b4eac15a/bootstrap.swf" />
- <param name="quality" value="high" />
- <param name="bgcolor" value="#FFFFFF" />
- <param name="flashVars" value="thumb=http://content.screencast.com/users/khatchad333/folders/Default/media/637eb105-e6e1-4e31-b4ee-6468b4eac15a/FirstFrame.jpg&containerwidth=1241&containerheight=778&content=http://content.screencast.com/users/khatchad333/folders/Default/media/637eb105-e6e1-4e31-b4ee-6468b4eac15a/fraglight_demo.swf&blurover=false" />
- <param name="allowFullScreen" value="true" />
- <param name="scale" value="showall" />
- <param name="allowScriptAccess" value="always" />
- <param name="base" value="http://content.screencast.com/users/khatchad333/folders/Default/media/637eb105-e6e1-4e31-b4ee-6468b4eac15a/" />
- Unable to display content. Adobe Flash is required.
-</object> 
-
-[This] is an Adobe Flash video demonstrating a simple use case with *fraglight*. Please open then with your web browser that has a flash plug-in installed:
-
-  * [Mylyn context screencast](images/fraglight_demo.swf)
+  * [Mylyn context screencast](http://www.screencast.com/t/6LEmVUEpntm)
 
 ## News
 
