@@ -31,9 +31,10 @@ Parameter descriptions are as follows:
 
 ## Screenshots
 
-| The package explorer, one view that *fraglight* manipulates as part of Mylyn, before breaking a pointcut. The view is controlled by Mylyn and a Mylyn task is activated. Notice that no pointcuts are present in the view: | The same view after a pointcut breakage. The broken pointcut is added to the Mylyn context automatically. This alerts developers that they may have written base-code that has broken pointcuts, all while they are typing: |
+| Before | After |
 |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ![http://svn.codespot.com/a/eclipselabs.org/fraglight/trunk/images/before.png](http://svn.codespot.com/a/eclipselabs.org/fraglight/trunk/images/before.png)                                                              | ![http://svn.codespot.com/a/eclipselabs.org/fraglight/trunk/images/after.png](http://svn.codespot.com/a/eclipselabs.org/fraglight/trunk/images/after.png)                                                                   |
+| The package explorer, one view that *fraglight* manipulates as part of Mylyn, before breaking a pointcut. The view is controlled by Mylyn and a Mylyn task is activated. Notice that no pointcuts are present in the view: | The same view after a pointcut breakage. The broken pointcut is added to the Mylyn context automatically. This alerts developers that they may have written base-code that has broken pointcuts, all while they are typing: |
+| ![Before](https://raw.githubusercontent.com/khatchad/fraglight/master/images/before.png "Before")                                                              | ![After](https://raw.githubusercontent.com/khatchad/fraglight/master/images/after.png "After")                                                                   |
 
 ## Demonstration
 
