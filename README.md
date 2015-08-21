@@ -37,8 +37,7 @@ Parameter descriptions are as follows:
 | ![Before](images/before.png "Before")                                                              | ![After](images/after.png "After")                                                                   |
 
 ## Demonstration
-
-  * [Mylyn context screencast](http://www.screencast.com/t/6LEmVUEpntm)
+You may find a demonstration showing how *fraglight* manipulates the Mylyn context using a simple use case [here](http://www.screencast.com/t/6LEmVUEpntm).
 
 ## News
 
