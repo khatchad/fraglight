@@ -1,3 +1,7 @@
+# fraglight
+
+A tool for early detection of broken pointcuts in evolving Aspect-Oriented software
+
 Pointcut fragility is a well-documented problem in Aspect-Oriented Programming; changes to the base-code can lead to join points incorrectly falling in or out of the scope of pointcuts. Deciding which pointcuts have broken because of changes made to the base-code is a daunting venture, especially in large and complex systems.
 
 ![Change prediction screenshot](https://raw.githubusercontent.com/khatchad/fraglight/master/images/change_prediction_screenshot.png "Change prediction screenshot")
