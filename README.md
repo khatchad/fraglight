@@ -6,7 +6,7 @@ A tool for early detection of broken pointcuts in evolving Aspect-Oriented softw
 
 Pointcut fragility is a well-documented problem in Aspect-Oriented Programming; changes to the base-code can lead to join points incorrectly falling in or out of the scope of pointcuts. Deciding which pointcuts have broken because of changes made to the base-code is a daunting venture, especially in large and complex systems.
 
-![Change prediction screenshot](https://raw.githubusercontent.com/khatchad/fraglight/master/images/change_prediction_screenshot.png "Change prediction screenshot")
+![Change prediction screenshot](images/change_prediction_screenshot.png "Change prediction screenshot")
 
 *fraglight*, an extension of the Mylyn Eclipse plug-in, which maintains focused contexts of entities relevant to a task, is a research prototype that recommends a set of AspectJ pointcuts that are likely to require modification due to a particular base-code change. The underlying approach is based on harnessing unique and arbitrarily deep structural commonality between program elements corresponding to join points selected by a pointcut in a particular software version. Patterns describing such commonality are used to recommend pointcuts that have potentially broken with a degree of change confidence as the developer is typing. More information can be found at the [project website](http://openlab.citytech.cuny.edu/pcp). The plug-in can be installed using the update site listed below.
 
@@ -18,7 +18,7 @@ https://raw.githubusercontent.com/khatchad/fraglight/master/edu.ohio_state.cse.k
 
 *fraglight* starts working when a Mylyn task is activated for an AspectJ project. There is a preference pane that can control some of the plug-in's behaviors:
 
-![Preferences](https://raw.githubusercontent.com/khatchad/fraglight/master/images/preferences.png "Preferences")
+![Preferences](images/preferences.png "Preferences")
 
 Parameter descriptions are as follows:
 
@@ -34,14 +34,10 @@ Parameter descriptions are as follows:
 | Before | After |
 |:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | The package explorer, one view that *fraglight* manipulates as part of Mylyn, before breaking a pointcut. The view is controlled by Mylyn and a Mylyn task is activated. Notice that no pointcuts are present in the view: | The same view after a pointcut breakage. The broken pointcut is added to the Mylyn context automatically. This alerts developers that they may have written base-code that has broken pointcuts, all while they are typing: |
-| ![Before](https://raw.githubusercontent.com/khatchad/fraglight/master/images/before.png "Before")                                                              | ![After](https://raw.githubusercontent.com/khatchad/fraglight/master/images/after.png "After")                                                                   |
+| ![Before](images/before.png "Before")                                                              | ![After](images/after.png "After")                                                                   |
 
 ## Demonstration
-
-These are Adobe Flash videos demonstrating a simple use case with *fraglight*. Please open then with your web browser that has a flash plug-in installed:
-
-  * [Mylyn context screencast part 1](http://svn.codespot.com/a/eclipselabs.org/fraglight/trunk/images/demo1.swf)
-  * [Mylyn context screencast part 2](http://svn.codespot.com/a/eclipselabs.org/fraglight/trunk/images/demo2.swf)
+You may find a demonstration showing how *fraglight* manipulates the Mylyn context using a simple use case [here](http://www.screencast.com/t/6LEmVUEpntm).
 
 ## News
 
@@ -49,5 +45,4 @@ Please subscribe to our [google group](http://groups.google.com/group/fraglight-
 
 ## Limitations
 
-Due to a present [Eclipse framework limitation](https://bugs.eclipse.org/bugs/show_bug.cgi?id=310046), the AJDT is not able to reconcile AspectJ code without first saving it to disk. As such, our prototype implementation saves the current editor buffer every time it detects a new join point has being added. We plan to add in-memory reconciliation to the AJDT as part of #1 to make fraglight would be more developer-friendly.
-
+Due to a present [Eclipse framework limitation](https://bugs.eclipse.org/bugs/show_bug.cgi?id=310046), the AJDT is not able to reconcile AspectJ code without first saving it to disk. As such, our prototype implementation saves the current editor buffer every time it detects a new join point has being added. We plan to add in-memory reconciliation to the AJDT as part of [issue #1](https://github.com/khatchad/fraglight/issues/1) to make fraglight would be more developer-friendly.
