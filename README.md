@@ -4,7 +4,7 @@ A tool for early detection of broken pointcuts in evolving Aspect-Oriented softw
 
 ## Introduction
 
-Pointcut fragility is a well-documented problem in Aspect-Oriented Programming; changes to the base-code can lead to join points incorrectly falling in or out of the scope of pointcuts. Deciding which pointcuts have broken because of changes made to the base-code is a daunting venture, especially in large and complex systems.
+<img src="images/logo.png" width="10%" alt="logo" title="Logo" align="left" /> Pointcut fragility is a well-documented problem in Aspect-Oriented Programming; changes to the base-code can lead to join points incorrectly falling in or out of the scope of pointcuts. Deciding which pointcuts have broken because of changes made to the base-code is a daunting venture, especially in large and complex systems.
 
 ![Change prediction screenshot](images/change_prediction_screenshot.png "Change prediction screenshot")
 
