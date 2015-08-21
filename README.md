@@ -12,7 +12,7 @@ Pointcut fragility is a well-documented problem in Aspect-Oriented Programming; 
 
 ## Update Site
 
-https://raw.githubusercontent.com/khatchad/constants-to-enum-eclipse-plugin/master/edu.ohio_state.cse.khatchad.fraglight.updatesite/
+https://raw.githubusercontent.com/khatchad/fraglight/master/edu.ohio_state.cse.khatchad.fraglight.updatesite/
 
 ## Usage
 
