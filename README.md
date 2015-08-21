@@ -1,6 +1,6 @@
 Pointcut fragility is a well-documented problem in Aspect-Oriented Programming; changes to the base-code can lead to join points incorrectly falling in or out of the scope of pointcuts. Deciding which pointcuts have broken because of changes made to the base-code is a daunting venture, especially in large and complex systems.
 
-!(https://raw.githubusercontent.com/khatchad/fraglight/master/images/change_prediction_screenshot.png)
+![Change prediction screenshot](https://raw.githubusercontent.com/khatchad/fraglight/master/images/change_prediction_screenshot.png "Change prediction screenshot")
 
 Fraglight, an extension of the Mylyn Eclipse plug-in, which maintains focused contexts of entities relevant to a task, is a research prototype that recommends a set of AspectJ pointcuts that are likely to require modification due to a particular base-code change. The underlying approach is based on harnessing unique and arbitrarily deep structural commonality between program elements corresponding to join points selected by a pointcut in a particular software version.   Patterns describing such commonality are used to recommend pointcuts that have potentially broken with a degree of change confidence as the developer is typing. More information can be found at the [project website](http://openlab.citytech.cuny.edu/pcp). The plug-in can be installed using the update site listed below.
 
