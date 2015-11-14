@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.Assert;

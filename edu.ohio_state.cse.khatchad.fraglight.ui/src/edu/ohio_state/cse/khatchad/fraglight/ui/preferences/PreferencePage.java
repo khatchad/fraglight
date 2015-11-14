@@ -3,13 +3,10 @@ package edu.ohio_state.cse.khatchad.fraglight.ui.preferences;
 import java.util.logging.Logger;
 
 import org.eclipse.jface.preference.*;
-import org.eclipse.jface.util.IPropertyChangeListener;
-import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 
 import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
-import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.PointcutAnalysisScope;
 
 /**

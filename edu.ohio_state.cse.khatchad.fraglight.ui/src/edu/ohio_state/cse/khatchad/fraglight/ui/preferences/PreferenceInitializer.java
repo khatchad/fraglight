@@ -8,7 +8,6 @@ import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PointcutProcessor;
 import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider.PointcutAnalysisScope;
-import edu.ohio_state.cse.khatchad.fraglight.ui.views.PointcutChangePredictionView;
 
 /**
  * Class used to initialize default preference values.

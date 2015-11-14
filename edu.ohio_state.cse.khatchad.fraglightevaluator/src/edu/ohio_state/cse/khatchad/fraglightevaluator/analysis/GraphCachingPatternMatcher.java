@@ -1,16 +1,12 @@
 package edu.ohio_state.cse.khatchad.fraglightevaluator.analysis;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.ajdt.core.javaelements.AdviceElement;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
-
-import com.google.common.collect.Collections2;
 
 import ca.mcgill.cs.swevo.jayfx.model.IElement;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PatternMatcher;

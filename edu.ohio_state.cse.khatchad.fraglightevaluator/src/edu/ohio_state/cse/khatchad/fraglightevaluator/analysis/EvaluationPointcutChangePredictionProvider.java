@@ -5,8 +5,6 @@ package edu.ohio_state.cse.khatchad.fraglightevaluator.analysis;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.LinkedHashSet;
 import java.util.ListIterator;
 import java.util.Map;
@@ -14,10 +12,7 @@ import java.util.Set;
 import java.util.prefs.Preferences;
 
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
 import com.google.common.collect.BiMap;
@@ -27,8 +22,6 @@ import edu.ohio_state.cse.khatchad.fraglight.core.analysis.PatternMatcher;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.util.TimeCollector;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.IntentionArc;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.Pattern;
-import edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil;
-import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
 
 /**

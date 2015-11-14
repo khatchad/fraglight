@@ -3,7 +3,6 @@
  */
 package edu.ohio_state.cse.khatchad.fraglight.ui.views;
 
-import org.aspectj.asm.AsmManager.ModelInfo;
 import org.eclipse.ajdt.core.model.AJProjectModelFacade;
 import org.eclipse.ajdt.core.model.AJProjectModelFactory;
 import org.eclipse.ajdt.internal.builder.AJNode;

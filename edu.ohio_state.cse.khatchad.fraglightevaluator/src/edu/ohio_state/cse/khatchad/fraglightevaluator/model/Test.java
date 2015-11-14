@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaModelException;
 import org.jdom2.Attribute;
 import org.jdom2.DataConversionException;

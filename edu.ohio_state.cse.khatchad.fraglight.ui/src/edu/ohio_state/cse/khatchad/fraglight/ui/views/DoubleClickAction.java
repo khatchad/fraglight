@@ -1,15 +1,10 @@
 package edu.ohio_state.cse.khatchad.fraglight.ui.views;
 
 import org.eclipse.contribution.xref.internal.ui.utils.XRefUIUtils;
-import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.widgets.Shell;
-
-import edu.ohio_state.cse.khatchad.fraglight.core.analysis.model.Suggestion;
 import edu.ohio_state.cse.khatchad.fraglight.ui.Prediction;
 
 @SuppressWarnings("restriction")

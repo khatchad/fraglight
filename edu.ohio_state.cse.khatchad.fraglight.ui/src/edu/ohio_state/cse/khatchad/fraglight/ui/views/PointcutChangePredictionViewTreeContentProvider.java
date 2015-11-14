@@ -1,7 +1,5 @@
 package edu.ohio_state.cse.khatchad.fraglight.ui.views;
 
-import java.util.Arrays;
-
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 

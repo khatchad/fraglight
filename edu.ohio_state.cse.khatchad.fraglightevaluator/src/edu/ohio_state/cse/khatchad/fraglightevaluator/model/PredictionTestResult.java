@@ -7,7 +7,6 @@ import static edu.ohio_state.cse.khatchad.fraglightevaluator.util.DatabaseUtil.g
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -24,8 +23,6 @@ import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
 import edu.ohio_state.cse.khatchad.fraglight.ui.Prediction;
 import edu.ohio_state.cse.khatchad.fraglight.ui.Prediction.ChangeDirection;
 import edu.ohio_state.cse.khatchad.fraglight.ui.Prediction.InterestDirection;
-import edu.ohio_state.cse.khatchad.fraglightevaluator.model.Test.Project;
-import edu.ohio_state.cse.khatchad.fraglightevaluator.util.DatabaseUtil;
 
 /**
  * @author <a href="mailto:khatchad@cse.ohio-state.edu">Raffi Khatchadourian</a>

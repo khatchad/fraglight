@@ -4,12 +4,9 @@
 package edu.ohio_state.cse.khatchad.fraglightevaluator.util;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import javax.sql.DataSource;
 
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
 import org.eclipse.ajdt.core.javaelements.IAJCodeElement;
@@ -18,9 +15,6 @@ import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageDeclaration;
 import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.dom.PackageDeclaration;
-import org.eclipse.jdt.internal.core.PackageFragment;
 import org.postgresql.ds.PGPoolingDataSource;
 
 import ca.mcgill.cs.swevo.jayfx.model.IElement;
