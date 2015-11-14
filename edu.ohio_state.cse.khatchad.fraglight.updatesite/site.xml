@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description name="Fraglight Update Site" url="http://svn.codespot.com/a/eclipselabs.org/fraglight/trunk/edu.ohio_state.cse.khatchad.fraglight.updatesite">
+   <description name="Fraglight Update Site" url="https://raw.githubusercontent.com/khatchad/fraglight/master/edu.ohio_state.cse.khatchad.fraglight.updatesite">
       Update site for the Fraglight Pointcut Change Predictor.
    </description>
-   <feature url="features/edu.ohio_state.cse.khatchad.fraglight.feature_1.0.0.jar" id="edu.ohio_state.cse.khatchad.fraglight.feature" version="1.0.0"/>
+   <feature url="features/edu.ohio_state.cse.khatchad.fraglight.feature_1.1.0.jar" id="edu.ohio_state.cse.khatchad.fraglight.feature" version="1.1.0"/>
 </site>
