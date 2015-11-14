@@ -24,6 +24,10 @@ import edu.ohio_state.cse.khatchad.ajplugintools.ajayfx.model.AspectElement;
  */
 public class FlyweightElementFactory {
 
+	private FlyweightElementFactory() {
+
+	}
+
 	private static final String KEY_SEPARATOR = ":";
 
 	private static Hashtable<String, IElement> aElements = new Hashtable<String, IElement>();

@@ -182,8 +182,8 @@ public class TestProgramDatabase extends TestCase {
 	public void testGetRange() {
 		// Invalid case
 		try {
-			this.aDB.getRange(this.aClass1, Relation.DECLARES_METHOD);
-			Assert.fail("Expected ElementNotFoundException");
+			Set<IElement> range = this.aDB.getRange(this.aClass1, Relation.DECLARES_METHOD);
+			assertTrue(range.isEmpty());
 		} catch (final ElementNotFoundException pException) {
 		}
 		// Empty Case

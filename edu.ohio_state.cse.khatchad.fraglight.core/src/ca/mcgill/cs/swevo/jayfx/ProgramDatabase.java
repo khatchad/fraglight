@@ -176,10 +176,10 @@ public class ProgramDatabase {
 		if (!this.contains(pTo))
 			throw new ElementNotFoundException(pTo.getId());
 
-		final Map lRelations = this.aElements.get(pFrom).getRelationMap();
-		for (final Iterator i = lRelations.keySet().iterator(); i.hasNext();) {
-			final Relation lNext = (Relation) i.next();
-			final Set lElements = (Set) lRelations.get(lNext);
+		final Map<Relation, Set<IElement>> lRelations = this.aElements.get(pFrom).getRelationMap();
+		for (final Iterator<Relation> i = lRelations.keySet().iterator(); i.hasNext();) {
+			final Relation lNext = i.next();
+			final Set lElements = lRelations.get(lNext);
 			for (final Iterator j = lElements.iterator(); j.hasNext();)
 				this.addRelationAndTranspose(pTo, lNext, (IElement) j.next());
 		}

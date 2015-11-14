@@ -302,18 +302,32 @@ public class JayFX {
 		if (pProgress != null)
 			pProgress.beginTask("Building program database", lTargets.size());
 
+		int successfullyAnalyzedCompilationUnits = lTargets.size();
+
 		for (final ICompilationUnit lCU : lTargets) {
 			try {
 				final IPackageDeclaration[] lPDs = lCU.getPackageDeclarations();
 				if (lPDs.length > 0)
 					this.aPackages.add(lPDs[0].getElementName());
 			} catch (final JavaModelException lException) {
+				if (pProgress != null)
+					pProgress.done();
 				throw new JayFXException(lException);
 			}
-			lAnalyzer.analyze(lCU, timeCollector);
+
+			// try to analyze the compilation unit.
+			try {
+				lAnalyzer.analyze(lCU, timeCollector);
+			} catch (Exception e) {
+				LogUtil.logError("Failed to analyze compilation unit: " + lCU.getElementName() + ". Skipping ...", e);
+				successfullyAnalyzedCompilationUnits--;
+			}
 			if (pProgress != null)
 				pProgress.worked(1);
 		}
+
+		LogUtil.logInfo("Successfully analyzed " + successfullyAnalyzedCompilationUnits + "/" + lTargets.size()
+				+ " compilation units.");
 
 		/*
 		 * int lSize = lTargets.size(); int k = 0; for( Iterator i =

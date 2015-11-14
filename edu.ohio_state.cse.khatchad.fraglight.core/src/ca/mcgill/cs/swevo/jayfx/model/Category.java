@@ -20,14 +20,8 @@ import org.jdom.Element;
 public enum Category {
 	CLASS, FIELD, METHOD, PACKAGE, ASPECT, ADVICE, AJCODE, WILDCARD;
 
-	/**
-	 * 
-	 */
 	private static final String TYPE = "type";
 
-	/**
-	 * @return
-	 */
 	public Element getXML() {
 		Element ret = new Element(this.getClass().getSimpleName());
 		ret.setAttribute(TYPE, this.toString());

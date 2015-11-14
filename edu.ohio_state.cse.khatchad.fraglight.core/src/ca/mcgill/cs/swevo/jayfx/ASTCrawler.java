@@ -14,7 +14,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
@@ -27,6 +30,7 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.AnnotationTypeDeclaration;
+import org.eclipse.jdt.core.dom.AnnotationTypeMemberDeclaration;
 import org.eclipse.jdt.core.dom.AnonymousClassDeclaration;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.CastExpression;
@@ -61,6 +65,7 @@ import org.eclipse.jdt.core.dom.SuperFieldAccess;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 import ca.mcgill.cs.swevo.jayfx.model.Category;
 import ca.mcgill.cs.swevo.jayfx.model.ClassElement;
@@ -177,6 +182,10 @@ public class ASTCrawler extends ASTVisitor {
 		return FlyweightElementFactory.getElement(Category.METHOD, lReturn);
 	}
 
+	private static void assertMethodBindingIsNotNull(IMethodBinding pBinding) {
+		assertIsNotNull(pBinding, IMethodBinding.class);
+	}
+
 	/**
 	 * Converts a type binding to a class element or an enum element.
 	 * 
@@ -206,9 +215,25 @@ public class ASTCrawler extends ASTVisitor {
 	 */
 	private static IElement convertBinding(final IVariableBinding pBinding) {
 		ASTCrawler.checkForNull(pBinding);
-		final String lFieldID = ASTCrawler.convertBinding(pBinding.getDeclaringClass()).getId() + "."
-				+ pBinding.getName();
-		return FlyweightElementFactory.getElement(Category.FIELD, lFieldID);
+		ITypeBinding declaringClass = pBinding.getDeclaringClass();
+
+		if (declaringClass != null) { // it's a field.
+			final String lFieldID = ASTCrawler.convertBinding(declaringClass).getId() + "." + pBinding.getName();
+			return FlyweightElementFactory.getElement(Category.FIELD, lFieldID);
+		} else // not a field.
+			throw new IllegalArgumentException(pBinding.getName() + " is not a field.");
+	}
+
+	private static void assertIsNotNull(final IVariableBinding pBinding) {
+		assertIsNotNull(pBinding, IVariableBinding.class);
+	}
+
+	private static void assertIsNotNull(final ITypeBinding pBinding) {
+		assertIsNotNull(pBinding, ITypeBinding.class);
+	}
+
+	private static void assertIsNotNull(final Object obj, Class<?> classBeingChecked) {
+		Assert.isNotNull(obj, classBeingChecked.getTypeName() + " is null.");
 	}
 
 	/**
@@ -319,20 +344,23 @@ public class ASTCrawler extends ASTVisitor {
 	 * 
 	 * @param pCU
 	 */
-	@SuppressWarnings({ "restriction", "unchecked" })
 	public void analyze(final ICompilationUnit pCU, TimeCollector timeCollector) {
-		timeCollector.start();
+		if (timeCollector != null)
+			timeCollector.start();
+
 		this.resetSpider();
 
 		this.extractTypes(pCU);
-		final ASTParser lParser = ASTParser.newParser(AST.JLS3); // handles JLS3
+		final ASTParser lParser = ASTParser.newParser(AST.JLS8); // handles JLS8
 																	// (J2SE
-																	// 1.5)
+																	// 1.8)
 		lParser.setSource(pCU);
 		lParser.setResolveBindings(true);
 		final CompilationUnit lResult = (CompilationUnit) lParser.createAST(null);
 		lResult.accept(this);
-		timeCollector.stop();
+
+		if (timeCollector != null)
+			timeCollector.stop();
 	}
 
 	@Override
@@ -564,9 +592,9 @@ public class ASTCrawler extends ASTVisitor {
 	 * Initializer or Constructor depending on if the method is static or not,
 	 * and if it's initalized with a value or not.
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(final FieldDeclaration pNode) {
+		@SuppressWarnings("rawtypes")
 		final List fragments = pNode.fragments();
 		IElement lField;
 
@@ -587,7 +615,8 @@ public class ASTCrawler extends ASTVisitor {
 			this.aCurrMethod = this.aTempMethod;
 
 		// Consider multiple declaration in one statment
-		for (final Iterator itr = fragments.iterator(); itr.hasNext();) {
+		for (@SuppressWarnings("rawtypes")
+		final Iterator itr = fragments.iterator(); itr.hasNext();) {
 			final VariableDeclarationFragment fragment = (VariableDeclarationFragment) itr.next();
 			final String lSimpleName = fragment.getName().getIdentifier();
 			final Expression lInit = fragment.getInitializer();
@@ -676,11 +705,16 @@ public class ASTCrawler extends ASTVisitor {
 			final ITypeBinding tBinding = annotatedAnnotation.resolveBinding();
 			return this.addAnnotationRelation(annoteElem, tBinding);
 		}
-
+		case ASTNode.VARIABLE_DECLARATION_STATEMENT: {
+			return processVariableDeclarationStatement(annoteElem, (VariableDeclarationStatement) annotatedNode);
+		}
 		case ASTNode.VARIABLE_DECLARATION_FRAGMENT: {
-			final VariableDeclarationFragment varDeclFrag = (VariableDeclarationFragment) annotatedNode;
-			final IVariableBinding vBinding = varDeclFrag.resolveBinding();
-			return this.addAnnotationRelation(annoteElem, vBinding);
+			return processVariableDeclarationFragment(annoteElem, (VariableDeclarationFragment) annotatedNode);
+		}
+		case ASTNode.ANNOTATION_TYPE_MEMBER_DECLARATION: {
+			AnnotationTypeMemberDeclaration atmd = (AnnotationTypeMemberDeclaration) annotatedNode;
+			IMethodBinding methodBinding = atmd.resolveBinding();
+			return this.addAnnotationRelation(annoteElem, methodBinding);
 		}
 
 		case ASTNode.PACKAGE_DECLARATION: {
@@ -725,7 +759,6 @@ public class ASTCrawler extends ASTVisitor {
 	 * constructor, copy all relations in temp method
 	 */
 	@Override
-	@SuppressWarnings("restriction")
 	public boolean visit(final MethodDeclaration pNode) {
 		final IMethodBinding lMBinding = pNode.resolveBinding();
 
@@ -798,11 +831,11 @@ public class ASTCrawler extends ASTVisitor {
 			final ITypeBinding tBinding = annotatedAnnotation.resolveBinding();
 			return this.addAnnotationRelation(annoteElem, tBinding);
 		}
-
+		case ASTNode.VARIABLE_DECLARATION_STATEMENT: {
+			return processVariableDeclarationStatement(annoteElem, (VariableDeclarationStatement) annotatedNode);
+		}
 		case ASTNode.VARIABLE_DECLARATION_FRAGMENT: {
-			final VariableDeclarationFragment varDeclFrag = (VariableDeclarationFragment) annotatedNode;
-			final IVariableBinding vBinding = varDeclFrag.resolveBinding();
-			return this.addAnnotationRelation(annoteElem, vBinding);
+			return processVariableDeclarationFragment(annoteElem, (VariableDeclarationFragment) annotatedNode);
 		}
 
 		case ASTNode.PACKAGE_DECLARATION: {
@@ -840,7 +873,6 @@ public class ASTCrawler extends ASTVisitor {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean visit(final PackageDeclaration pNode) {
 		final IPackageBinding binding = pNode.resolveBinding();
@@ -851,8 +883,10 @@ public class ASTCrawler extends ASTVisitor {
 		this.aDB.addElement(packageElem, binding.getModifiers());
 
 		final CompilationUnit parent = (CompilationUnit) pNode.getParent();
+		@SuppressWarnings("rawtypes")
 		final List containedTypes = parent.types();
-		for (final Iterator it = containedTypes.iterator(); it.hasNext();) {
+		for (@SuppressWarnings("rawtypes")
+		final Iterator it = containedTypes.iterator(); it.hasNext();) {
 			final AbstractTypeDeclaration type = (AbstractTypeDeclaration) it.next();
 			final ITypeBinding typeBinding = type.resolveBinding();
 			final IElement typeElem = ASTCrawler.convertBinding(typeBinding);
@@ -935,10 +969,13 @@ public class ASTCrawler extends ASTVisitor {
 			return this.addAnnotationRelation(annoteElem, tBinding);
 		}
 
+		case ASTNode.VARIABLE_DECLARATION_STATEMENT: {
+			VariableDeclarationStatement vds = (VariableDeclarationStatement) annotatedNode;
+			return processVariableDeclarationStatement(annoteElem, vds);
+		}
+
 		case ASTNode.VARIABLE_DECLARATION_FRAGMENT: {
-			final VariableDeclarationFragment varDeclFrag = (VariableDeclarationFragment) annotatedNode;
-			final IVariableBinding vBinding = varDeclFrag.resolveBinding();
-			return this.addAnnotationRelation(annoteElem, vBinding);
+			return processVariableDeclarationFragment(annoteElem, (VariableDeclarationFragment) annotatedNode);
 		}
 
 		case ASTNode.PACKAGE_DECLARATION: {
@@ -974,6 +1011,21 @@ public class ASTCrawler extends ASTVisitor {
 			throw new IllegalStateException("Illegal annotated node type: " + annotatedNode);
 		}
 		}
+	}
+
+	private boolean processVariableDeclarationStatement(final IElement annoteElem, VariableDeclarationStatement vds) {
+		List<?> fragments = vds.fragments();
+		Stream<?> stream = fragments.stream();
+		Stream<?> filter = stream.filter(e -> e instanceof VariableDeclarationFragment);
+		Stream<VariableDeclarationFragment> map = filter.map(VariableDeclarationFragment.class::cast);
+		Stream<Boolean> map2 = map.map(vdf -> processVariableDeclarationFragment(annoteElem, vdf));
+		return map2.allMatch(b -> b);
+	}
+
+	private boolean processVariableDeclarationFragment(final IElement annoteElem,
+			final VariableDeclarationFragment varDeclFrag) {
+		final IVariableBinding vBinding = varDeclFrag.resolveBinding();
+		return this.addAnnotationRelation(annoteElem, vBinding);
 	}
 
 	@Override
@@ -1142,8 +1194,15 @@ public class ASTCrawler extends ASTVisitor {
 	private boolean addAnnotationRelation(final IElement annoteElem, final IVariableBinding binding) {
 		if (ASTCrawler.checkForNull(binding))
 			return false;
-		final IElement annotatedElement = ASTCrawler.convertBinding(binding);
-		this.addAnnotationRelation(annoteElem, binding, annotatedElement);
+		try {
+			if (binding.isField()) {
+				final IElement annotatedElement = ASTCrawler.convertBinding(binding);
+				this.addAnnotationRelation(annoteElem, binding, annotatedElement);
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"Failed to add annotation relation for element: " + annoteElem + " and binding: " + binding, e);
+		}
 		return true;
 	}
 
