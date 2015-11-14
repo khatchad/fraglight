@@ -12,9 +12,9 @@ import org.eclipse.ajdt.core.javaelements.AdviceElement;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaModelException;
-import org.jdom.Attribute;
-import org.jdom.DataConversionException;
-import org.jdom.Element;
+import org.jdom2.Attribute;
+import org.jdom2.DataConversionException;
+import org.jdom2.Element;
 
 import au.com.bytecode.opencsv.CSVWriter;
 

@@ -10,8 +10,8 @@ import java.util.Iterator;
 import java.util.Stack;
 
 import org.drools.ObjectFilter;
-import org.jdom.DataConversionException;
-import org.jdom.Element;
+import org.jdom2.DataConversionException;
+import org.jdom2.Element;
 
 import ca.mcgill.cs.swevo.jayfx.model.IElement;
 

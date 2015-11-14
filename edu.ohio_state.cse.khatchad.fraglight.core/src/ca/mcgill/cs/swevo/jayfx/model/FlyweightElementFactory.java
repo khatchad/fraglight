@@ -12,11 +12,11 @@ package ca.mcgill.cs.swevo.jayfx.model;
 
 import java.util.Hashtable;
 
-import org.jdom.Element;
 
 import edu.ohio_state.cse.khatchad.ajplugintools.ajayfx.model.AJCodeElement;
 import edu.ohio_state.cse.khatchad.ajplugintools.ajayfx.model.AdviceElement;
 import edu.ohio_state.cse.khatchad.ajplugintools.ajayfx.model.AspectElement;
+import org.jdom2.Element;
 
 /**
  * Factory participant in the Flyweight design pattern. Produces unique IElement

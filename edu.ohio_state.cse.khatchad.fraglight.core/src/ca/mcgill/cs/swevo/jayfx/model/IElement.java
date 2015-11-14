@@ -12,7 +12,7 @@ package ca.mcgill.cs.swevo.jayfx.model;
 
 import java.io.Serializable;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 
 /**
  * A program element in the Java model.

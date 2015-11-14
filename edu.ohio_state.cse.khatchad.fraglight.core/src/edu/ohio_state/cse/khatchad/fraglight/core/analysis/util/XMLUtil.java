@@ -9,8 +9,8 @@ import java.io.PrintWriter;
 
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
 import org.eclipse.jdt.core.IJavaElement;
-import org.jdom.Attribute;
-import org.jdom.Element;
+import org.jdom2.Attribute;
+import org.jdom2.Element;
 
 /**
  * @author raffi

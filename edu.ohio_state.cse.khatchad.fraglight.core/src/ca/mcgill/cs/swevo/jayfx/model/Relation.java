@@ -14,8 +14,8 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Vector;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
+import org.jdom2.Attribute;
+import org.jdom2.Element;
 
 /**
  * Encapsulate various services related to relations.
@@ -117,7 +117,7 @@ public enum Relation {
 		ID_TRANS_EXTENDS("transitively_extends", "transitively extending", "transitively extended by",
 				"a class transitively extends a class"), ID_TRANS_IMPLEMENTS("transitively_implements",
 						"transitively implementing", "transitively implemented by",
-						"a class transitively implements an interface"),
+				"a class transitively implements an interface"),
 
 		ID_ACCESSES("accesses_field", "accessing", "accessed by",
 				"a method accesses a field, either to read or write"), ID_SETS("sets_field", "setting", "set by",

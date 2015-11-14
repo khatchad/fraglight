@@ -9,9 +9,9 @@ import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
 
 import org.eclipse.jdt.core.IJavaElement;
-import org.jdom.Attribute;
-import org.jdom.DataConversionException;
-import org.jdom.Element;
+import org.jdom2.Attribute;
+import org.jdom2.DataConversionException;
+import org.jdom2.Element;
 
 import ca.mcgill.cs.swevo.jayfx.ConversionException;
 import ca.mcgill.cs.swevo.jayfx.JayFX;

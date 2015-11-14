@@ -10,8 +10,7 @@
 
 package ca.mcgill.cs.swevo.jayfx.model;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
+import org.jdom2.*;
 
 /**
  * Abtract class for the various program elements in the model.

@@ -8,11 +8,6 @@
 			<attribute name="javadoc_location" value="http://guava-libraries.googlecode.com/svn/trunk/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/jdom.jar" sourcepath="lib/jdom-src.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/edu.ohio_state.cse.khatchad.fraglightevaluator/lib/jdom-doc.jar!/apidocs"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="lib/opencsv-2.2.jar" sourcepath="lib/opencsv-2.2-src.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/edu.ohio_state.cse.khatchad.fraglightevaluator/lib/opencsv-2.2-doc.zip!/api"/>
@@ -20,5 +15,10 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/mail-1.4.3.jar"/>
 	<classpathentry kind="lib" path="lib/postgresql-8.3-603.jdbc3.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-2.0.6.jar" sourcepath="lib/jdom-2.0.6-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/edu.ohio_state.cse.khatchad.fraglightevaluator/lib/jdom-2.0.6-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

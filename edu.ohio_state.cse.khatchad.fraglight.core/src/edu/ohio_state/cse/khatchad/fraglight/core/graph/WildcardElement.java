@@ -3,8 +3,8 @@
  */
 package edu.ohio_state.cse.khatchad.fraglight.core.graph;
 
-import org.jdom.Attribute;
-import org.jdom.Element;
+import org.jdom2.Attribute;
+import org.jdom2.Element;
 
 import ca.mcgill.cs.swevo.jayfx.model.Category;
 import ca.mcgill.cs.swevo.jayfx.model.ClassElement;

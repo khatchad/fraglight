@@ -8,8 +8,8 @@ import org.eclipse.ajdt.core.javaelements.AJCodeElement;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.internal.core.JavaElement;
-import org.jdom.DataConversionException;
-import org.jdom.Element;
+import org.jdom2.DataConversionException;
+import org.jdom2.Element;
 
 import ca.mcgill.cs.swevo.jayfx.ConversionException;
 import ca.mcgill.cs.swevo.jayfx.JayFX;
