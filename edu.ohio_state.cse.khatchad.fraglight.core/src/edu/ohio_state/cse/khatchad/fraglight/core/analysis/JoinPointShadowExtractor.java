@@ -9,10 +9,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.aspectj.lang.JoinPoint;
-import org.eclipse.ajdt.core.AspectJCore;
 import org.eclipse.ajdt.core.javaelements.AJCodeElement;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -21,7 +19,6 @@ import org.eclipse.jdt.core.dom.ClassInstanceCreation;
 import org.eclipse.jdt.core.dom.ConstructorInvocation;
 import org.eclipse.jdt.core.dom.FieldAccess;
 import org.eclipse.jdt.core.dom.IBinding;
-import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
@@ -32,9 +29,7 @@ import org.eclipse.jdt.core.dom.SuperFieldAccess;
 import org.eclipse.jdt.core.dom.SuperMethodInvocation;
 import org.eclipse.jdt.internal.core.JavaElement;
 
-import ca.mcgill.cs.swevo.jayfx.ASTCrawler;
 import ca.mcgill.cs.swevo.jayfx.ConversionException;
-
 import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
 
 /**
@@ -120,16 +115,13 @@ public class JoinPointShadowExtractor extends ASTVisitor {
 		IBinding binding = node.resolveBinding();
 
 		if (binding == null) {
-			logger.log(Level.WARNING,
-					"Unable to extract field access join point from " + node,
-					node);
+			logger.log(Level.WARNING, "Unable to extract field access join point from " + node, node);
 			return false;
 		}
 
 		if (binding.getKind() == IBinding.VARIABLE) {
 			IVariableBinding variableBinding = (IVariableBinding) binding;
-			MethodDeclaration methodDeclaration = Util
-					.getMethodDeclaration(node);
+			MethodDeclaration methodDeclaration = Util.getMethodDeclaration(node);
 
 			if (variableBinding.isField() && methodDeclaration != null) {
 				final Assignment assignment = getAssignment(node);
@@ -146,8 +138,7 @@ public class JoinPointShadowExtractor extends ASTVisitor {
 
 					if (!(assignment.getOperator() == Assignment.Operator.ASSIGN))
 						try {
-							this.joinPointShadows
-									.add(getFieldGetJavaElement(node));
+							this.joinPointShadows.add(getFieldGetJavaElement(node));
 						} catch (JavaModelException e) {
 							e.printStackTrace();
 							throw new RuntimeException(e);
@@ -175,16 +166,13 @@ public class JoinPointShadowExtractor extends ASTVisitor {
 		IBinding binding = node.resolveBinding();
 
 		if (binding == null) {
-			logger.log(Level.WARNING,
-					"Unable to extract field access join point from " + node,
-					node);
+			logger.log(Level.WARNING, "Unable to extract field access join point from " + node, node);
 			return false;
 		}
 
 		if (binding.getKind() == IBinding.VARIABLE) {
 			IVariableBinding variableBinding = (IVariableBinding) binding;
-			MethodDeclaration methodDeclaration = Util
-					.getMethodDeclaration(node);
+			MethodDeclaration methodDeclaration = Util.getMethodDeclaration(node);
 
 			if (variableBinding.isField() && methodDeclaration != null) {
 				final Assignment assignment = getAssignment(node);
@@ -201,8 +189,7 @@ public class JoinPointShadowExtractor extends ASTVisitor {
 
 					if (!(assignment.getOperator() == Assignment.Operator.ASSIGN))
 						try {
-							this.joinPointShadows
-									.add(getFieldGetJavaElement(node));
+							this.joinPointShadows.add(getFieldGetJavaElement(node));
 						} catch (JavaModelException e) {
 							e.printStackTrace();
 							throw new RuntimeException(e);
@@ -225,8 +212,7 @@ public class JoinPointShadowExtractor extends ASTVisitor {
 		return false;
 	}
 
-	private static Logger logger = Logger
-			.getLogger(JoinPointShadowExtractor.class.getName());
+	private static Logger logger = Logger.getLogger(JoinPointShadowExtractor.class.getName());
 
 	@Override
 	public boolean visit(FieldAccess node) {
@@ -306,15 +292,13 @@ public class JoinPointShadowExtractor extends ASTVisitor {
 		return super.visit(node);
 	}
 
-	private static IJavaElement getFieldSetJavaElement(SimpleName node)
-			throws JavaModelException, ConversionException {
+	private static IJavaElement getFieldSetJavaElement(SimpleName node) throws JavaModelException, ConversionException {
 		IBinding binding = node.resolveBinding();
 		AJCodeElement ret = getJavaElement(node, binding, JoinPoint.FIELD_SET);
 		return ret;
 	}
 
-	private static IJavaElement getFieldGetJavaElement(SimpleName node)
-			throws JavaModelException, ConversionException {
+	private static IJavaElement getFieldGetJavaElement(SimpleName node) throws JavaModelException, ConversionException {
 		IBinding binding = node.resolveBinding();
 		AJCodeElement ret = getJavaElement(node, binding, JoinPoint.FIELD_GET);
 		return ret;
@@ -337,91 +321,77 @@ public class JoinPointShadowExtractor extends ASTVisitor {
 	private static IJavaElement getFieldSetJavaElement(FieldAccess node)
 			throws JavaModelException, ConversionException {
 		IBinding fieldBinding = node.resolveFieldBinding();
-		AJCodeElement ret = getJavaElement(node, fieldBinding,
-				JoinPoint.FIELD_SET);
+		AJCodeElement ret = getJavaElement(node, fieldBinding, JoinPoint.FIELD_SET);
 		return ret;
 	}
 
 	private static IJavaElement getFieldSetJavaElement(SuperFieldAccess node)
 			throws JavaModelException, ConversionException {
 		IBinding fieldBinding = node.resolveFieldBinding();
-		AJCodeElement ret = getJavaElement(node, fieldBinding,
-				JoinPoint.FIELD_SET);
+		AJCodeElement ret = getJavaElement(node, fieldBinding, JoinPoint.FIELD_SET);
 		return ret;
 	}
 
 	private static IJavaElement getFieldGetJavaElement(FieldAccess node)
 			throws JavaModelException, ConversionException {
 		IBinding fieldBinding = node.resolveFieldBinding();
-		AJCodeElement ret = getJavaElement(node, fieldBinding,
-				JoinPoint.FIELD_GET);
+		AJCodeElement ret = getJavaElement(node, fieldBinding, JoinPoint.FIELD_GET);
 		return ret;
 	}
 
 	private static IJavaElement getFieldGetJavaElement(SuperFieldAccess node)
 			throws JavaModelException, ConversionException {
 		IBinding fieldBinding = node.resolveFieldBinding();
-		AJCodeElement ret = getJavaElement(node, fieldBinding,
-				JoinPoint.FIELD_GET);
+		AJCodeElement ret = getJavaElement(node, fieldBinding, JoinPoint.FIELD_GET);
 		return ret;
 	}
 
 	private static IJavaElement getJavaElement(ConstructorInvocation node)
 			throws JavaModelException, ConversionException {
 		IBinding methodBinding = node.resolveConstructorBinding();
-		AJCodeElement ret = getJavaElement(node, methodBinding,
-				JoinPoint.CONSTRUCTOR_CALL);
+		AJCodeElement ret = getJavaElement(node, methodBinding, JoinPoint.CONSTRUCTOR_CALL);
 		return ret;
 	}
 
 	private static IJavaElement getJavaElement(SuperConstructorInvocation node)
 			throws JavaModelException, ConversionException {
 		IBinding methodBinding = node.resolveConstructorBinding();
-		AJCodeElement ret = getJavaElement(node, methodBinding,
-				JoinPoint.CONSTRUCTOR_CALL);
+		AJCodeElement ret = getJavaElement(node, methodBinding, JoinPoint.CONSTRUCTOR_CALL);
 		return ret;
 	}
 
 	private static IJavaElement getJavaElement(ClassInstanceCreation node)
 			throws JavaModelException, ConversionException {
 		IBinding methodBinding = node.resolveConstructorBinding();
-		AJCodeElement ret = getJavaElement(node, methodBinding,
-				JoinPoint.CONSTRUCTOR_CALL);
+		AJCodeElement ret = getJavaElement(node, methodBinding, JoinPoint.CONSTRUCTOR_CALL);
 		return ret;
 	}
 
 	private static IJavaElement getJavaElement(SuperMethodInvocation node)
 			throws JavaModelException, ConversionException {
 		IBinding methodBinding = node.resolveMethodBinding();
-		AJCodeElement ret = getJavaElement(node, methodBinding,
-				JoinPoint.METHOD_CALL);
+		AJCodeElement ret = getJavaElement(node, methodBinding, JoinPoint.METHOD_CALL);
 		return ret;
 	}
 
-	private static IJavaElement getJavaElement(MethodInvocation node)
-			throws JavaModelException, ConversionException {
+	private static IJavaElement getJavaElement(MethodInvocation node) throws JavaModelException, ConversionException {
 		IBinding methodBinding = node.resolveMethodBinding();
-		AJCodeElement ret = getJavaElement(node, methodBinding,
-				JoinPoint.METHOD_CALL);
+		AJCodeElement ret = getJavaElement(node, methodBinding, JoinPoint.METHOD_CALL);
 		return ret;
 	}
 
-	private static AJCodeElement getJavaElement(ASTNode node, IBinding binding,
-			String joinPointType) throws JavaModelException,
-			ConversionException {
+	private static AJCodeElement getJavaElement(ASTNode node, IBinding binding, String joinPointType)
+			throws JavaModelException, ConversionException {
 		String ajTargetString = getAJTargetString(binding, joinPointType);
 		IJavaElement source = getSourceMethod(node);
-		AJCodeElement ret = new AJCodeElement((JavaElement) source,
-				ajTargetString);
+		AJCodeElement ret = new AJCodeElement((JavaElement) source, ajTargetString);
 		return ret;
 	}
 
-	private static String getAJTargetString(IBinding methodBinding,
-			String joinPointType) throws JavaModelException,
-			ConversionException {
+	private static String getAJTargetString(IBinding methodBinding, String joinPointType)
+			throws JavaModelException, ConversionException {
 		IJavaElement target = methodBinding.getJavaElement();
-		StringBuilder targetStringBuilder = new StringBuilder(
-				Util.getTargetString(target));
+		StringBuilder targetStringBuilder = new StringBuilder(Util.getTargetString(target));
 		targetStringBuilder.insert(0, joinPointType + "(");
 		targetStringBuilder.append(')');
 		String ajTargetString = targetStringBuilder.toString();
@@ -430,8 +400,7 @@ public class JoinPointShadowExtractor extends ASTVisitor {
 
 	private static IJavaElement getSourceMethod(ASTNode node) {
 		MethodDeclaration methodDeclaration = Util.getMethodDeclaration(node);
-		IJavaElement source = methodDeclaration.resolveBinding()
-				.getMethodDeclaration().getJavaElement();
+		IJavaElement source = methodDeclaration.resolveBinding().getMethodDeclaration().getJavaElement();
 		return source;
 	}
 

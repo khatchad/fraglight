@@ -12,8 +12,6 @@ package ca.mcgill.cs.swevo.jayfx.model;
 
 import java.io.Serializable;
 
-import org.eclipse.jdt.core.IJavaElement;
-import org.jdom.Attribute;
 import org.jdom.Element;
 
 /**

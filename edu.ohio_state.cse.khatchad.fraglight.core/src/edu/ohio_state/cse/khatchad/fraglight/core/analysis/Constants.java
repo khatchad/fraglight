@@ -8,7 +8,7 @@ package edu.ohio_state.cse.khatchad.fraglight.core.analysis;
  * 
  */
 public class Constants {
-	
+
 	@SuppressWarnings("unused")
 	private static final String DATABASE_FILE_NAME = "rejuv-pc.xml";
 

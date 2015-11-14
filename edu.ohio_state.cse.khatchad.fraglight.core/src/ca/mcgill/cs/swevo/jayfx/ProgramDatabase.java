@@ -71,7 +71,7 @@ public class ProgramDatabase {
 	 *            The modifier flags for this element.
 	 */
 	public void addElement(final IElement pElement, final int pModifier) {
-		//		assert (pElement != null);
+		// assert (pElement != null);
 		if (!this.aElements.containsKey(pElement))
 			this.aElements.put(pElement, new Bundle(pModifier));
 	}
@@ -90,20 +90,19 @@ public class ProgramDatabase {
 	 * @throws ElementNotFoundException
 	 *             If pElement1 or pElement2 is not found in the database.
 	 */
-	public void addRelation(final IElement pElement1, final Relation pRelation,
-			final IElement pElement2) throws ElementNotFoundException {
-		//		assert (pElement1 != null);
-		//		assert (pElement2 != null);
-		//		assert (pRelation != null);
+	public void addRelation(final IElement pElement1, final Relation pRelation, final IElement pElement2)
+			throws ElementNotFoundException {
+		// assert (pElement1 != null);
+		// assert (pElement2 != null);
+		// assert (pRelation != null);
 
 		if (!this.contains(pElement1))
 			throw new ElementNotFoundException(pElement1.getId());
 		if (!this.contains(pElement2))
 			throw new ElementNotFoundException(pElement2.getId());
 
-		final Map<Relation, Set<IElement>> lRelations = this.aElements.get(
-				pElement1).getRelationMap();
-		//		assert (lRelations != null);
+		final Map<Relation, Set<IElement>> lRelations = this.aElements.get(pElement1).getRelationMap();
+		// assert (lRelations != null);
 
 		Set<IElement> lElements = lRelations.get(pRelation);
 		if (lElements == null) {
@@ -127,12 +126,11 @@ public class ProgramDatabase {
 	 *             if either of pElement1 or pElement2 are not indexed in the
 	 *             database.
 	 */
-	public void addRelationAndTranspose(final IElement pElement1,
-			final Relation pRelation, final IElement pElement2)
+	public void addRelationAndTranspose(final IElement pElement1, final Relation pRelation, final IElement pElement2)
 			throws ElementNotFoundException {
-		//		assert (pElement1 != null);
-		//		assert (pElement2 != null);
-		//		assert (pRelation != null);
+		// assert (pElement1 != null);
+		// assert (pElement2 != null);
+		// assert (pRelation != null);
 
 		if (!this.contains(pElement1))
 			throw new ElementNotFoundException(pElement1.getId());
@@ -151,7 +149,7 @@ public class ProgramDatabase {
 	 * @return Whether the database has information about pElement.
 	 */
 	public boolean contains(final IElement pElement) {
-		//		assert (pElement != null);
+		// assert (pElement != null);
 		return this.aElements.containsKey(pElement);
 	}
 
@@ -169,10 +167,9 @@ public class ProgramDatabase {
 	 *             If either pFrom or pTo is not indexed in the database.
 	 */
 	@SuppressWarnings("unchecked")
-	public void copyRelations(final IElement pFrom, final IElement pTo)
-			throws ElementNotFoundException {
-		//		assert (pFrom != null);
-		//		assert (pTo != null);
+	public void copyRelations(final IElement pFrom, final IElement pTo) throws ElementNotFoundException {
+		// assert (pFrom != null);
+		// assert (pTo != null);
 
 		if (!this.contains(pFrom))
 			throw new ElementNotFoundException(pFrom.getId());
@@ -201,8 +198,7 @@ public class ProgramDatabase {
 			for (final Object element : lRelations.getRelationMap().keySet()) {
 				final Relation lRelation = (Relation) element;
 				System.out.println("    " + lRelation);
-				for (final Iterator k = ((Set) lRelations.getRelationMap().get(
-						lRelation)).iterator(); k.hasNext();)
+				for (final Iterator k = ((Set) lRelations.getRelationMap().get(lRelation)).iterator(); k.hasNext();)
 					ret.append("        " + k.next());
 			}
 		}
@@ -245,17 +241,15 @@ public class ProgramDatabase {
 	 * @throws ElementNotFoundException
 	 *             If pElement is not indexed in the database
 	 */
-	public Set<IElement> getRange(final IElement pElement,
-			final Relation pRelation) throws ElementNotFoundException {
-		//		assert (pElement != null);
-		//		assert (pRelation != null);
+	public Set<IElement> getRange(final IElement pElement, final Relation pRelation) throws ElementNotFoundException {
+		// assert (pElement != null);
+		// assert (pRelation != null);
 		if (!this.contains(pElement))
-//			throw new ElementNotFoundException(pElement.getId());
+			// throw new ElementNotFoundException(pElement.getId());
 			return new HashSet<IElement>();
 
 		final Set<IElement> lReturn = new HashSet<IElement>();
-		final Map<Relation, Set<IElement>> lRelations = this.aElements.get(
-				pElement).getRelationMap();
+		final Map<Relation, Set<IElement>> lRelations = this.aElements.get(pElement).getRelationMap();
 
 		if (lRelations.containsKey(pRelation))
 			lReturn.addAll(lRelations.get(pRelation));
@@ -273,9 +267,8 @@ public class ProgramDatabase {
 	 *             If either pFrom or pTo is not indexed in the database.
 	 */
 	@SuppressWarnings("unchecked")
-	public boolean hasRelations(final IElement pElement)
-			throws ElementNotFoundException {
-		//		assert (pElement != null);
+	public boolean hasRelations(final IElement pElement) throws ElementNotFoundException {
+		// assert (pElement != null);
 		if (!this.contains(pElement))
 			throw new ElementNotFoundException(pElement.getId());
 
@@ -293,9 +286,8 @@ public class ProgramDatabase {
 	 *             If pElement is not indexed in the database.
 	 */
 	@SuppressWarnings("unchecked")
-	public void removeElement(final IElement pElement)
-			throws ElementNotFoundException {
-		//		assert (pElement != null);
+	public void removeElement(final IElement pElement) throws ElementNotFoundException {
+		// assert (pElement != null);
 		if (!this.contains(pElement))
 			throw new ElementNotFoundException(pElement.getId());
 
@@ -304,8 +296,7 @@ public class ProgramDatabase {
 			final Relation lNext = (Relation) i.next();
 			final Set lElements = (Set) lRelations.get(lNext);
 			for (final Iterator j = lElements.iterator(); j.hasNext();)
-				this.removeRelation((IElement) j.next(), lNext
-						.getInverseRelation(), pElement);
+				this.removeRelation((IElement) j.next(), lNext.getInverseRelation(), pElement);
 		}
 
 		// Remove the element
@@ -348,12 +339,11 @@ public class ProgramDatabase {
 	 *             If either pFrom or pTo is not indexed in the database.
 	 */
 	@SuppressWarnings("unchecked")
-	private void removeRelation(final IElement pElement1,
-			final Relation pRelation, final IElement pElement2)
+	private void removeRelation(final IElement pElement1, final Relation pRelation, final IElement pElement2)
 			throws ElementNotFoundException {
-		//		assert (pElement1 != null);
-		//		assert (pElement2 != null);
-		//		assert (pRelation != null);
+		// assert (pElement1 != null);
+		// assert (pElement2 != null);
+		// assert (pRelation != null);
 
 		if (!this.contains(pElement1))
 			throw new ElementNotFoundException(pElement1.getId());

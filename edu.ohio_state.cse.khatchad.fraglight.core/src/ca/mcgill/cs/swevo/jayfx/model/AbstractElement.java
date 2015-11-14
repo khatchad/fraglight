@@ -10,7 +10,6 @@
 
 package ca.mcgill.cs.swevo.jayfx.model;
 
-import org.eclipse.jdt.core.IJavaElement;
 import org.jdom.Attribute;
 import org.jdom.Element;
 
@@ -31,7 +30,7 @@ public abstract class AbstractElement implements IElement {
 	 *            fully-qualified name of the declaring class for methods.
 	 */
 	protected AbstractElement(final String pId) {
-		if ( pId != null )
+		if (pId != null)
 			this.aId = pId;
 	}
 
@@ -42,6 +41,7 @@ public abstract class AbstractElement implements IElement {
 	 * @return An int representing the category of the element.
 	 * @see ca.ubc.cs.javadb.model.IElement#getCategory()
 	 */
+	@Override
 	public abstract Category getCategory();
 
 	/**
@@ -51,10 +51,11 @@ public abstract class AbstractElement implements IElement {
 	 * @return A String representing the fully qualified name of the element.
 	 * @see ca.ubc.cs.javadb.model.IElement#getId()
 	 */
+	@Override
 	public String getId() {
 		return this.aId;
 	}
-	
+
 	public void setId(String val) {
 		this.aId = val;
 	}
@@ -62,6 +63,7 @@ public abstract class AbstractElement implements IElement {
 	/**
 	 * @return The id of this element without the package.
 	 */
+	@Override
 	public abstract String getShortName();
 
 	/**
@@ -74,6 +76,7 @@ public abstract class AbstractElement implements IElement {
 		return this.getId();
 	}
 
+	@Override
 	public Element getXML() {
 		Element ret = new Element(IElement.class.getSimpleName());
 		ret.setAttribute(new Attribute(IElement.ID, this.getId()));

@@ -40,28 +40,17 @@ public class Analyzer {
 	 * @param pRelation
 	 * @return
 	 */
-	public Set<IElement> getRange(final IElement pElement,
-			final Relation pRelation) {
+	public Set<IElement> getRange(final IElement pElement, final Relation pRelation) {
 		Set<IElement> lReturn = new HashSet<IElement>();
-		if (pRelation == Relation.DECLARES_TYPE
-				|| pRelation == Relation.DECLARES_METHOD
-				|| pRelation == Relation.DECLARES_FIELD
-				|| pRelation == Relation.ACCESSES
-				|| pRelation == Relation.T_ACCESSES
-				|| pRelation == Relation.SETS || pRelation == Relation.GETS
-				|| pRelation == Relation.EXTENDS_CLASS
-				|| pRelation == Relation.T_EXTENDS_CLASS
-				|| pRelation == Relation.EXTENDS_INTERFACES
-				|| pRelation == Relation.T_EXTENDS_INTERFACES
-				|| pRelation == Relation.OVERRIDES
-				|| pRelation == Relation.T_OVERRIDES
-				|| pRelation == Relation.OVERLOADS
-				|| pRelation == Relation.ANNOTATES
-				|| pRelation == Relation.ADVISES
-				|| pRelation == Relation.IMPLEMENTS_INTERFACE
-				|| pRelation == Relation.T_IMPLEMENTS_INTERFACE
-				|| pRelation == Relation.CONTAINS
-				|| pRelation == Relation.IMPLEMENTS_METHOD)
+		if (pRelation == Relation.DECLARES_TYPE || pRelation == Relation.DECLARES_METHOD
+				|| pRelation == Relation.DECLARES_FIELD || pRelation == Relation.ACCESSES
+				|| pRelation == Relation.T_ACCESSES || pRelation == Relation.SETS || pRelation == Relation.GETS
+				|| pRelation == Relation.EXTENDS_CLASS || pRelation == Relation.T_EXTENDS_CLASS
+				|| pRelation == Relation.EXTENDS_INTERFACES || pRelation == Relation.T_EXTENDS_INTERFACES
+				|| pRelation == Relation.OVERRIDES || pRelation == Relation.T_OVERRIDES
+				|| pRelation == Relation.OVERLOADS || pRelation == Relation.ANNOTATES || pRelation == Relation.ADVISES
+				|| pRelation == Relation.IMPLEMENTS_INTERFACE || pRelation == Relation.T_IMPLEMENTS_INTERFACE
+				|| pRelation == Relation.CONTAINS || pRelation == Relation.IMPLEMENTS_METHOD)
 			lReturn.addAll(this.aDB.getRange(pElement, pRelation));
 		else if (pRelation == Relation.TRANS_EXTENDS)
 			lReturn = this.getTransitivelyExtends(pElement);
@@ -87,21 +76,19 @@ public class Analyzer {
 	 * @return
 	 */
 	private Set<IElement> getCalls(final IElement pElement) {
-		//		Util.assertExpression(pElement instanceof MethodElement);
+		// Util.assertExpression(pElement instanceof MethodElement);
 
 		final Set<IElement> lReturn = new HashSet<IElement>();
 		// static stuff
 		lReturn.addAll(this.aDB.getRange(pElement, Relation.STATIC_CALLS));
 
 		// dynamic stuff
-		final Set<IElement> lVirtualCalls = this.aDB.getRange(pElement,
-				Relation.CALLS);
+		final Set<IElement> lVirtualCalls = this.aDB.getRange(pElement, Relation.CALLS);
 
 		lReturn.addAll(lVirtualCalls);
 		for (final IElement lVirtualCallMember : lVirtualCalls)
 			// Note: a static method cannot be overriden
-			lReturn.addAll(this.aDB.getRange(lVirtualCallMember,
-					Relation.T_OVERRIDES));
+			lReturn.addAll(this.aDB.getRange(lVirtualCallMember, Relation.T_OVERRIDES));
 
 		return lReturn;
 	}
@@ -114,7 +101,7 @@ public class Analyzer {
 	 * @return Set of IMethodElement that calls the method
 	 */
 	private Set<IElement> getTCalls(final IElement pElement) {
-		//		Util.assertExpression(pElement instanceof MethodElement);
+		// Util.assertExpression(pElement instanceof MethodElement);
 
 		final Set<IElement> lReturn = new HashSet<IElement>();
 		// static stuff
@@ -122,12 +109,10 @@ public class Analyzer {
 
 		// dynamic stuff
 		lReturn.addAll(this.aDB.getRange(pElement, Relation.T_CALLS));
-		final Set<IElement> lOverrides = this.aDB.getRange(pElement,
-				Relation.OVERRIDES);
+		final Set<IElement> lOverrides = this.aDB.getRange(pElement, Relation.OVERRIDES);
 		for (final IElement lOverridsElement : lOverrides)
 			// Note: a static method cannot be overriden
-			lReturn.addAll(this.aDB
-					.getRange(lOverridsElement, Relation.T_CALLS));
+			lReturn.addAll(this.aDB.getRange(lOverridsElement, Relation.T_CALLS));
 		return lReturn;
 	}
 
@@ -139,14 +124,13 @@ public class Analyzer {
 	 * @return A set of IElement containing classes
 	 */
 	private Set<IElement> getTransitivelyExtends(final IElement pElement) {
-		//		Util.assertExpression(pElement instanceof ClassElement);
+		// Util.assertExpression(pElement instanceof ClassElement);
 
-		Set<IElement> lRange = this.aDB.getRange(pElement,
-				Relation.EXTENDS_CLASS);
+		Set<IElement> lRange = this.aDB.getRange(pElement, Relation.EXTENDS_CLASS);
 		final Set<IElement> lReturn = new HashSet<IElement>();
 
 		while (lRange.size() > 0) {
-			//	        Util.assertExpression( lRange.size() == 1 );
+			// Util.assertExpression( lRange.size() == 1 );
 
 			final IElement lSuperClass = lRange.iterator().next();
 			lReturn.add(lSuperClass);
@@ -163,27 +147,25 @@ public class Analyzer {
 	 * @return A set of IElement containing classes
 	 */
 	private Set<IElement> getTransitivelyImplements(final IElement pElement) {
-		//		Util.assertExpression(pElement instanceof ClassElement);
+		// Util.assertExpression(pElement instanceof ClassElement);
 
 		final Set<IElement> lReturn = new HashSet<IElement>();
 
 		// First get all directly implemented interfaces
 		final Set<IElement> lInterfaces = new HashSet<IElement>();
-		lInterfaces.addAll(this.aDB.getRange(pElement,
-				Relation.IMPLEMENTS_INTERFACE));
+		lInterfaces.addAll(this.aDB.getRange(pElement, Relation.IMPLEMENTS_INTERFACE));
 
-		//Then find the interfaces that are extended by one or more of the interfaces we found
+		// Then find the interfaces that are extended by one or more of the
+		// interfaces we found
 		while (lInterfaces.size() > 0) {
 			final IElement lNext = lInterfaces.iterator().next();
 			lReturn.add(lNext);
 			lInterfaces.remove(lNext);
-			lInterfaces.addAll(this.aDB.getRange(lNext,
-					Relation.EXTENDS_INTERFACES));
+			lInterfaces.addAll(this.aDB.getRange(lNext, Relation.EXTENDS_INTERFACES));
 		}
 
-		//Now find the class this class extends
-		final Set<IElement> lSuperclass = this.aDB.getRange(pElement,
-				Relation.EXTENDS_CLASS);
+		// Now find the class this class extends
+		final Set<IElement> lSuperclass = this.aDB.getRange(pElement, Relation.EXTENDS_CLASS);
 
 		// Obtain all it interfaces
 		for (final IElement lSuperclassElement : lSuperclass)
@@ -201,18 +183,16 @@ public class Analyzer {
 	 * @return A set of IElement containing classes
 	 */
 	private Set<IElement> getTTransitivelyExtends(final IElement pElement) {
-		//		Util.assertExpression(pElement instanceof ClassElement);
+		// Util.assertExpression(pElement instanceof ClassElement);
 
-		Set<IElement> lToProcess = this.aDB.getRange(pElement,
-				Relation.T_EXTENDS_CLASS);
+		Set<IElement> lToProcess = this.aDB.getRange(pElement, Relation.T_EXTENDS_CLASS);
 		final Set<IElement> lReturn = new HashSet<IElement>();
 
 		while (lToProcess.size() > 0) {
 			final IElement lNext = lToProcess.iterator().next();
 			lReturn.add(lNext);
 			lToProcess.remove(lNext);
-			lToProcess.addAll(this.aDB
-					.getRange(lNext, Relation.T_EXTENDS_CLASS));
+			lToProcess.addAll(this.aDB.getRange(lNext, Relation.T_EXTENDS_CLASS));
 		}
 		lToProcess = this.aDB.getRange(pElement, Relation.T_EXTENDS_CLASS);
 
@@ -227,7 +207,7 @@ public class Analyzer {
 	 * @return A set of IElement containing classes
 	 */
 	private Set<IElement> getTTransitivelyImplements(final IElement pElement) {
-		//		Util.assertExpression(pElement instanceof ClassElement);
+		// Util.assertExpression(pElement instanceof ClassElement);
 
 		final Set<IElement> lReturn = new HashSet<IElement>();
 
@@ -241,19 +221,16 @@ public class Analyzer {
 		while (lToProcess.size() > 0) {
 			final IElement lNext = lToProcess.iterator().next();
 			lToProcess.remove(lNext);
-			lInterfaces.addAll(this.aDB.getRange(lNext,
-					Relation.T_EXTENDS_INTERFACES));
-			lToProcess.addAll(this.aDB.getRange(lNext,
-					Relation.T_EXTENDS_INTERFACES));
+			lInterfaces.addAll(this.aDB.getRange(lNext, Relation.T_EXTENDS_INTERFACES));
+			lToProcess.addAll(this.aDB.getRange(lNext, Relation.T_EXTENDS_INTERFACES));
 		}
 
-		//Then for each interface find all implementing classes and their subclasses
+		// Then for each interface find all implementing classes and their
+		// subclasses
 		lToProcess = new HashSet<IElement>();
 		for (final IElement lNext : lInterfaces) {
-			lToProcess.addAll(this.aDB.getRange(lNext,
-					Relation.T_IMPLEMENTS_INTERFACE));
-			lReturn.addAll(this.aDB.getRange(lNext,
-					Relation.T_IMPLEMENTS_INTERFACE));
+			lToProcess.addAll(this.aDB.getRange(lNext, Relation.T_IMPLEMENTS_INTERFACE));
+			lReturn.addAll(this.aDB.getRange(lNext, Relation.T_IMPLEMENTS_INTERFACE));
 		}
 
 		for (final IElement lNext : lToProcess) {
@@ -265,35 +242,35 @@ public class Analyzer {
 	/**
 	 * Returns whether pElement is an interface type that exists in the DB.
 	 */
-	//    public boolean isInterface( IElement pElement )
-	//    {
-	//    	boolean lReturn = false;
-	//    	if( pElement.getCategory() == Category.CLASS )
-	//    	{
-	//    		if( aDB.getModifiers( pElement ) >= 16384 )
-	//    		{
-	//    			lReturn = true;
-	//    		}
-	//    	}
-	//    	return lReturn;
-	//    }
+	// public boolean isInterface( IElement pElement )
+	// {
+	// boolean lReturn = false;
+	// if( pElement.getCategory() == Category.CLASS )
+	// {
+	// if( aDB.getModifiers( pElement ) >= 16384 )
+	// {
+	// lReturn = true;
+	// }
+	// }
+	// return lReturn;
+	// }
 	/**
 	 * Returns whether pElement is an non-implemented method, either in an
 	 * interface or as an abstract method in an abstract class. Description of
 	 * JavaDB
 	 */
-	//    public boolean isAbstractMethod( IElement pElement )
-	//    {
-	//    	boolean lReturn = false;
-	//    	if( pElement.getCategory() == Category.METHOD )
-	//    	{
-	//    		if( aDB.getModifiers( pElement ) >= 16384 )
-	//    		{
-	//    			lReturn = true;
-	//    		}
-	//    	}
-	//    	return lReturn;
-	//    }
+	// public boolean isAbstractMethod( IElement pElement )
+	// {
+	// boolean lReturn = false;
+	// if( pElement.getCategory() == Category.METHOD )
+	// {
+	// if( aDB.getModifiers( pElement ) >= 16384 )
+	// {
+	// lReturn = true;
+	// }
+	// }
+	// return lReturn;
+	// }
 	/**
 	 * returns pelement included in the set if it is a class. pelement can be an
 	 * interface, in which case all the implementing types will be included.
@@ -301,39 +278,39 @@ public class Analyzer {
 	 * @param pElement
 	 * @return
 	 */
-	//	private Set getNonAbstractSubtypes( IElement pElement )
-	//	{
-	//		Set lReturn = new HashSet();
-	//		if( isInterface( pElement ))
-	//		{
-	//			Set lImplementors = getTTransitivelyImplements( pElement );
-	//			for( Iterator i = lImplementors.iterator(); i.hasNext(); )
-	//			{
-	//				IElement lNext = (IElement)i.next();
-	//				if( !Modifier.isAbstract( aDB.getModifiers( lNext )))
-	//				{
-	//					lReturn.add( lNext );
-	//				}
-	//			}
-	//		}
-	//		else
-	//		{
-	//			if( !Modifier.isAbstract( aDB.getModifiers( pElement )))
-	//			{
-	//				lReturn.add( pElement );
-	//			}
-	//			Set lSubclasses = getTTransitivelyExtends( pElement );
-	//			for( Iterator i = lSubclasses.iterator(); i.hasNext(); )
-	//			{
-	//				IElement lNext = (IElement)i.next();
-	//				if( !Modifier.isAbstract( aDB.getModifiers( lNext )))
-	//				{
-	//					lReturn.add( lNext );
-	//				}
-	//			}
-	//		}
-	//		return lReturn;
-	//	}
+	// private Set getNonAbstractSubtypes( IElement pElement )
+	// {
+	// Set lReturn = new HashSet();
+	// if( isInterface( pElement ))
+	// {
+	// Set lImplementors = getTTransitivelyImplements( pElement );
+	// for( Iterator i = lImplementors.iterator(); i.hasNext(); )
+	// {
+	// IElement lNext = (IElement)i.next();
+	// if( !Modifier.isAbstract( aDB.getModifiers( lNext )))
+	// {
+	// lReturn.add( lNext );
+	// }
+	// }
+	// }
+	// else
+	// {
+	// if( !Modifier.isAbstract( aDB.getModifiers( pElement )))
+	// {
+	// lReturn.add( pElement );
+	// }
+	// Set lSubclasses = getTTransitivelyExtends( pElement );
+	// for( Iterator i = lSubclasses.iterator(); i.hasNext(); )
+	// {
+	// IElement lNext = (IElement)i.next();
+	// if( !Modifier.isAbstract( aDB.getModifiers( lNext )))
+	// {
+	// lReturn.add( lNext );
+	// }
+	// }
+	// }
+	// return lReturn;
+	// }
 	/**
 	 * Returns the method implementation that is executed if pMethod is called
 	 * on an object of dynamic type pTarget.
@@ -345,22 +322,23 @@ public class Analyzer {
 	 * @return The lowest non-abstract method in the class hierarchy. null if
 	 *         none are found. (should not happen)
 	 */
-	//	private IElement getMethodImplementation( MethodElement pMethod, IElement pTarget )
-	//	{
-	//		IElement lTarget = pTarget;
-	//		IElement lReturn = matchMethod( pMethod, lTarget );
-	//		while( lReturn == null )
-	//		{
-	//			Set lSuperclass = aDB.getRange( lTarget, Relation.EXTENDS_CLASS );
-	//			if( lSuperclass.size() != 1 )
-	//			{
-	//				break;
-	//			}
-	//			lTarget = (IElement)lSuperclass.iterator().next();
-	//			lReturn = matchMethod( pMethod, lTarget );
-	//		}
-	//		return lReturn;
-	//	}
+	// private IElement getMethodImplementation( MethodElement pMethod, IElement
+	// pTarget )
+	// {
+	// IElement lTarget = pTarget;
+	// IElement lReturn = matchMethod( pMethod, lTarget );
+	// while( lReturn == null )
+	// {
+	// Set lSuperclass = aDB.getRange( lTarget, Relation.EXTENDS_CLASS );
+	// if( lSuperclass.size() != 1 )
+	// {
+	// break;
+	// }
+	// lTarget = (IElement)lSuperclass.iterator().next();
+	// lReturn = matchMethod( pMethod, lTarget );
+	// }
+	// return lReturn;
+	// }
 	/**
 	 * Returns a non-static, non-constructor method that matches pMethod but
 	 * that is declared in pClass. null if none are found. Small concession to
@@ -368,105 +346,108 @@ public class Analyzer {
 	 * parameter types match exactly. pAbstract whether to look for abstract or
 	 * non-abstract methods
 	 */
-	//	private IElement matchMethod( MethodElement pMethod, IElement pClass, boolean pAbstract )
-	//	{
-	//		IElement lReturn = null;
-	//		String lThisName = pMethod.getName();
-	//		
-	//		Set lElements = aDB.getRange( pClass, Relation.DECLARES );
-	//		for( Iterator i = lElements.iterator(); i.hasNext(); )
-	//		{
-	//			IElement lNext = (IElement)i.next();
-	//			if( lNext.getCategory() == Category.METHOD )
-	//			{
-	//				if(  !((MethodElement)lNext).getName().startsWith("<init>") &&
-	//				     !((MethodElement)lNext).getName().startsWith("<clinit>"))
-	//				{
-	//					if( !Modifier.isStatic( aDB.getModifiers( lNext )))
-	//					{
-	//						if( lThisName.equals( ((MethodElement)lNext).getName() ))
-	//						{
-	//							pMethod.getParameters().equals( ((MethodElement)lNext).getParameters() );
-	//							if( isAbstractMethod( lNext ) == pAbstract )
-	//							{
-	//								lReturn = lNext;
-	//								break;
-	//							}
-	//						}
-	//					}
-	//				}
-	//			}
-	//		}
-	//		
-	//		return lReturn;
-	//	}
+	// private IElement matchMethod( MethodElement pMethod, IElement pClass,
+	// boolean pAbstract )
+	// {
+	// IElement lReturn = null;
+	// String lThisName = pMethod.getName();
+	//
+	// Set lElements = aDB.getRange( pClass, Relation.DECLARES );
+	// for( Iterator i = lElements.iterator(); i.hasNext(); )
+	// {
+	// IElement lNext = (IElement)i.next();
+	// if( lNext.getCategory() == Category.METHOD )
+	// {
+	// if( !((MethodElement)lNext).getName().startsWith("<init>") &&
+	// !((MethodElement)lNext).getName().startsWith("<clinit>"))
+	// {
+	// if( !Modifier.isStatic( aDB.getModifiers( lNext )))
+	// {
+	// if( lThisName.equals( ((MethodElement)lNext).getName() ))
+	// {
+	// pMethod.getParameters().equals( ((MethodElement)lNext).getParameters() );
+	// if( isAbstractMethod( lNext ) == pAbstract )
+	// {
+	// lReturn = lNext;
+	// break;
+	// }
+	// }
+	// }
+	// }
+	// }
+	// }
+	//
+	// return lReturn;
+	// }
 	/**
 	 * Returns the method that this method directly overrides.
 	 * 
 	 * @return A non-null set.
 	 */
-	//	private Set getOverrides( IElement pElement )
-	//	{
-	//		Set lReturn = new HashSet();
-	//		
-	//		if( !(pElement instanceof MethodElement ))
-	//			return lReturn;
-	//		
-	//		if( isAbstractMethod( pElement ))
-	//			return lReturn;
-	//		
-	//		// look in superclasses
-	//		Set lSuperclass = aDB.getRange( pElement.getDeclaringClass(), Relation.EXTENDS_CLASS );
-	//		while( lSuperclass.size() != 0 )
-	//		{
-	//			IElement lNext = (IElement)lSuperclass.iterator().next();
-	//			IElement lMethod = matchMethod( (MethodElement)pElement, lNext, false );
-	//			if( lMethod != null )
-	//			{
-	//				lReturn.add( lMethod );
-	//				break;
-	//			}
-	//			lSuperclass = aDB.getRange( lNext, Relation.EXTENDS_CLASS );
-	//		}
-	//		
-	//		return lReturn;
-	//	}
+	// private Set getOverrides( IElement pElement )
+	// {
+	// Set lReturn = new HashSet();
+	//
+	// if( !(pElement instanceof MethodElement ))
+	// return lReturn;
+	//
+	// if( isAbstractMethod( pElement ))
+	// return lReturn;
+	//
+	// // look in superclasses
+	// Set lSuperclass = aDB.getRange( pElement.getDeclaringClass(),
+	// Relation.EXTENDS_CLASS );
+	// while( lSuperclass.size() != 0 )
+	// {
+	// IElement lNext = (IElement)lSuperclass.iterator().next();
+	// IElement lMethod = matchMethod( (MethodElement)pElement, lNext, false );
+	// if( lMethod != null )
+	// {
+	// lReturn.add( lMethod );
+	// break;
+	// }
+	// lSuperclass = aDB.getRange( lNext, Relation.EXTENDS_CLASS );
+	// }
+	//
+	// return lReturn;
+	// }
 	/**
 	 * Returns the methods that this method is directly overriden by.
 	 * 
 	 * @return A non-null set.
 	 */
-	//	private Set getTOverrides( IElement pElement )
-	//	{
-	//		Set lReturn = new HashSet();
-	//		
-	//		if( !(pElement instanceof MethodElement ))
-	//			return lReturn;
-	//		
-	//		if( isAbstractMethod( pElement ))
-	//			return lReturn;
-	//		
-	//		// look in subclasses
-	//		Set lSubclasses = new HashSet();
-	//		lSubclasses.addAll( aDB.getRange( pElement.getDeclaringClass(), Relation.T_EXTENDS_CLASS ));
-	//		while( lSubclasses.size() != 0 )
-	//		{
-	//			IElement lNext = (IElement)lSubclasses.iterator().next();
-	//			lSubclasses.remove( lNext );
-	//			IElement lMethod = matchMethod( (MethodElement)pElement, lNext, false );
-	//			if( lMethod != null )
-	//			{
-	//				lReturn.add( lMethod );
-	//			}
-	//			else
-	//			{
-	//				lSubclasses.addAll( aDB.getRange( lNext, Relation.T_EXTENDS_CLASS ));
-	//			}
-	//		}
-	//		
-	//		return lReturn;
-	//		
-	//	}
+	// private Set getTOverrides( IElement pElement )
+	// {
+	// Set lReturn = new HashSet();
+	//
+	// if( !(pElement instanceof MethodElement ))
+	// return lReturn;
+	//
+	// if( isAbstractMethod( pElement ))
+	// return lReturn;
+	//
+	// // look in subclasses
+	// Set lSubclasses = new HashSet();
+	// lSubclasses.addAll( aDB.getRange( pElement.getDeclaringClass(),
+	// Relation.T_EXTENDS_CLASS ));
+	// while( lSubclasses.size() != 0 )
+	// {
+	// IElement lNext = (IElement)lSubclasses.iterator().next();
+	// lSubclasses.remove( lNext );
+	// IElement lMethod = matchMethod( (MethodElement)pElement, lNext, false );
+	// if( lMethod != null )
+	// {
+	// lReturn.add( lMethod );
+	// }
+	// else
+	// {
+	// lSubclasses.addAll( aDB.getRange( lNext, Relation.T_EXTENDS_CLASS ));
+	// }
+	// }
+	//
+	// return lReturn;
+	//
+	// }
 	/**
 	 * Returns the first abstract method found that matches this method. The
 	 * methods are - are abstract, non-static - match pElement - and that are
@@ -476,28 +457,29 @@ public class Analyzer {
 	 * @param pElement
 	 * @return
 	 */
-	//	private Set getImplementsMethod( IElement pElement )
-	//	{
-	//		Set lReturn = new HashSet();
-	//		
-	//		if( !(pElement instanceof MethodElement ))
-	//			return lReturn;
-	//		
-	//		// First, search the superclasses for abstract methods
-	//		Set lSuperclass = aDB.getRange( pElement.getDeclaringClass(), Relation.EXTENDS_CLASS );
-	//		while( lSuperclass.size() != 0 )
-	//		{
-	//			IElement lNext = (IElement)lSuperclass.iterator().next();
-	//			IElement lMethod = matchMethod( (MethodElement)pElement, lNext, true );
-	//			if( lMethod != null )
-	//			{
-	//				lReturn.add( lMethod );
-	//				break;
-	//			}
-	//			lSuperclass = aDB.getRange( lNext, Relation.EXTENDS_CLASS );
-	//		}
-	//		
-	//		
-	//		return lReturn;
-	//	}
+	// private Set getImplementsMethod( IElement pElement )
+	// {
+	// Set lReturn = new HashSet();
+	//
+	// if( !(pElement instanceof MethodElement ))
+	// return lReturn;
+	//
+	// // First, search the superclasses for abstract methods
+	// Set lSuperclass = aDB.getRange( pElement.getDeclaringClass(),
+	// Relation.EXTENDS_CLASS );
+	// while( lSuperclass.size() != 0 )
+	// {
+	// IElement lNext = (IElement)lSuperclass.iterator().next();
+	// IElement lMethod = matchMethod( (MethodElement)pElement, lNext, true );
+	// if( lMethod != null )
+	// {
+	// lReturn.add( lMethod );
+	// break;
+	// }
+	// lSuperclass = aDB.getRange( lNext, Relation.EXTENDS_CLASS );
+	// }
+	//
+	//
+	// return lReturn;
+	// }
 }

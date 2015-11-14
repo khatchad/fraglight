@@ -14,7 +14,6 @@ import org.jdom.DataConversionException;
 import org.jdom.Element;
 
 import ca.mcgill.cs.swevo.jayfx.ConversionException;
-import ca.mcgill.cs.swevo.jayfx.FastConverter;
 import ca.mcgill.cs.swevo.jayfx.JayFX;
 
 /**
@@ -28,8 +27,7 @@ public abstract class GraphElement<E> implements Serializable {
 
 	private static final String ENABLED = "enabled";
 
-	private final PropertyChangeSupport changes = new PropertyChangeSupport(
-			this);
+	private final PropertyChangeSupport changes = new PropertyChangeSupport(this);
 
 	private boolean enabled;
 
@@ -48,8 +46,7 @@ public abstract class GraphElement<E> implements Serializable {
 		final boolean oldState = this.enabled;
 		this.enabled = false;
 		if (oldState != this.enabled)
-			this.changes.firePropertyChange(new PropertyChangeEvent(this,
-					ENABLED, oldState, this.enabled));
+			this.changes.firePropertyChange(new PropertyChangeEvent(this, ENABLED, oldState, this.enabled));
 	}
 
 	/**
@@ -60,8 +57,7 @@ public abstract class GraphElement<E> implements Serializable {
 		final boolean oldState = this.enabled;
 		this.enabled = true;
 		if (oldState != this.enabled)
-			this.changes.firePropertyChange(new PropertyChangeEvent(this,
-					ENABLED, oldState, this.enabled));
+			this.changes.firePropertyChange(new PropertyChangeEvent(this, ENABLED, oldState, this.enabled));
 	}
 
 	/**
@@ -89,8 +85,7 @@ public abstract class GraphElement<E> implements Serializable {
 		return ret;
 	}
 
-	public static boolean isEnabled(Element elem)
-			throws DataConversionException {
+	public static boolean isEnabled(Element elem) throws DataConversionException {
 		Attribute enabledAttribute = elem.getAttribute(ENABLED);
 		return enabledAttribute.getBooleanValue();
 	}
@@ -111,11 +106,12 @@ public abstract class GraphElement<E> implements Serializable {
 
 	/**
 	 * Converts this IntentionElement into its corresponding IJavaElement.
-	 * @param fastConverter 
+	 * 
+	 * @param fastConverter
 	 * @return The IJavaElement representing this IntentionElement.
-	 * @throws ConversionException 
+	 * @throws ConversionException
 	 */
-	public abstract IJavaElement toJavaElement(JayFX database) throws ConversionException; 
-	
+	public abstract IJavaElement toJavaElement(JayFX database) throws ConversionException;
+
 	public abstract boolean isAdvisable();
 }

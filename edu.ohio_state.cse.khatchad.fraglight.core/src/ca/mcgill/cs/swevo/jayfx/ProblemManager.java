@@ -28,12 +28,9 @@ class ProblemManager {
 	 */
 	public static void reportException(final Exception pException) {
 		final Bundle lJayFX = Platform.getBundle("ca.mcgill.cs.swevo.jayfx");
-		//		assert( lJayFX != null );
-		Platform.getLog(lJayFX)
-				.log(
-						new Status(IStatus.ERROR, "ca.mcgill.cs.swevo.jayfx",
-								IStatus.OK, pException.getClass().getName(),
-								pException));
+		// assert( lJayFX != null );
+		Platform.getLog(lJayFX).log(new Status(IStatus.ERROR, "ca.mcgill.cs.swevo.jayfx", IStatus.OK,
+				pException.getClass().getName(), pException));
 	}
 
 	private ProblemManager() {

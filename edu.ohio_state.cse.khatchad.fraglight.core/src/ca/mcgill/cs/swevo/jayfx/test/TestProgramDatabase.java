@@ -12,14 +12,14 @@ package ca.mcgill.cs.swevo.jayfx.test;
 
 import java.util.Set;
 
-import junit.framework.Assert;
-import junit.framework.TestCase;
 import ca.mcgill.cs.swevo.jayfx.ElementNotFoundException;
 import ca.mcgill.cs.swevo.jayfx.ProgramDatabase;
-import ca.mcgill.cs.swevo.jayfx.model.FlyweightElementFactory;
 import ca.mcgill.cs.swevo.jayfx.model.Category;
+import ca.mcgill.cs.swevo.jayfx.model.FlyweightElementFactory;
 import ca.mcgill.cs.swevo.jayfx.model.IElement;
 import ca.mcgill.cs.swevo.jayfx.model.Relation;
+import junit.framework.Assert;
+import junit.framework.TestCase;
 
 public class TestProgramDatabase extends TestCase {
 	private IElement aClass1;
@@ -35,11 +35,9 @@ public class TestProgramDatabase extends TestCase {
 		Assert.assertTrue(this.aDB.contains(this.aClass1));
 		this.aDB.addElement(this.aClass2, 0);
 		Assert.assertTrue(this.aDB.contains(this.aClass2));
-		this.aDB
-				.addRelation(this.aClass1, Relation.DECLARES_TYPE, this.aClass2);
+		this.aDB.addRelation(this.aClass1, Relation.DECLARES_TYPE, this.aClass2);
 		this.aDB.addElement(this.aClass1, 0);
-		final Set lSet = this.aDB
-				.getRange(this.aClass1, Relation.DECLARES_TYPE);
+		final Set lSet = this.aDB.getRange(this.aClass1, Relation.DECLARES_TYPE);
 		Assert.assertTrue(lSet.size() == 1);
 	}
 
@@ -48,15 +46,13 @@ public class TestProgramDatabase extends TestCase {
 		try {
 			this.aDB.addRelation(this.aClass1, Relation.CALLS, this.aMethod1);
 			Assert.fail("Expected ElementNotFoundException");
-		}
-		catch (final ElementNotFoundException pException) {
+		} catch (final ElementNotFoundException pException) {
 		}
 		this.aDB.addElement(this.aClass1, 0);
 		try {
 			this.aDB.addRelation(this.aClass1, Relation.CALLS, this.aMethod1);
 			Assert.fail("Expected ElementNotFoundException");
-		}
-		catch (final ElementNotFoundException pException) {
+		} catch (final ElementNotFoundException pException) {
 		}
 		this.aDB.addElement(this.aMethod1, 0);
 		this.aDB.addRelation(this.aClass1, Relation.CALLS, this.aMethod1);
@@ -74,22 +70,18 @@ public class TestProgramDatabase extends TestCase {
 	@SuppressWarnings("unchecked")
 	public void testAddRelationAndTranspose() {
 		try {
-			this.aDB.addRelationAndTranspose(this.aClass1, Relation.CALLS,
-					this.aMethod1);
+			this.aDB.addRelationAndTranspose(this.aClass1, Relation.CALLS, this.aMethod1);
 			Assert.fail("Expected ElementNotFoundException");
-		}
-		catch (final ElementNotFoundException pException) {
+		} catch (final ElementNotFoundException pException) {
 		}
 		this.aDB.addElement(this.aClass1, 0);
 		try {
 			this.aDB.addRelation(this.aClass1, Relation.CALLS, this.aMethod1);
 			Assert.fail("Expected ElementNotFoundException");
-		}
-		catch (final ElementNotFoundException pException) {
+		} catch (final ElementNotFoundException pException) {
 		}
 		this.aDB.addElement(this.aMethod1, 0);
-		this.aDB.addRelationAndTranspose(this.aClass1, Relation.CALLS,
-				this.aMethod1);
+		this.aDB.addRelationAndTranspose(this.aClass1, Relation.CALLS, this.aMethod1);
 		Set lSet = this.aDB.getRange(this.aClass1, Relation.CALLS);
 		Assert.assertTrue(lSet.size() == 1);
 		Assert.assertTrue(lSet.contains(this.aMethod1));
@@ -99,8 +91,7 @@ public class TestProgramDatabase extends TestCase {
 		Assert.assertTrue(lSet.size() == 1);
 		Assert.assertTrue(lSet.contains(this.aClass1));
 		this.aDB.addElement(this.aMethod2, 0);
-		this.aDB.addRelationAndTranspose(this.aMethod2, Relation.T_CALLS,
-				this.aClass1);
+		this.aDB.addRelationAndTranspose(this.aMethod2, Relation.T_CALLS, this.aClass1);
 		lSet = this.aDB.getRange(this.aClass1, Relation.CALLS);
 		Assert.assertTrue(lSet.size() == 2);
 		Assert.assertTrue(lSet.contains(this.aMethod1));
@@ -123,15 +114,13 @@ public class TestProgramDatabase extends TestCase {
 		try {
 			this.aDB.copyRelations(this.aClass1, this.aClass2);
 			Assert.fail("Expected ElementNotFoundException");
-		}
-		catch (final ElementNotFoundException pException) {
+		} catch (final ElementNotFoundException pException) {
 		}
 		this.aDB.addElement(this.aClass1, 0);
 		try {
 			this.aDB.addRelation(this.aClass1, Relation.CALLS, this.aMethod1);
 			Assert.fail("Expected ElementNotFoundException");
-		}
-		catch (final ElementNotFoundException pException) {
+		} catch (final ElementNotFoundException pException) {
 		}
 		// Empty case
 		this.aDB.addElement(this.aClass2, 0);
@@ -139,10 +128,8 @@ public class TestProgramDatabase extends TestCase {
 		// Unit case
 		this.aDB.addElement(this.aMethod1, 0);
 		this.aDB.addElement(this.aField1, 0);
-		this.aDB.addRelationAndTranspose(this.aClass1, Relation.DECLARES_FIELD,
-				this.aField1);
-		this.aDB.addRelationAndTranspose(this.aClass1, Relation.CALLS,
-				this.aMethod1);
+		this.aDB.addRelationAndTranspose(this.aClass1, Relation.DECLARES_FIELD, this.aField1);
+		this.aDB.addRelationAndTranspose(this.aClass1, Relation.CALLS, this.aMethod1);
 		this.aDB.copyRelations(this.aClass1, this.aClass2);
 		Set lSet = this.aDB.getRange(this.aClass1, Relation.DECLARES_FIELD);
 		Assert.assertTrue(lSet.size() == 1);
@@ -165,8 +152,7 @@ public class TestProgramDatabase extends TestCase {
 		Assert.assertTrue(lSet.size() == 1);
 		Assert.assertTrue(lSet.contains(this.aMethod1));
 		// Adding on to existing relations
-		this.aDB.addRelationAndTranspose(this.aField1, Relation.T_ACCESSES,
-				this.aMethod1);
+		this.aDB.addRelationAndTranspose(this.aField1, Relation.T_ACCESSES, this.aMethod1);
 		this.aDB.copyRelations(this.aField1, this.aClass2);
 		lSet = this.aDB.getRange(this.aMethod1, Relation.ACCESSES);
 		Assert.assertTrue(lSet.size() == 2);
@@ -198,16 +184,14 @@ public class TestProgramDatabase extends TestCase {
 		try {
 			this.aDB.getRange(this.aClass1, Relation.DECLARES_METHOD);
 			Assert.fail("Expected ElementNotFoundException");
-		}
-		catch (final ElementNotFoundException pException) {
+		} catch (final ElementNotFoundException pException) {
 		}
 		// Empty Case
 		this.aDB.addElement(this.aClass1, 0);
 		Set lSet = this.aDB.getRange(this.aClass1, Relation.DECLARES_METHOD);
 		Assert.assertTrue(lSet.size() == 0);
 		this.aDB.addElement(this.aMethod1, 0);
-		this.aDB.addRelationAndTranspose(this.aClass1,
-				Relation.DECLARES_METHOD, this.aMethod1);
+		this.aDB.addRelationAndTranspose(this.aClass1, Relation.DECLARES_METHOD, this.aMethod1);
 		lSet = this.aDB.getRange(this.aClass1, Relation.DECLARES_METHOD);
 		Assert.assertTrue(lSet.size() == 1);
 		Assert.assertTrue(lSet.contains(this.aMethod1));
@@ -221,15 +205,13 @@ public class TestProgramDatabase extends TestCase {
 		try {
 			this.aDB.hasRelations(this.aClass1);
 			Assert.fail("Expected ElementNotFoundException");
-		}
-		catch (final ElementNotFoundException pException) {
+		} catch (final ElementNotFoundException pException) {
 		}
 		// Empty case
 		this.aDB.addElement(this.aClass1, 0);
 		Assert.assertFalse(this.aDB.hasRelations(this.aClass1));
 		this.aDB.addElement(this.aMethod1, 0);
-		this.aDB.addRelationAndTranspose(this.aClass1,
-				Relation.DECLARES_METHOD, this.aMethod1);
+		this.aDB.addRelationAndTranspose(this.aClass1, Relation.DECLARES_METHOD, this.aMethod1);
 		Assert.assertTrue(this.aDB.hasRelations(this.aClass1));
 		Assert.assertTrue(this.aDB.hasRelations(this.aMethod1));
 	}
@@ -240,21 +222,17 @@ public class TestProgramDatabase extends TestCase {
 		try {
 			this.aDB.removeElement(this.aClass1);
 			Assert.fail("Expected ElementNotFoundException");
-		}
-		catch (final ElementNotFoundException pException) {
+		} catch (final ElementNotFoundException pException) {
 		}
 		this.aDB.addElement(this.aClass1, 0);
 		this.aDB.removeElement(this.aClass1);
 		Assert.assertFalse(this.aDB.contains(this.aClass1));
 		this.aDB.addElement(this.aClass1, 0);
 		this.aDB.addElement(this.aMethod1, 0);
-		this.aDB.addRelationAndTranspose(this.aClass1,
-				Relation.DECLARES_METHOD, this.aMethod1);
+		this.aDB.addRelationAndTranspose(this.aClass1, Relation.DECLARES_METHOD, this.aMethod1);
 		this.aDB.addElement(this.aClass2, 0);
-		this.aDB.addRelationAndTranspose(this.aClass2, Relation.ACCESSES,
-				this.aClass1);
-		this.aDB.addRelationAndTranspose(this.aMethod1, Relation.T_DECLARES,
-				this.aClass2);
+		this.aDB.addRelationAndTranspose(this.aClass2, Relation.ACCESSES, this.aClass1);
+		this.aDB.addRelationAndTranspose(this.aMethod1, Relation.T_DECLARES, this.aClass2);
 		this.aDB.removeElement(this.aClass1);
 		Assert.assertFalse(this.aDB.contains(this.aClass1));
 		Set lSet = this.aDB.getRange(this.aClass2, Relation.ACCESSES);
@@ -269,18 +247,12 @@ public class TestProgramDatabase extends TestCase {
 
 	@Override
 	protected void setUp() throws Exception {
-		this.aClass1 = FlyweightElementFactory.getElement(Category.CLASS,
-				"a.b.c.Class1" );
-		this.aClass2 = FlyweightElementFactory.getElement(Category.CLASS,
-				"a.b.c.Class2" );
-		this.aField1 = FlyweightElementFactory.getElement(Category.FIELD,
-				"a.b.c.Class1.aField1" );
-		FlyweightElementFactory.getElement(Category.FIELD,
-				"a.b.c.Class2.aField2" );
-		this.aMethod1 = FlyweightElementFactory.getElement(Category.METHOD,
-				"a.b.c.Class1.method1()" );
-		this.aMethod2 = FlyweightElementFactory.getElement(Category.METHOD,
-				"a.b.c.Class2.method2()" );
+		this.aClass1 = FlyweightElementFactory.getElement(Category.CLASS, "a.b.c.Class1");
+		this.aClass2 = FlyweightElementFactory.getElement(Category.CLASS, "a.b.c.Class2");
+		this.aField1 = FlyweightElementFactory.getElement(Category.FIELD, "a.b.c.Class1.aField1");
+		FlyweightElementFactory.getElement(Category.FIELD, "a.b.c.Class2.aField2");
+		this.aMethod1 = FlyweightElementFactory.getElement(Category.METHOD, "a.b.c.Class1.method1()");
+		this.aMethod2 = FlyweightElementFactory.getElement(Category.METHOD, "a.b.c.Class2.method2()");
 		this.aDB = new ProgramDatabase();
 	}
 

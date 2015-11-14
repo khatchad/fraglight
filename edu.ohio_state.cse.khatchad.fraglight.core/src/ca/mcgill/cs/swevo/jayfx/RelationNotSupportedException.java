@@ -20,8 +20,7 @@ public class RelationNotSupportedException extends RuntimeException {
 		super(pMessage);
 	}
 
-	public RelationNotSupportedException(final String pMessage,
-			final Throwable pException) {
+	public RelationNotSupportedException(final String pMessage, final Throwable pException) {
 		super(pMessage, pException);
 	}
 

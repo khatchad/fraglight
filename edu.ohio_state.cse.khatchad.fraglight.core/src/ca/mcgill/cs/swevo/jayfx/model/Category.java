@@ -33,7 +33,7 @@ public enum Category {
 		ret.setAttribute(TYPE, this.toString());
 		return ret;
 	}
-	
+
 	public static Category valueOf(Element elem) {
 		Attribute typeAttribute = elem.getAttribute(TYPE);
 		return valueOf(typeAttribute.getValue());

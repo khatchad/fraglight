@@ -4,65 +4,53 @@ import static edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil.extractAdvi
 import static org.eclipse.core.resources.ResourcesPlugin.getWorkspace;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.ajdt.core.AspectJCore;
-import org.eclipse.ajdt.core.javaelements.AJCodeElement;
 import org.eclipse.ajdt.core.javaelements.AdviceElement;
-import org.eclipse.ajdt.core.javaelements.IAspectJElement;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Plugin;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.mylyn.context.core.ContextCore;
 import org.eclipse.mylyn.context.core.IInteractionElement;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.IWorkbenchWindowActionDelegate;
 import org.jdom.DataConversionException;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
-import au.com.bytecode.opencsv.CSVWriter;
-
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.google.common.collect.ImmutableBiMap.Builder;
 
-import edu.ohio_state.cse.khatchad.fraglight.core.analysis.model.JoinPointType;
+import au.com.bytecode.opencsv.CSVWriter;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.util.FileUtil;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.AJUtil;
 import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
-import edu.ohio_state.cse.khatchad.fraglight.ui.FraglightUiPlugin;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PointcutChangePredictionProvider;
 import edu.ohio_state.cse.khatchad.fraglight.ui.Prediction;
 import edu.ohio_state.cse.khatchad.fraglight.ui.PredictionSet;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.analysis.GraphCachingPatternMatcher;
-import edu.ohio_state.cse.khatchad.fraglightevaluator.model.Test;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.model.PredictionTestResult;
+import edu.ohio_state.cse.khatchad.fraglightevaluator.model.Test;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.model.Test.Project;
 import edu.ohio_state.cse.khatchad.fraglightevaluator.util.PostMan;
 

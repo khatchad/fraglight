@@ -39,8 +39,7 @@ public class JoinPointShadowDifferenceAnalyzer extends ASTMatcher {
 
 			if (node.statements().size() < o.statements().size()) {
 
-				List<Statement> newStatements = new ArrayList<Statement>(
-						o.statements());
+				List<Statement> newStatements = new ArrayList<Statement>(o.statements());
 				for (Iterator it = newStatements.iterator(); it.hasNext();)
 					if (contains(node.statements(), (ASTNode) it.next()))
 						it.remove();
@@ -49,8 +48,7 @@ public class JoinPointShadowDifferenceAnalyzer extends ASTMatcher {
 					// visit the statement to find all method invocations.
 					JoinPointShadowExtractor extractor = new JoinPointShadowExtractor();
 					statement.accept(extractor);
-					this.newJoinPointShadows.addAll(extractor
-							.getJoinPointShadows());
+					this.newJoinPointShadows.addAll(extractor.getJoinPointShadows());
 				}
 			}
 
@@ -68,8 +66,7 @@ public class JoinPointShadowDifferenceAnalyzer extends ASTMatcher {
 						JoinPointShadowExtractor ex2 = new JoinPointShadowExtractor();
 						s2.accept(ex2);
 
-						Set<IJavaElement> set2 = new LinkedHashSet<IJavaElement>(
-								ex2.getJoinPointShadows());
+						Set<IJavaElement> set2 = new LinkedHashSet<IJavaElement>(ex2.getJoinPointShadows());
 						set2.removeAll(ex1.getJoinPointShadows());
 						this.newJoinPointShadows.addAll(set2);
 					}

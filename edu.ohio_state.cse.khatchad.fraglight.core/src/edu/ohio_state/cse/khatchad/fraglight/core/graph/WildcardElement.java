@@ -3,12 +3,11 @@
  */
 package edu.ohio_state.cse.khatchad.fraglight.core.graph;
 
-import org.eclipse.jdt.core.IJavaElement;
 import org.jdom.Attribute;
 import org.jdom.Element;
 
-import ca.mcgill.cs.swevo.jayfx.model.ClassElement;
 import ca.mcgill.cs.swevo.jayfx.model.Category;
+import ca.mcgill.cs.swevo.jayfx.model.ClassElement;
 import ca.mcgill.cs.swevo.jayfx.model.IElement;
 import ca.mcgill.cs.swevo.jayfx.model.Relation;
 
@@ -28,20 +27,27 @@ public class WildcardElement implements IElement {
 	public WildcardElement() {
 	}
 
+	@Override
 	public Category getCategory() {
 		return Category.WILDCARD;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ca.mcgill.cs.swevo.jayfx.model.IElement#getDeclaringClass()
 	 */
+	@Override
 	public ClassElement getDeclaringClass() {
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ca.mcgill.cs.swevo.jayfx.model.IElement#getId()
 	 */
+	@Override
 	public String getId() {
 		return QUESTION_MARK;
 	}
@@ -50,27 +56,38 @@ public class WildcardElement implements IElement {
 		return identifier.equals(QUESTION_MARK);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ca.mcgill.cs.swevo.jayfx.model.IElement#getPackageName()
 	 */
+	@Override
 	public String getPackageName() {
 		return "";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ca.mcgill.cs.swevo.jayfx.model.IElement#getShortName()
 	 */
+	@Override
 	public String getShortName() {
 		return QUESTION_MARK;
 	}
 
-	/* (non-Javadoc)
-	 * @see ca.mcgill.cs.swevo.jayfx.model.IElement#hasEnabledRelationFor(ca.mcgill.cs.swevo.jayfx.model.Relation)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * ca.mcgill.cs.swevo.jayfx.model.IElement#hasEnabledRelationFor(ca.mcgill.
+	 * cs.swevo.jayfx.model.Relation)
 	 */
 	public boolean hasEnabledRelationFor(final Relation relation) {
 		return false;
 	}
 
+	@Override
 	public Element getXML() {
 		Element ret = new Element(IElement.class.getSimpleName());
 		ret.setAttribute(new Attribute(ID, this.getId()));

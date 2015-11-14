@@ -18,17 +18,16 @@ public class FileUtil {
 	/**
 	 * Where to store benchmark results.
 	 */
-	public static final File WORKSPACE_LOC = ResourcesPlugin.getWorkspace()
-			.getRoot().getLocation().toFile();
+	public static final File WORKSPACE_LOC = ResourcesPlugin.getWorkspace().getRoot().getLocation().toFile();
 
-	private FileUtil() {}
+	private FileUtil() {
+	}
 
 	/**
 	 * @return
 	 * @throws IOException
 	 */
-	public static PrintWriter getPrintWriter(final File aFile,
-			final boolean append) throws IOException {
+	public static PrintWriter getPrintWriter(final File aFile, final boolean append) throws IOException {
 		final FileWriter resFileOut = new FileWriter(aFile, append);
 		PrintWriter ret = new PrintWriter(resFileOut);
 		return ret;

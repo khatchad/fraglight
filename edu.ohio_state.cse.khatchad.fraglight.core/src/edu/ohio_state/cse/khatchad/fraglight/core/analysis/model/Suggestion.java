@@ -5,7 +5,6 @@ package edu.ohio_state.cse.khatchad.fraglight.core.analysis.model;
 
 import ca.mcgill.cs.swevo.jayfx.model.IElement;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.IntentionArc;
-import edu.ohio_state.cse.khatchad.fraglight.core.graph.GraphElement;
 import edu.ohio_state.cse.khatchad.fraglight.core.graph.Pattern;
 
 /**
@@ -22,8 +21,7 @@ public class Suggestion<E> {
 	 * @param pattern
 	 * @param confidence
 	 */
-	public Suggestion(E suggestion,
-			Pattern<IntentionArc<IElement>> pattern, double confidence) {
+	public Suggestion(E suggestion, Pattern<IntentionArc<IElement>> pattern, double confidence) {
 		this.suggestion = suggestion;
 		this.pattern = pattern;
 		this.confidence = confidence;

@@ -10,14 +10,11 @@
 
 package ca.mcgill.cs.swevo.jayfx.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Represents a field element in the Java program model.
  */
 public class FieldElement extends AbstractElement {
-	
+
 	private static final long serialVersionUID = -7741801515115590408L;
 
 	/**
@@ -63,11 +60,11 @@ public class FieldElement extends AbstractElement {
 	/**
 	 * @return The fully-qualified name of the class declaring this field.
 	 */
+	@Override
 	public ClassElement getDeclaringClass() {
 		ClassElement lReturn = null;
-		lReturn = (ClassElement) FlyweightElementFactory.getElement(
-				Category.CLASS, this.getId().substring(0,
-						this.getId().lastIndexOf(".")));
+		lReturn = (ClassElement) FlyweightElementFactory.getElement(Category.CLASS,
+				this.getId().substring(0, this.getId().lastIndexOf(".")));
 		return lReturn;
 	}
 
@@ -75,22 +72,21 @@ public class FieldElement extends AbstractElement {
 	 * @return The name of the package in which the declaring class of this
 	 *         field is defined in.
 	 */
+	@Override
 	public String getPackageName() {
 		return this.getDeclaringClass().getPackageName();
 	}
 
 	@Override
 	public String getShortName() {
-		return this.getDeclaringClass().getShortName() + "."
-				+ this.getSimpleName();
+		return this.getDeclaringClass().getShortName() + "." + this.getSimpleName();
 	}
 
 	/**
 	 * @return The simple name of the field.
 	 */
 	public String getSimpleName() {
-		return this.getId().substring(this.getId().lastIndexOf(".") + 1,
-				this.getId().length());
+		return this.getId().substring(this.getId().lastIndexOf(".") + 1, this.getId().length());
 	}
 
 	/**

@@ -10,16 +10,11 @@
 
 package ca.mcgill.cs.swevo.jayfx.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.eclipse.jdt.core.IJavaElement;
-
 /**
  * Represents a class program element.
  */
 public class PackageElement extends AbstractElement {
-	
+
 	/**
 	 * 
 	 */
@@ -63,28 +58,32 @@ public class PackageElement extends AbstractElement {
 	 * @return The declaring class of this class. null is the element is a
 	 *         top-level class.
 	 */
+	@Override
 	public ClassElement getDeclaringClass() {
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ca.mcgill.cs.swevo.jayfx.model.AbstractElement#getJavaElement()
 	 */
-//	@Override
-//	public IJavaElement getJavaElement() {
-//		return this.elem;
-//	}
+	// @Override
+	// public IJavaElement getJavaElement() {
+	// return this.elem;
+	// }
 
 	/**
 	 * @return The name of the package in which this class is defined.
 	 */
+	@Override
 	public String getPackageName() {
 		return this.getId();
-		//		int lIndex = getId().lastIndexOf( "." );
-		//		if( lIndex >= 0 )
-		//			return getId().substring(0, getId().lastIndexOf("."));
-		//		else
-		//			return "";
+		// int lIndex = getId().lastIndexOf( "." );
+		// if( lIndex >= 0 )
+		// return getId().substring(0, getId().lastIndexOf("."));
+		// else
+		// return "";
 	}
 
 	/**
@@ -92,10 +91,11 @@ public class PackageElement extends AbstractElement {
 	 */
 	@Override
 	public String getShortName() {
-		//		String lPackageName = getPackageName();
-		//		if( lPackageName.length() > 0 )
-		//			return getId().substring( lPackageName.length() +1, getId().length() );
-		//		else
+		// String lPackageName = getPackageName();
+		// if( lPackageName.length() > 0 )
+		// return getId().substring( lPackageName.length() +1, getId().length()
+		// );
+		// else
 		return this.getId();
 	}
 

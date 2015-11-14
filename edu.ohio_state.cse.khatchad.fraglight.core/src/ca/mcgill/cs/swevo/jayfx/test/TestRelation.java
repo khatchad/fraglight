@@ -10,9 +10,9 @@
 
 package ca.mcgill.cs.swevo.jayfx.test;
 
+import ca.mcgill.cs.swevo.jayfx.model.Relation;
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import ca.mcgill.cs.swevo.jayfx.model.Relation;
 
 public class TestRelation extends TestCase {
 
@@ -30,8 +30,7 @@ public class TestRelation extends TestCase {
 	 * 
 	 */
 	public void test1() {
-		Assert.assertEquals(this.aDirectRelations.length,
-				this.aIndirectRelations.length);
+		Assert.assertEquals(this.aDirectRelations.length, this.aIndirectRelations.length);
 	}
 
 	/**
@@ -41,7 +40,6 @@ public class TestRelation extends TestCase {
 	 */
 	public void test2() {
 		for (int i = 0; i < this.aDirectRelations.length; i++)
-			Assert.assertEquals(this.aDirectRelations[i].getInverseRelation(),
-					this.aIndirectRelations[i]);
+			Assert.assertEquals(this.aDirectRelations[i].getInverseRelation(), this.aIndirectRelations[i]);
 	}
 }

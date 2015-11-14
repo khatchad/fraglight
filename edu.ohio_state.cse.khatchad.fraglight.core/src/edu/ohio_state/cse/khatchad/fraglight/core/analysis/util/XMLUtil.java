@@ -17,7 +17,8 @@ import org.jdom.Element;
  *
  */
 public class XMLUtil {
-	private XMLUtil() {}
+	private XMLUtil() {
+	}
 
 	/**
 	 * @param advElem
@@ -28,8 +29,7 @@ public class XMLUtil {
 		String relativeFileName = getRelativeXMLFileName(advElem);
 		File aFile = new File(FileUtil.WORKSPACE_LOC, relativeFileName);
 		if (!aFile.exists())
-			throw new IllegalArgumentException("No XML file found for advice "
-					+ advElem.getElementName());
+			throw new IllegalArgumentException("No XML file found for advice " + advElem.getElementName());
 		return aFile;
 	}
 
@@ -39,15 +39,13 @@ public class XMLUtil {
 	 */
 	@SuppressWarnings("restriction")
 	public static String getRelativeXMLFileName(AdviceElement advElem) {
-		StringBuilder fileNameBuilder = new StringBuilder(advElem.getPath()
-				.toOSString());
+		StringBuilder fileNameBuilder = new StringBuilder(advElem.getPath().toOSString());
 		fileNameBuilder.append("#" + advElem.toDebugString());
 		fileNameBuilder.append(".rejuv-pc.xml");
 		return fileNameBuilder.toString();
 	}
 
-	public static PrintWriter getXMLFileWriter(AdviceElement advElem)
-			throws IOException {
+	public static PrintWriter getXMLFileWriter(AdviceElement advElem) throws IOException {
 		String fileName = getRelativeXMLFileName(advElem);
 		final File aFile = new File(FileUtil.WORKSPACE_LOC, fileName);
 		PrintWriter ret = FileUtil.getPrintWriter(aFile, false);
@@ -63,15 +61,13 @@ public class XMLUtil {
 		String handleIdentifier = null;
 		try {
 			handleIdentifier = elem.getHandleIdentifier();
-		}
-		catch(NullPointerException e) {
+		} catch (NullPointerException e) {
 			System.err.println("Can't retrieve element handler for: " + elem);
 			System.exit(-1);
 		}
 		ret.setAttribute(new Attribute("id", handleIdentifier));
 		ret.setAttribute(new Attribute("name", elem.getElementName()));
-		ret.setAttribute(new Attribute("type", String.valueOf(elem
-				.getElementType())));
+		ret.setAttribute(new Attribute("type", String.valueOf(elem.getElementType())));
 		return ret;
 	}
 }

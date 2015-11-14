@@ -10,18 +10,15 @@
 
 package ca.mcgill.cs.swevo.jayfx.model;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.Constants;
-
 
 /**
  * Represents a method element in the model.
  */
 public class MethodElement extends AbstractElement {
-	
+
 	private static final long serialVersionUID = -6347203303128369543L;
 
 	/**
@@ -67,12 +64,12 @@ public class MethodElement extends AbstractElement {
 	/**
 	 * @return The name of the class declaring this method.
 	 */
+	@Override
 	public ClassElement getDeclaringClass() {
 		final String lName = this.getFirstParticle();
 		final int lIndex = lName.lastIndexOf(".");
 		ClassElement lReturn = null;
-		lReturn = (ClassElement) FlyweightElementFactory.getElement(
-				Category.CLASS, lName.substring(0, lIndex));
+		lReturn = (ClassElement) FlyweightElementFactory.getElement(Category.CLASS, lName.substring(0, lIndex));
 		return lReturn;
 	}
 
@@ -89,6 +86,7 @@ public class MethodElement extends AbstractElement {
 	 * @return The name of the package in which the declaring class of this
 	 *         method is defined in.
 	 */
+	@Override
 	public String getPackageName() {
 		return this.getDeclaringClass().getPackageName();
 	}
@@ -108,10 +106,8 @@ public class MethodElement extends AbstractElement {
 	 */
 	@Override
 	public String getShortName() {
-		String lReturn = this.getDeclaringClass().getShortName() + "."
-				+ this.getName() + "(";
-		final StringTokenizer lParser = new StringTokenizer(this
-				.getParameters(), ",()");
+		String lReturn = this.getDeclaringClass().getShortName() + "." + this.getName() + "(";
+		final StringTokenizer lParser = new StringTokenizer(this.getParameters(), ",()");
 		final int lNbTokens = lParser.countTokens();
 		for (int i = 0; i < lNbTokens - 1; i++) {
 			final String lToken = lParser.nextToken();
@@ -151,7 +147,7 @@ public class MethodElement extends AbstractElement {
 		final int lIndex = this.getId().indexOf("(");
 		return this.getId().substring(0, lIndex);
 	}
-	
+
 	public boolean isConstructor() {
 		return this.getId().contains(Constants.INIT_STRING);
 	}

@@ -21,36 +21,31 @@ import org.eclipse.jdt.core.search.SearchRequestor;
  *
  */
 public class SearchEngineUtil {
-	private SearchEngineUtil() {}
+	private SearchEngineUtil() {
+	}
 
 	/**
 	 * @param pattern
 	 * @return
 	 */
-	public static Collection<SearchMatch> search(final SearchPattern pattern,
-			IJavaSearchScope scope, IProgressMonitor monitor) {
+	public static Collection<SearchMatch> search(final SearchPattern pattern, IJavaSearchScope scope,
+			IProgressMonitor monitor) {
 		final SearchEngine engine = new SearchEngine();
 		final Collection<SearchMatch> results = new ArrayList<SearchMatch>();
 		try {
-			engine.search(pattern, new SearchParticipant[] { SearchEngine
-					.getDefaultSearchParticipant() }, scope,
+			engine.search(pattern, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope,
 					new SearchRequestor() {
-	
+
 						@Override
-						public void acceptSearchMatch(final SearchMatch match)
-								throws CoreException {
-							if (match.getAccuracy() == SearchMatch.A_ACCURATE
-									&& !match.isInsideDocComment())
+						public void acceptSearchMatch(final SearchMatch match) throws CoreException {
+							if (match.getAccuracy() == SearchMatch.A_ACCURATE && !match.isInsideDocComment())
 								results.add(match);
 						}
 					}, monitor);
-		}
-		catch (final NullPointerException e) {
-			System.err.println("Caught " + e
-					+ " from search engine. Rethrowing.");
+		} catch (final NullPointerException e) {
+			System.err.println("Caught " + e + " from search engine. Rethrowing.");
 			throw e;
-		}
-		catch (final CoreException e) {
+		} catch (final CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -61,32 +56,25 @@ public class SearchEngineUtil {
 		return search(pattern, SearchEngine.createWorkspaceScope(), monitor);
 	}
 
-	public static Collection<SearchMatch> search(final SearchPattern pattern,
-			IJavaSearchScope scope, final ISourceRange range, IProgressMonitor monitor) {
+	public static Collection<SearchMatch> search(final SearchPattern pattern, IJavaSearchScope scope,
+			final ISourceRange range, IProgressMonitor monitor) {
 		final SearchEngine engine = new SearchEngine();
 		final Collection<SearchMatch> results = new ArrayList<SearchMatch>();
 		try {
-			engine.search(pattern, new SearchParticipant[] { SearchEngine
-					.getDefaultSearchParticipant() }, scope,
+			engine.search(pattern, new SearchParticipant[] { SearchEngine.getDefaultSearchParticipant() }, scope,
 					new SearchRequestor() {
-	
+
 						@Override
-						public void acceptSearchMatch(final SearchMatch match)
-								throws CoreException {
-							if (match.getAccuracy() == SearchMatch.A_ACCURATE
-									&& !match.isInsideDocComment()
-									&& match.getOffset() == range.getOffset()
-									&& match.getLength() == range.getLength())
+						public void acceptSearchMatch(final SearchMatch match) throws CoreException {
+							if (match.getAccuracy() == SearchMatch.A_ACCURATE && !match.isInsideDocComment()
+									&& match.getOffset() == range.getOffset() && match.getLength() == range.getLength())
 								results.add(match);
 						}
 					}, monitor);
-		}
-		catch (final NullPointerException e) {
-			System.err.println("Caught " + e
-					+ " from search engine. Rethrowing.");
+		} catch (final NullPointerException e) {
+			System.err.println("Caught " + e + " from search engine. Rethrowing.");
 			throw e;
-		}
-		catch (final CoreException e) {
+		} catch (final CoreException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

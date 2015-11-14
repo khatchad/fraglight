@@ -10,9 +10,6 @@
 
 package ca.mcgill.cs.swevo.jayfx.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Represents a class program element.
  */
@@ -58,6 +55,7 @@ public class ClassElement extends AbstractElement {
 	 * @return The declaring class of this class. null is the element is a
 	 *         top-level class.
 	 */
+	@Override
 	public ClassElement getDeclaringClass() {
 		return null;
 	}
@@ -65,6 +63,7 @@ public class ClassElement extends AbstractElement {
 	/**
 	 * @return The name of the package in which this class is defined.
 	 */
+	@Override
 	public String getPackageName() {
 		final int lIndex = this.getId().lastIndexOf(".");
 		if (lIndex >= 0)
@@ -80,8 +79,7 @@ public class ClassElement extends AbstractElement {
 	public String getShortName() {
 		final String lPackageName = this.getPackageName();
 		if (lPackageName.length() > 0)
-			return this.getId().substring(lPackageName.length() + 1,
-					this.getId().length());
+			return this.getId().substring(lPackageName.length() + 1, this.getId().length());
 		else
 			return this.getId();
 	}

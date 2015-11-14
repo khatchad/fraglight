@@ -16,17 +16,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.aspectj.ajdt.core.AspectJCore;
-import org.eclipse.ajdt.core.javaelements.AJCodeElement;
-import org.eclipse.ajdt.core.javaelements.AdviceElement;
-import org.eclipse.ajdt.core.javaelements.AspectElement;
-import org.eclipse.ajdt.core.javaelements.IAJCodeElement;
-import org.eclipse.ajdt.core.model.AJRelationship;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IJavaElement;
@@ -35,26 +27,17 @@ import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IPackageDeclaration;
 import org.eclipse.jdt.core.IPackageFragment;
-import org.eclipse.jdt.core.ISourceRange;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.Modifier;
-import org.eclipse.jdt.core.search.IJavaSearchConstants;
-import org.eclipse.jdt.core.search.SearchEngine;
-import org.eclipse.jdt.core.search.SearchMatch;
-import org.eclipse.jdt.core.search.SearchParticipant;
-import org.eclipse.jdt.core.search.SearchPattern;
-import org.eclipse.jdt.core.search.SearchRequestor;
 
-
-import ca.mcgill.cs.swevo.jayfx.model.FlyweightElementFactory;
 import ca.mcgill.cs.swevo.jayfx.model.Category;
+import ca.mcgill.cs.swevo.jayfx.model.FlyweightElementFactory;
 import ca.mcgill.cs.swevo.jayfx.model.IElement;
 import ca.mcgill.cs.swevo.jayfx.model.MethodElement;
 import ca.mcgill.cs.swevo.jayfx.model.Relation;
 import edu.ohio_state.cse.khatchad.fraglight.core.analysis.util.TimeCollector;
-import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
 
 /**
  * Facade for the JavaDB component. This component takes in a Java projects and
@@ -72,27 +55,22 @@ public class JayFX {
 	 * @throws JayFXException
 	 *             If the method cannot complete correctly
 	 */
-	private static List<ICompilationUnit> getCompilationUnits(
-			final IJavaProject pProject) throws JayFXException {
-		//		assert pProject != null;
+	private static List<ICompilationUnit> getCompilationUnits(final IJavaProject pProject) throws JayFXException {
+		// assert pProject != null;
 
 		final List<ICompilationUnit> lReturn = new ArrayList<ICompilationUnit>();
 
 		try {
-			final IPackageFragment[] lFragments = pProject
-					.getPackageFragments();
+			final IPackageFragment[] lFragments = pProject.getPackageFragments();
 			for (final IPackageFragment element : lFragments) {
 				final ICompilationUnit[] lCUs = element.getCompilationUnits();
 				for (final ICompilationUnit element2 : lCUs) {
-					if ( !element2.getResource().getFileExtension().equals("aj") )
+					if (!element2.getResource().getFileExtension().equals("aj"))
 						lReturn.add(element2);
 				}
 			}
-		}
-		catch (final JavaModelException pException) {
-			throw new JayFXException(
-					"Could not extract compilation units from project",
-					pException);
+		} catch (final JavaModelException pException) {
+			throw new JayFXException("Could not extract compilation units from project", pException);
 		}
 		return lReturn;
 	}
@@ -109,21 +87,17 @@ public class JayFX {
 	 * @throws JayFXException
 	 *             If the method cannot complete correctly.
 	 */
-	private static List<IJavaProject> getJavaProjects(final IProject pProject)
-			throws JayFXException {
-		//		assert pProject != null;
+	private static List<IJavaProject> getJavaProjects(final IProject pProject) throws JayFXException {
+		// assert pProject != null;
 
 		final List<IJavaProject> lReturn = new ArrayList<IJavaProject>();
 		try {
 			lReturn.add(JavaCore.create(pProject));
-			final IProject[] lReferencedProjects = pProject
-					.getReferencedProjects();
+			final IProject[] lReferencedProjects = pProject.getReferencedProjects();
 			for (final IProject element : lReferencedProjects)
 				lReturn.add(JavaCore.create(element));
-		}
-		catch (final CoreException pException) {
-			throw new JayFXException("Could not extract project information",
-					pException);
+		} catch (final CoreException pException) {
+			throw new JayFXException("Could not extract project information", pException);
 		}
 		return lReturn;
 	}
@@ -158,8 +132,7 @@ public class JayFX {
 	 * @throws ConversionException
 	 *             if the element cannot be converted.
 	 */
-	public IElement convertToElement(final IJavaElement pElement)
-			throws ConversionException {
+	public IElement convertToElement(final IJavaElement pElement) throws ConversionException {
 		final IElement ret = this.aConverter.getElement(pElement);
 		if (ret == null)
 			throw new IllegalStateException("In trouble.");
@@ -180,8 +153,7 @@ public class JayFX {
 	 * @throws ConversionException
 	 *             If the element cannot be
 	 */
-	public IJavaElement convertToJavaElement(final IElement pElement)
-			throws ConversionException {
+	public IJavaElement convertToJavaElement(final IElement pElement) throws ConversionException {
 		return this.aConverter.getJavaElement(pElement);
 	}
 
@@ -219,25 +191,19 @@ public class JayFX {
 	 *         abstract.
 	 */
 	public Set<IElement> getOverridenMethods(final IElement pMethod) {
-		//		assert pMethod != null && pMethod instanceof MethodElement;
+		// assert pMethod != null && pMethod instanceof MethodElement;
 		final Set<IElement> lReturn = new HashSet<IElement>();
 
 		if (!this.isAbstractMethod(pMethod)) {
 			final Set<IElement> lToProcess = new HashSet<IElement>();
-			lToProcess.addAll(this.getRange(pMethod.getDeclaringClass(),
-					Relation.EXTENDS_CLASS));
-			lToProcess.addAll(this.getRange(pMethod.getDeclaringClass(),
-					Relation.IMPLEMENTS_INTERFACE));
+			lToProcess.addAll(this.getRange(pMethod.getDeclaringClass(), Relation.EXTENDS_CLASS));
+			lToProcess.addAll(this.getRange(pMethod.getDeclaringClass(), Relation.IMPLEMENTS_INTERFACE));
 			while (lToProcess.size() > 0) {
 				final IElement lType = lToProcess.iterator().next();
-				lReturn
-						.addAll(this
-								.matchMethod((MethodElement) pMethod, lType));
+				lReturn.addAll(this.matchMethod((MethodElement) pMethod, lType));
 				lToProcess.addAll(this.getRange(lType, Relation.EXTENDS_CLASS));
-				lToProcess.addAll(this.getRange(lType,
-						Relation.IMPLEMENTS_INTERFACE));
-				lToProcess.addAll(this.getRange(lType,
-						Relation.EXTENDS_INTERFACES));
+				lToProcess.addAll(this.getRange(lType, Relation.IMPLEMENTS_INTERFACE));
+				lToProcess.addAll(this.getRange(lType, Relation.EXTENDS_INTERFACES));
 				lToProcess.remove(lType);
 			}
 		}
@@ -254,31 +220,22 @@ public class JayFX {
 	 * @return A Set of IElement objects representing all the elements in the
 	 *         range.
 	 */
-	public Set<IElement> getRange(final IElement pElement,
-			final Relation pRelation) {
-		if (pRelation == Relation.DECLARES_TYPE
-				&& !this.isProjectElement(pElement))
+	public Set<IElement> getRange(final IElement pElement, final Relation pRelation) {
+		if (pRelation == Relation.DECLARES_TYPE && !this.isProjectElement(pElement))
 			return this.getDeclaresTypeForNonProjectElement(pElement);
-		if (pRelation == Relation.DECLARES_METHOD
-				&& !this.isProjectElement(pElement))
+		if (pRelation == Relation.DECLARES_METHOD && !this.isProjectElement(pElement))
 			return this.getDeclaresMethodForNonProjectElement(pElement);
-		if (pRelation == Relation.DECLARES_FIELD
-				&& !this.isProjectElement(pElement))
+		if (pRelation == Relation.DECLARES_FIELD && !this.isProjectElement(pElement))
 			return this.getDeclaresFieldForNonProjectElement(pElement);
-		if (pRelation == Relation.EXTENDS_CLASS
-				&& !this.isProjectElement(pElement))
+		if (pRelation == Relation.EXTENDS_CLASS && !this.isProjectElement(pElement))
 			return this.getExtendsClassForNonProjectElement(pElement);
-		if (pRelation == Relation.IMPLEMENTS_INTERFACE
-				&& !this.isProjectElement(pElement))
+		if (pRelation == Relation.IMPLEMENTS_INTERFACE && !this.isProjectElement(pElement))
 			return this.getInterfacesForNonProjectElement(pElement, true);
-		if (pRelation == Relation.EXTENDS_INTERFACES
-				&& !this.isProjectElement(pElement))
+		if (pRelation == Relation.EXTENDS_INTERFACES && !this.isProjectElement(pElement))
 			return this.getInterfacesForNonProjectElement(pElement, false);
-		if (pRelation == Relation.OVERRIDES
-				|| pRelation == Relation.T_OVERRIDES)
+		if (pRelation == Relation.OVERRIDES || pRelation == Relation.T_OVERRIDES)
 			if (!this.isCHAEnabled())
-				throw new RelationNotSupportedException(
-						"CHA must be enabled to support this relation");
+				throw new RelationNotSupportedException("CHA must be enabled to support this relation");
 		return this.aAnalyzer.getRange(pElement, pRelation);
 	}
 
@@ -293,18 +250,16 @@ public class JayFX {
 	 * @return A Set of IElement objects representing all the elements in the
 	 *         range.
 	 */
-	public Set<IElement> getRangeInProject(final IElement pElement,
-			final Relation pRelation) {
-		final Set<IElement> lRange = this.aAnalyzer.getRange(pElement,
-				pRelation);
+	public Set<IElement> getRangeInProject(final IElement pElement, final Relation pRelation) {
+		final Set<IElement> lRange = this.aAnalyzer.getRange(pElement, pRelation);
 		final Set<IElement> lReturn = new HashSet<IElement>();
 
 		for (final IElement lElement : lRange)
 			if (this.isProjectElement(lElement))
 				lReturn.add(lElement);
 		/*
-		 * for( Iterator i = lRange.iterator(); i.hasNext(); ) { IElement lNext =
-		 * (IElement)i.next(); if( isProjectElement( lNext )) { lReturn.add(
+		 * for( Iterator i = lRange.iterator(); i.hasNext(); ) { IElement lNext
+		 * = (IElement)i.next(); if( isProjectElement( lNext )) { lReturn.add(
 		 * lNext ); } }
 		 */
 		return lReturn;
@@ -328,11 +283,10 @@ public class JayFX {
 	 * @throws ElementNotFoundException
 	 * @throws JavaModelException
 	 */
-	@SuppressWarnings( { "restriction", "unchecked" })
-	public void initialize(final Collection<? extends IProject> pProjectCol,
-			final IProgressMonitor pProgress, boolean pCHA, TimeCollector timeCollector)
-			throws JayFXException, ElementNotFoundException,
-			ConversionException, JavaModelException {
+	@SuppressWarnings({ "restriction", "unchecked" })
+	public void initialize(final Collection<? extends IProject> pProjectCol, final IProgressMonitor pProgress,
+			boolean pCHA, TimeCollector timeCollector)
+					throws JayFXException, ElementNotFoundException, ConversionException, JavaModelException {
 
 		this.aCHAEnabled = pCHA;
 
@@ -353,8 +307,7 @@ public class JayFX {
 				final IPackageDeclaration[] lPDs = lCU.getPackageDeclarations();
 				if (lPDs.length > 0)
 					this.aPackages.add(lPDs[0].getElementName());
-			}
-			catch (final JavaModelException lException) {
+			} catch (final JavaModelException lException) {
 				throw new JayFXException(lException);
 			}
 			lAnalyzer.analyze(lCU, timeCollector);
@@ -367,23 +320,22 @@ public class JayFX {
 		 * lTargets.iterator(); i.hasNext(); ) { k++; ICompilationUnit lCU =
 		 * (ICompilationUnit)i.next(); try { IPackageDeclaration[] lPDs =
 		 * lCU.getPackageDeclarations(); if( lPDs.length > 0 ) { aPackages.add(
-		 * lPDs[0].getElementName() ); } } catch( JavaModelException pException ) {
-		 * throw new JavaDBException( pException ); } lAnalyzer.analyze( lCU );
-		 * if( pProgress != null ) pProgress.worked(1);
+		 * lPDs[0].getElementName() ); } } catch( JavaModelException pException
+		 * ) { throw new JavaDBException( pException ); } lAnalyzer.analyze( lCU
+		 * ); if( pProgress != null ) pProgress.worked(1);
 		 * 
 		 * System.out.println( k + "/" + lSize ); if( k == 1414 ) {
 		 * System.out.println( k + "/" + lSize ); } }
 		 */
 
 		if (!pCHA)
-			//			if (pProgress != null)
-			//				pProgress.done();
+			// if (pProgress != null)
+			// pProgress.done();
 			return;
 
 		// Process the class hierarchy analysis
 		if (pProgress != null)
-			pProgress.beginTask("Performing class hierarchy analysis", this.aDB
-					.getAllElements().size());
+			pProgress.beginTask("Performing class hierarchy analysis", this.aDB.getAllElements().size());
 		final Set<IElement> lToProcess = new HashSet<IElement>();
 		lToProcess.addAll(this.aDB.getAllElements());
 		// int lSize = aDB.getAllElements().size();
@@ -394,31 +346,25 @@ public class JayFX {
 			lToProcess.remove(lNext);
 			if (lNext.getCategory() == Category.METHOD)
 				if (!this.isAbstractMethod(lNext)) {
-					final Set<IElement> lOverrides = this
-							.getOverridenMethods(lNext);
+					final Set<IElement> lOverrides = this.getOverridenMethods(lNext);
 					for (final IElement lMethod : lOverrides) {
 						if (!this.isProjectElement(lMethod)) {
 							int lModifiers = 0;
 							try {
-								final IJavaElement lElement = this
-										.convertToJavaElement(lMethod);
+								final IJavaElement lElement = this.convertToJavaElement(lMethod);
 								if (lElement instanceof IMember) {
-									lModifiers = ((IMember) lElement)
-											.getFlags();
+									lModifiers = ((IMember) lElement).getFlags();
 									if (Modifier.isAbstract(lModifiers))
 										lModifiers += 16384;
 								}
-							}
-							catch (final ConversionException lException) {
+							} catch (final ConversionException lException) {
 								// Ignore, the modifiers used is 0
-							}
-							catch (final JavaModelException lException) {
+							} catch (final JavaModelException lException) {
 								// Ignore, the modifierds used is 0
 							}
 							this.aDB.addElement(lMethod, lModifiers);
 						}
-						this.aDB.addRelationAndTranspose(lNext,
-								Relation.OVERRIDES, lMethod);
+						this.aDB.addRelationAndTranspose(lNext, Relation.OVERRIDES, lMethod);
 					}
 					/*
 					 * for( Iterator j = lOverrides.iterator(); j.hasNext(); ) {
@@ -444,21 +390,21 @@ public class JayFX {
 		// if ( AspectJPlugin.isAJProject(pProject)) {
 		// AjASTCrawler aspectAnalyzer = new AjASTCrawler( aDB, aConverter );
 		// if( pProgress != null ) pProgress.subTask("Analyzing aspects.");
-		//	        
+		//
 		// AjBuildManager.setAsmHierarchyBuilder(aspectAnalyzer);
 		// try {
 		// pProject.open(pProgress);
 		// } catch (CoreException e) {
 		// throw new JayFXException( "Could not open project ", e);
 		// }
-		//			
+		//
 		// try {
 		// pProject.build(IncrementalProjectBuilder.FULL_BUILD, pProgress);
 		// } catch (CoreException e) {
 		// throw new JayFXException( "Could not build project ", e);
 		// }
 		// }
-		//		pProgress.done();
+		// pProgress.done();
 	}
 
 	/**
@@ -492,11 +438,13 @@ public class JayFX {
 	 * @return true if pElement is a project element.
 	 */
 	public boolean isProjectElement(final IElement pElement) {
-		//		assert pElement != null;
+		// assert pElement != null;
 		return this.aPackages.contains(pElement.getPackageName());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -513,47 +461,39 @@ public class JayFX {
 	 * @return A set of elements declared. Cannot be null. Emptyset if there is
 	 *         any problem converting the element.
 	 */
-	private Set<IElement> getDeclaresFieldForNonProjectElement(
-			final IElement pElement) {
-		//		assert pElement != null;
+	private Set<IElement> getDeclaresFieldForNonProjectElement(final IElement pElement) {
+		// assert pElement != null;
 		final Set<IElement> lReturn = new HashSet<IElement>();
 		if (pElement.getCategory() == Category.CLASS)
 			try {
-				final IJavaElement lElement = this
-						.convertToJavaElement(pElement);
+				final IJavaElement lElement = this.convertToJavaElement(pElement);
 				if (lElement instanceof IType) {
 					final IField[] lFields = ((IType) lElement).getFields();
 					for (final IField element : lFields)
 						lReturn.add(this.convertToElement(element));
 				}
-			}
-			catch (final ConversionException pException) {
+			} catch (final ConversionException pException) {
 				// Nothing, we return the empty set.
-			}
-			catch (final JavaModelException pException) {
+			} catch (final JavaModelException pException) {
 				// Nothing, we return the empty set.
 			}
 		return lReturn;
 	}
 
-	private Set<IElement> getDeclaresMethodForNonProjectElement(
-			final IElement pElement) {
-		//		assert pElement != null;
+	private Set<IElement> getDeclaresMethodForNonProjectElement(final IElement pElement) {
+		// assert pElement != null;
 		final Set<IElement> lReturn = new HashSet<IElement>();
 		if (pElement.getCategory() == Category.CLASS)
 			try {
-				final IJavaElement lElement = this
-						.convertToJavaElement(pElement);
+				final IJavaElement lElement = this.convertToJavaElement(pElement);
 				if (lElement instanceof IType) {
 					final IMethod[] lMethods = ((IType) lElement).getMethods();
 					for (final IMethod element : lMethods)
 						lReturn.add(this.convertToElement(element));
 				}
-			}
-			catch (final ConversionException pException) {
+			} catch (final ConversionException pException) {
 				// Nothing, we return the empty set.
-			}
-			catch (final JavaModelException pException) {
+			} catch (final JavaModelException pException) {
 				// Nothing, we return the empty set.
 			}
 		return lReturn;
@@ -568,24 +508,20 @@ public class JayFX {
 	// return aAnalyzer.isInterface( pElement );
 	// }
 
-	private Set<IElement> getDeclaresTypeForNonProjectElement(
-			final IElement pElement) {
-		//		assert pElement != null;
+	private Set<IElement> getDeclaresTypeForNonProjectElement(final IElement pElement) {
+		// assert pElement != null;
 		final Set<IElement> lReturn = new HashSet<IElement>();
 		if (pElement.getCategory() == Category.CLASS)
 			try {
-				final IJavaElement lElement = this
-						.convertToJavaElement(pElement);
+				final IJavaElement lElement = this.convertToJavaElement(pElement);
 				if (lElement instanceof IType) {
 					final IType[] lTypes = ((IType) lElement).getTypes();
 					for (final IType element : lTypes)
 						lReturn.add(this.convertToElement(element));
 				}
-			}
-			catch (final ConversionException pException) {
+			} catch (final ConversionException pException) {
 				// Nothing, we return the empty set.
-			}
-			catch (final JavaModelException pException) {
+			} catch (final JavaModelException pException) {
 				// Nothing, we return the empty set.
 			}
 		return lReturn;
@@ -600,32 +536,24 @@ public class JayFX {
 	 * @return A set of elements declared. Cannot be null. Emptyset if there is
 	 *         any problem converting the element.
 	 */
-	private Set<IElement> getExtendsClassForNonProjectElement(
-			final IElement pElement) {
-		//		assert pElement != null;
+	private Set<IElement> getExtendsClassForNonProjectElement(final IElement pElement) {
+		// assert pElement != null;
 		final Set<IElement> lReturn = new HashSet<IElement>();
 		if (pElement.getCategory() == Category.CLASS)
 			try {
-				final IJavaElement lElement = this
-						.convertToJavaElement(pElement);
+				final IJavaElement lElement = this.convertToJavaElement(pElement);
 				if (lElement instanceof IType) {
-					final String lSignature = ((IType) lElement)
-							.getSuperclassTypeSignature();
+					final String lSignature = ((IType) lElement).getSuperclassTypeSignature();
 					if (lSignature != null) {
-						final IElement lSuperclass = FlyweightElementFactory
-								.getElement(Category.CLASS, this.aConverter
-										.resolveType(lSignature,
-												(IType) lElement).substring(1,
-												lSignature.length() - 1));
-						//						assert lSuperclass instanceof ClassElement;
+						final IElement lSuperclass = FlyweightElementFactory.getElement(Category.CLASS, this.aConverter
+								.resolveType(lSignature, (IType) lElement).substring(1, lSignature.length() - 1));
+						// assert lSuperclass instanceof ClassElement;
 						lReturn.add(lSuperclass);
 					}
 				}
-			}
-			catch (final ConversionException lException) {
+			} catch (final ConversionException lException) {
 				// Nothing, we return the empty set.
-			}
-			catch (final JavaModelException lException) {
+			} catch (final JavaModelException lException) {
 				// Nothing, we return the empty set.
 			}
 		return lReturn;
@@ -643,39 +571,26 @@ public class JayFX {
 	 * @return A set of elements declared. Cannot be null. Emptyset if there is
 	 *         any problem converting the element.
 	 */
-	private Set<IElement> getInterfacesForNonProjectElement(
-			final IElement pElement, boolean pImplements) {
-		//		assert pElement != null;
+	private Set<IElement> getInterfacesForNonProjectElement(final IElement pElement, boolean pImplements) {
+		// assert pElement != null;
 		final Set<IElement> lReturn = new HashSet<IElement>();
 		if (pElement.getCategory() == Category.CLASS)
 			try {
-				final IJavaElement lElement = this
-						.convertToJavaElement(pElement);
+				final IJavaElement lElement = this.convertToJavaElement(pElement);
 				if (lElement instanceof IType)
 					if (((IType) lElement).isInterface() == !pImplements) {
-						final String[] lInterfaces = ((IType) lElement)
-								.getSuperInterfaceTypeSignatures();
+						final String[] lInterfaces = ((IType) lElement).getSuperInterfaceTypeSignatures();
 						if (lInterfaces != null)
 							for (final String element : lInterfaces) {
-								final IElement lInterface = FlyweightElementFactory
-										.getElement(
-												Category.CLASS,
-												this.aConverter
-														.resolveType(
-																element,
-																(IType) lElement)
-														.substring(
-																1,
-																element
-																		.length() - 1));
+								final IElement lInterface = FlyweightElementFactory.getElement(Category.CLASS,
+										this.aConverter.resolveType(element, (IType) lElement).substring(1,
+												element.length() - 1));
 								lReturn.add(lInterface);
 							}
 					}
-			}
-			catch (final ConversionException lException) {
+			} catch (final ConversionException lException) {
 				// Nothing, we return the empty set.
-			}
-			catch (final JavaModelException lException) {
+			} catch (final JavaModelException lException) {
 				// Nothing, we return the empty set.
 			}
 		return lReturn;
@@ -691,26 +606,18 @@ public class JayFX {
 	 * @param pClass
 	 * @return
 	 */
-	private Set<IElement> matchMethod(final MethodElement pMethod,
-			final IElement pClass) {
+	private Set<IElement> matchMethod(final MethodElement pMethod, final IElement pClass) {
 		final Set<IElement> lReturn = new HashSet<IElement>();
 		final String lThisName = pMethod.getName();
 
-		final Set<IElement> lElements = this.getRange(pClass,
-				Relation.DECLARES_METHOD);
+		final Set<IElement> lElements = this.getRange(pClass, Relation.DECLARES_METHOD);
 		for (final IElement lMethodElement : lElements)
 			if (lMethodElement.getCategory() == Category.METHOD)
-				if (!((MethodElement) lMethodElement).getName().startsWith(
-						"<init>")
-						&& !((MethodElement) lMethodElement).getName()
-								.startsWith("<clinit>"))
-					if (!Modifier.isStatic(this.aDB
-							.getModifiers(lMethodElement)))
-						if (lThisName.equals(((MethodElement) lMethodElement)
-								.getName())) {
-							pMethod.getParameters().equals(
-									((MethodElement) lMethodElement)
-											.getParameters());
+				if (!((MethodElement) lMethodElement).getName().startsWith("<init>")
+						&& !((MethodElement) lMethodElement).getName().startsWith("<clinit>"))
+					if (!Modifier.isStatic(this.aDB.getModifiers(lMethodElement)))
+						if (lThisName.equals(((MethodElement) lMethodElement).getName())) {
+							pMethod.getParameters().equals(((MethodElement) lMethodElement).getParameters());
 							lReturn.add(lMethodElement);
 							break;
 						}

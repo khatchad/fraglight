@@ -82,8 +82,7 @@ public class Util {
 	 * @param values
 	 * @return
 	 */
-	public static <E> Collection<E> flattenCollection(
-			Collection<? extends Collection<E>> values) {
+	public static <E> Collection<E> flattenCollection(Collection<? extends Collection<E>> values) {
 		Collection<E> ret = new LinkedHashSet<E>();
 		for (Collection<E> col : values)
 			for (E e : col)
@@ -96,8 +95,7 @@ public class Util {
 	 * @return
 	 * @throws JavaModelException
 	 */
-	public static IMethod getDefaultConstructor(IType type)
-			throws JavaModelException {
+	public static IMethod getDefaultConstructor(IType type) throws JavaModelException {
 		for (final IMethod meth : type.getMethods())
 			if (meth.isConstructor() && meth.getParameterNames().length == 0)
 				return meth;
@@ -156,8 +154,7 @@ public class Util {
 		return getIMember(elem.getParent());
 	}
 
-	public static CompilationUnit getCompilationUnit(ICompilationUnit icu,
-			IProgressMonitor monitor) {
+	public static CompilationUnit getCompilationUnit(ICompilationUnit icu, IProgressMonitor monitor) {
 		final ASTParser parser = ASTParser.newParser(AST.JLS3);
 		parser.setSource(icu);
 		parser.setResolveBindings(true);
@@ -165,10 +162,10 @@ public class Util {
 		return ret;
 	}
 
-	public static ASTNode getExactASTNode(CompilationUnit root,
-			final SearchMatch match) {
+	public static ASTNode getExactASTNode(CompilationUnit root, final SearchMatch match) {
 		final ArrayList ret = new ArrayList(1);
 		final ASTVisitor visitor = new ASTVisitor() {
+			@Override
 			public void preVisit(ASTNode node) {
 				if (node.getStartPosition() == match.getOffset()) {
 					ret.clear();
@@ -180,16 +177,13 @@ public class Util {
 		return (ASTNode) ret.get(0);
 	}
 
-	public static ASTNode getExactASTNode(IJavaElement elem,
-			final SearchMatch match, IProgressMonitor monitor) {
+	public static ASTNode getExactASTNode(IJavaElement elem, final SearchMatch match, IProgressMonitor monitor) {
 		final IMember mem = getIMember(elem);
-		final CompilationUnit root = Util.getCompilationUnit(
-				mem.getCompilationUnit(), monitor);
+		final CompilationUnit root = Util.getCompilationUnit(mem.getCompilationUnit(), monitor);
 		return getExactASTNode(root, match);
 	}
 
-	public static ASTNode getExactASTNode(SearchMatch match,
-			IProgressMonitor monitor) {
+	public static ASTNode getExactASTNode(SearchMatch match, IProgressMonitor monitor) {
 		final IJavaElement elem = (IJavaElement) match.getElement();
 		return Util.getExactASTNode(elem, match, monitor);
 	}
@@ -219,8 +213,7 @@ public class Util {
 		return (MethodDeclaration) trav;
 	}
 
-	public static SingleVariableDeclaration getSingleVariableDeclaration(
-			ASTNode node) {
+	public static SingleVariableDeclaration getSingleVariableDeclaration(ASTNode node) {
 		if (node == null)
 			return null;
 		else if (node instanceof SingleVariableDeclaration)
@@ -232,15 +225,13 @@ public class Util {
 	public static Name getTopmostName(ASTNode node) {
 		if (node == null)
 			return null;
-		else if (node.getParent() == null
-				|| node.getParent().getNodeType() != ASTNode.QUALIFIED_NAME)
+		else if (node.getParent() == null || node.getParent().getNodeType() != ASTNode.QUALIFIED_NAME)
 			return (Name) node;
 		else
 			return getTopmostName(node.getParent());
 	}
 
-	public static VariableDeclarationStatement getVariableDeclarationStatement(
-			ASTNode node) {
+	public static VariableDeclarationStatement getVariableDeclarationStatement(ASTNode node) {
 		if (node == null)
 			return null;
 		else if (node instanceof VariableDeclarationStatement)
@@ -272,13 +263,11 @@ public class Util {
 	 * @throws JavaModelException
 	 * @throws ConversionException
 	 */
-	public static String getTargetString(IJavaElement target)
-			throws JavaModelException, ConversionException {
+	public static String getTargetString(IJavaElement target) throws JavaModelException, ConversionException {
 		switch (target.getElementType()) {
 		case IJavaElement.METHOD: {
 			IMethod methodTarget = (IMethod) target;
-			MethodElement methodElement = Converter
-					.getMethodElement(methodTarget);
+			MethodElement methodElement = Converter.getMethodElement(methodTarget);
 			return methodElement.getId();
 		}
 
@@ -290,8 +279,7 @@ public class Util {
 			// TODO: Add other types? Exception handles, etc.?
 
 		default: {
-			throw new IllegalArgumentException(
-					"Can't construct target string for " + target);
+			throw new IllegalArgumentException("Can't construct target string for " + target);
 		}
 		}
 	}
@@ -305,8 +293,7 @@ public class Util {
 		return key.toString();
 	}
 
-	public static double calculateTimeStatistics(final long start,
-			TimeCollector timeCollector) {
+	public static double calculateTimeStatistics(final long start, TimeCollector timeCollector) {
 		long end = System.currentTimeMillis();
 
 		long collectedTime = timeCollector.getCollectedTime();
@@ -346,8 +333,7 @@ public class Util {
 	 * @param adviceCol
 	 * @return
 	 */
-	public static Set<IProject> getProjects(
-			final Collection<? extends IJavaElement> jElemCol) {
+	public static Set<IProject> getProjects(final Collection<? extends IJavaElement> jElemCol) {
 		final Set<IProject> ret = new LinkedHashSet<IProject>();
 		for (final IJavaElement elem : jElemCol) {
 			IProject project = getProject(elem);
@@ -357,10 +343,9 @@ public class Util {
 	}
 
 	public static String getBenchmarkName(IJavaProject project) {
-		IJavaProject jProj = (IJavaProject) project;
+		IJavaProject jProj = project;
 		String projectName = jProj.getElementName();
-		String benchmarkName = projectName.substring(0,
-				projectName.indexOf('_'));
+		String benchmarkName = projectName.substring(0, projectName.indexOf('_'));
 		benchmarkName = benchmarkName.replace("AO", "");
 		return benchmarkName;
 	}

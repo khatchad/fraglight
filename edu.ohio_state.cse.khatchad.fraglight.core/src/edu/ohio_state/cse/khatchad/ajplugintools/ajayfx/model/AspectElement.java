@@ -3,17 +3,9 @@
  */
 package edu.ohio_state.cse.khatchad.ajplugintools.ajayfx.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.jdom.Attribute;
-import org.jdom.Element;
-
 import ca.mcgill.cs.swevo.jayfx.model.AbstractElement;
-import ca.mcgill.cs.swevo.jayfx.model.ClassElement;
 import ca.mcgill.cs.swevo.jayfx.model.Category;
-import ca.mcgill.cs.swevo.jayfx.model.IElement;
-import ca.mcgill.cs.swevo.jayfx.model.Relation;
+import ca.mcgill.cs.swevo.jayfx.model.ClassElement;
 
 /**
  * @author raffi
@@ -30,7 +22,9 @@ public class AspectElement extends AbstractElement {
 		super(id);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -41,7 +35,9 @@ public class AspectElement extends AbstractElement {
 			return this.getId().equals(((AspectElement) obj).getId());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ca.mcgill.cs.swevo.jayfx.model.AbstractElement#getCategory()
 	 */
 	@Override
@@ -49,17 +45,23 @@ public class AspectElement extends AbstractElement {
 		return Category.ASPECT;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ca.mcgill.cs.swevo.jayfx.model.IElement#getDeclaringClass()
 	 */
+	@Override
 	public ClassElement getDeclaringClass() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ca.mcgill.cs.swevo.jayfx.model.IElement#getPackageName()
 	 */
+	@Override
 	public String getPackageName() {
 		final int lIndex = this.getId().lastIndexOf(".");
 		if (lIndex >= 0)
@@ -68,20 +70,23 @@ public class AspectElement extends AbstractElement {
 			return "";
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see ca.mcgill.cs.swevo.jayfx.model.AbstractElement#getShortName()
 	 */
 	@Override
 	public String getShortName() {
 		final String lPackageName = this.getPackageName();
 		if (lPackageName.length() > 0)
-			return this.getId().substring(lPackageName.length() + 1,
-					this.getId().length());
+			return this.getId().substring(lPackageName.length() + 1, this.getId().length());
 		else
 			return this.getId();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override

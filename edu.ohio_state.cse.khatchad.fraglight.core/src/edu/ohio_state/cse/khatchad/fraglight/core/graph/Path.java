@@ -13,15 +13,13 @@ import org.drools.ObjectFilter;
 import org.jdom.DataConversionException;
 import org.jdom.Element;
 
-import ca.mcgill.cs.swevo.jayfx.model.FlyweightElementFactory;
 import ca.mcgill.cs.swevo.jayfx.model.IElement;
 
 /**
  * @author raffi
  * 
  */
-public class Path<E extends IntentionArc<IElement>> extends Stack<E> implements
-		Serializable {
+public class Path<E extends IntentionArc<IElement>> extends Stack<E>implements Serializable {
 
 	/**
 	 * 
@@ -30,9 +28,12 @@ public class Path<E extends IntentionArc<IElement>> extends Stack<E> implements
 
 	public static class PathObjectFilter implements ObjectFilter {
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see org.drools.ObjectFilter#accept(java.lang.Object)
 		 */
+		@Override
 		public boolean accept(final Object object) {
 			return object instanceof Path;
 		}
@@ -45,22 +46,23 @@ public class Path<E extends IntentionArc<IElement>> extends Stack<E> implements
 
 	/**
 	 * @param patternElem
-	 * @throws DataConversionException 
+	 * @throws DataConversionException
 	 */
 	@SuppressWarnings("unchecked")
 	public Path(Element pathElem) throws DataConversionException {
-		for (Object intentionEdgeElemObj : pathElem
-				.getChildren(IntentionArc.class.getSimpleName())) {
+		for (Object intentionEdgeElemObj : pathElem.getChildren(IntentionArc.class.getSimpleName())) {
 			Element intentionEdgeXMLElem = (Element) intentionEdgeElemObj;
 			IntentionArc<IElement> intentionEdge = new IntentionArc<IElement>(intentionEdgeXMLElem);
-			this.add((E)intentionEdge);
+			this.add((E) intentionEdge);
 		}
 	}
 
 	public Path() {
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Vector#equals(java.lang.Object)
 	 */
 	@Override
@@ -69,62 +71,50 @@ public class Path<E extends IntentionArc<IElement>> extends Stack<E> implements
 		return super.equals(o);
 	}
 
-	public Pattern<IntentionArc<IElement>> extractPattern(
-			final IntentionNode<IElement> commonNode,
+	public Pattern<IntentionArc<IElement>> extractPattern(final IntentionNode<IElement> commonNode,
 			IntentionArc<IElement> enabledEdge) {
 
 		final Pattern<IntentionArc<IElement>> ret = new Pattern<IntentionArc<IElement>>();
 		for (final IntentionArc<IElement> edge : this)
 			if (edge.getFromNode().equals(commonNode)) {
-				final IntentionArc<IElement> newEdge = new IntentionArc<IElement>(
-						edge.getFromNode(), IntentionNode.DISABLED_WILDCARD,
-						edge.getType(), edge.equals(enabledEdge));
+				final IntentionArc<IElement> newEdge = new IntentionArc<IElement>(edge.getFromNode(),
+						IntentionNode.DISABLED_WILDCARD, edge.getType(), edge.equals(enabledEdge));
 				ret.add(newEdge);
-			}
-			else if (edge.getToNode().equals(commonNode)) {
-				final IntentionArc<IElement> newEdge = new IntentionArc<IElement>(
-						IntentionNode.DISABLED_WILDCARD, edge.getToNode(), edge
-								.getType(), edge.equals(enabledEdge));
+			} else if (edge.getToNode().equals(commonNode)) {
+				final IntentionArc<IElement> newEdge = new IntentionArc<IElement>(IntentionNode.DISABLED_WILDCARD,
+						edge.getToNode(), edge.getType(), edge.equals(enabledEdge));
 				ret.add(newEdge);
-			}
-			else {
-				final IntentionArc<IElement> newEdge = new IntentionArc<IElement>(
-						IntentionNode.DISABLED_WILDCARD,
-						IntentionNode.DISABLED_WILDCARD, edge.getType(), edge
-								.equals(enabledEdge));
+			} else {
+				final IntentionArc<IElement> newEdge = new IntentionArc<IElement>(IntentionNode.DISABLED_WILDCARD,
+						IntentionNode.DISABLED_WILDCARD, edge.getType(), edge.equals(enabledEdge));
 				ret.add(newEdge);
 			}
 		return ret;
 	}
 
-	public Pattern<IntentionArc<IElement>> extractPattern(
-			final IntentionNode<IElement> commonNode,
+	public Pattern<IntentionArc<IElement>> extractPattern(final IntentionNode<IElement> commonNode,
 			IntentionNode<IElement> enabledNode) {
 
 		final Pattern<IntentionArc<IElement>> ret = new Pattern<IntentionArc<IElement>>();
 		for (final IntentionArc<IElement> edge : this)
-			if (edge.getFromNode().equals(commonNode)) { //upwards pattern?
-				final IntentionArc<IElement> newEdge = new IntentionArc<IElement>(
-						edge.getFromNode(),
+			if (edge.getFromNode().equals(commonNode)) { // upwards pattern?
+				final IntentionArc<IElement> newEdge = new IntentionArc<IElement>(edge.getFromNode(),
 						edge.getToNode().equals(enabledNode) ? IntentionNode.ENABLED_WILDCARD
-								: IntentionNode.DISABLED_WILDCARD, edge
-								.getType(), false);
+								: IntentionNode.DISABLED_WILDCARD,
+						edge.getType(), false);
 				ret.add(newEdge);
-			}
-			else if (edge.getToNode().equals(commonNode)) {
-				final IntentionArc<IElement> newEdge = new IntentionArc<IElement>(
-						edge.getFromNode().equals(enabledNode) ? IntentionNode.ENABLED_WILDCARD
-								: IntentionNode.DISABLED_WILDCARD, edge
-								.getToNode(), edge.getType(), false);
+			} else if (edge.getToNode().equals(commonNode)) {
+				final IntentionArc<IElement> newEdge = new IntentionArc<IElement>(edge.getFromNode().equals(enabledNode)
+						? IntentionNode.ENABLED_WILDCARD : IntentionNode.DISABLED_WILDCARD, edge.getToNode(),
+						edge.getType(), false);
 				ret.add(newEdge);
-			}
-			else {
+			} else {
 				final IntentionArc<IElement> newEdge = new IntentionArc<IElement>(
 						edge.getFromNode().equals(enabledNode) ? IntentionNode.ENABLED_WILDCARD
 								: IntentionNode.DISABLED_WILDCARD,
 						edge.getToNode().equals(enabledNode) ? IntentionNode.ENABLED_WILDCARD
-								: IntentionNode.DISABLED_WILDCARD, edge
-								.getType(), false);
+								: IntentionNode.DISABLED_WILDCARD,
+						edge.getType(), false);
 				ret.add(newEdge);
 			}
 		return ret;
@@ -162,8 +152,7 @@ public class Path<E extends IntentionArc<IElement>> extends Stack<E> implements
 	}
 
 	public PathElements<IntentionNode<?>> getPathElements() {
-		final PathElements<IntentionNode<?>> ret = new PathElements<IntentionNode<?>>(
-				this);
+		final PathElements<IntentionNode<?>> ret = new PathElements<IntentionNode<?>>(this);
 		ret.add(this.getTopNode());
 		ret.addAll(this.getTailNodes());
 		return ret;
@@ -190,8 +179,7 @@ public class Path<E extends IntentionArc<IElement>> extends Stack<E> implements
 
 	public Collection<IntentionNode<IElement>> getWildcardNodes() {
 		final Collection<IntentionNode<IElement>> ret = this.getNodes();
-		for (final Iterator<IntentionNode<IElement>> it = ret.iterator(); it
-				.hasNext();) {
+		for (final Iterator<IntentionNode<IElement>> it = ret.iterator(); it.hasNext();) {
 			final IntentionNode<IElement> node = it.next();
 			if (!(node.getElem() instanceof WildcardElement))
 				it.remove();
@@ -199,7 +187,9 @@ public class Path<E extends IntentionArc<IElement>> extends Stack<E> implements
 		return ret;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Vector#hashCode()
 	 */
 	@Override
