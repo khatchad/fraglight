@@ -184,6 +184,7 @@ public abstract class PointcutProcessor {
 	 * @param pattern
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	private Element getXML(final Set<GraphElement<IElement>> set, String elementName) {
 		Element ret = new Element(elementName);
 		for (GraphElement<IElement> enabledElement : set) {
@@ -200,6 +201,7 @@ public abstract class PointcutProcessor {
 	 * @param pattern
 	 * @param simularity
 	 */
+	@SuppressWarnings("unused")
 	private static Element getPatternXMLElement(final Pattern pattern, double simularity) {
 		Element patternXMLElement = pattern.getXML();
 		patternXMLElement.setAttribute(SIMULARITY, String.valueOf(simularity));

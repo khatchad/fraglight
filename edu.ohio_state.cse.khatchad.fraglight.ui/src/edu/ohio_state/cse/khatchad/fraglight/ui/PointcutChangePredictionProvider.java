@@ -411,6 +411,7 @@ public class PointcutChangePredictionProvider extends
 		return pointcuts;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void contextChanged(ContextChangeEvent event) {
 		switch (event.getEventKind()) {

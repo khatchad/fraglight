@@ -94,6 +94,7 @@ public class PointcutAnalyzer extends PointcutProcessor {
 		serializer.output(doc, xmlOut);
 		xmlOut.close();
 
+		@SuppressWarnings("restriction")
 		IJavaElement ancestor = advElem.getAncestor(IJavaElement.JAVA_PROJECT);
 		IJavaProject jProject = (IJavaProject) ancestor;
 		IProject project = jProject.getProject();

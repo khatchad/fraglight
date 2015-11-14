@@ -36,6 +36,7 @@ import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
  * @author <a href="mailto:khatchad@cse.ohio-state.edu">Raffi Khatchadourian</a>
  * 
  */
+@SuppressWarnings("restriction")
 public class JoinPointShadowExtractor extends ASTVisitor {
 
 	private Set<IJavaElement> joinPointShadows = new LinkedHashSet<IJavaElement>();

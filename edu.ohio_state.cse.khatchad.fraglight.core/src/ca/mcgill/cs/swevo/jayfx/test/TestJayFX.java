@@ -32,7 +32,7 @@ public class TestJayFX extends TestCase {
 
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public void testAccesses() {
 		Set lRange = this.aDB.getRange(this.getElement("a.b.A.<clinit>()", false), Relation.ACCESSES);
 		Assert.assertEquals(3, lRange.size());
@@ -56,7 +56,7 @@ public class TestJayFX extends TestCase {
 		Assert.assertTrue(lRange.contains(this.getElement("a.b.B.aTest1", false)));
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "deprecation" })
 	public void testCalls() {
 		Set lRange = this.aDB.getRange(this.getElement("a.b.c.C1.main([Ljava.lang.String;)", false), Relation.CALLS);
 		Assert.assertEquals(1, lRange.size());

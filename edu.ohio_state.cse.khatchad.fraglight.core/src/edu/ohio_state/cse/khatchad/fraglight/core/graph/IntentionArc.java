@@ -22,6 +22,7 @@ import edu.ohio_state.cse.khatchad.fraglight.core.util.Util;
  * @author raffi
  * 
  */
+@SuppressWarnings("restriction")
 public class IntentionArc<E extends IElement> extends GraphElement<E> {
 
 	/**
@@ -109,7 +110,7 @@ public class IntentionArc<E extends IElement> extends GraphElement<E> {
 	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	@Override
 	public boolean equals(final Object obj) {
 		return obj instanceof IntentionArc ? this.fromNode.equals(((IntentionArc) obj).fromNode)

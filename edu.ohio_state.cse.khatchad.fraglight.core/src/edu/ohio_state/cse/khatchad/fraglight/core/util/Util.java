@@ -56,8 +56,9 @@ public class Util {
 		return qualifiedName.substring(pos + 1);
 	}
 
-	@SuppressWarnings({ "unchecked", "unused" })
+	@SuppressWarnings({ "unused" })
 	private static boolean distinct(final Collection<Object> col) {
+		@SuppressWarnings("rawtypes")
 		final Comparable[] objs = new Comparable[col.size()];
 		col.toArray(objs);
 		try {
