@@ -73,9 +73,6 @@ public class FlyweightElementFactory {
 		return lReturn;
 	}
 
-	private FlyweightElementFactory() {
-	}
-
 	/**
 	 * @param elementXML
 	 * @return
