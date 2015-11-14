@@ -88,16 +88,17 @@ public abstract class PointcutProcessor {
 
 		lMonitor.beginTask("Executing query: " + queryString.replace("X", relation.toString()) + ".",
 				suggestedArcs.size());
-		for (final Iterator it = suggestedArcs.iterator(); it.hasNext();) {
+		for (final Iterator<?> it = suggestedArcs.iterator(); it.hasNext();) {
 			final QueryResult result = (QueryResult) it.next();
+			@SuppressWarnings("rawtypes")
 			final IntentionArc suggestedArc = (IntentionArc) result.get("$suggestedArc");
 
-			final IntentionArc enabledArc = (IntentionArc) result.get("$enabledArc");
+			final IntentionArc<IElement> enabledArc = (IntentionArc<IElement>) result.get("$enabledArc");
 
 			final Path enabledPath = (Path) result.get("$enabledPath");
 
-			final IntentionNode commonNode = (IntentionNode) result.get("$commonNode");
-			final Pattern pattern = enabledPath.extractPattern(commonNode, enabledArc);
+			final IntentionNode<IElement> commonNode = (IntentionNode<IElement>) result.get("$commonNode");
+			final Pattern<IntentionArc<IElement>> pattern = enabledPath.extractPattern(commonNode, enabledArc);
 
 			if (!patternToResultMap.containsKey(pattern))
 				patternToResultMap.put(pattern, new LinkedHashSet<GraphElement<IElement>>());

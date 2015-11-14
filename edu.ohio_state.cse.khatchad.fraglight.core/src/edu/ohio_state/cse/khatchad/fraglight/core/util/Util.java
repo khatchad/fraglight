@@ -164,7 +164,7 @@ public class Util {
 	}
 
 	public static ASTNode getExactASTNode(CompilationUnit root, final SearchMatch match) {
-		final ArrayList ret = new ArrayList(1);
+		final ArrayList<ASTNode> ret = new ArrayList<ASTNode>(1);
 		final ASTVisitor visitor = new ASTVisitor() {
 			@Override
 			public void preVisit(ASTNode node) {
@@ -175,7 +175,7 @@ public class Util {
 			}
 		};
 		root.accept(visitor);
-		return (ASTNode) ret.get(0);
+		return ret.get(0);
 	}
 
 	public static ASTNode getExactASTNode(IJavaElement elem, final SearchMatch match, IProgressMonitor monitor) {

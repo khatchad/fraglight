@@ -475,7 +475,7 @@ public class ConcernGraph {
 	public void enableAllElements(IProgressMonitor monitor) {
 		Collection<GraphElement<IElement>> allElements = this.getAllElements();
 		monitor.beginTask("Enabling all graph elements.", allElements.size());
-		for (GraphElement elem : allElements)
+		for (GraphElement<IElement> elem : allElements)
 			elem.enable();
 		monitor.done();
 	}
@@ -483,7 +483,7 @@ public class ConcernGraph {
 	public void enableAllAdvisableElements(IProgressMonitor monitor) {
 		Collection<GraphElement<IElement>> allAdvisableElements = this.getAllAdvisableElements();
 		monitor.beginTask("Enabling all advisable graph elements.", allAdvisableElements.size());
-		for (GraphElement elem : allAdvisableElements)
+		for (GraphElement<IElement> elem : allAdvisableElements)
 			elem.enable();
 		monitor.done();
 	}

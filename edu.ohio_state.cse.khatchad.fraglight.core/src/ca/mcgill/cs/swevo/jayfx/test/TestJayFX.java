@@ -58,7 +58,7 @@ public class TestJayFX extends TestCase {
 
 	@SuppressWarnings({ "unchecked", "deprecation" })
 	public void testCalls() {
-		Set lRange = this.aDB.getRange(this.getElement("a.b.c.C1.main([Ljava.lang.String;)", false), Relation.CALLS);
+		Set<IElement> lRange = this.aDB.getRange(this.getElement("a.b.c.C1.main([Ljava.lang.String;)", false), Relation.CALLS);
 		Assert.assertEquals(1, lRange.size());
 		Assert.assertTrue(lRange.contains(this.getElement("a.b.A.<init>(Ljava.lang.String;)", false)));
 
