@@ -2,8 +2,9 @@
 <feature
       id="edu.ohio_state.cse.khatchad.fraglight.feature"
       label="Fraglight Pointcut Change Predictor"
-      provider-name="Ohio State University">
       version="1.1.0"
+      provider-name="New York City College of Technology, City University of New York"
+      plugin="edu.ohio_state.cse.khatchad.fraglight.ui">
 
    <description url="http://openlab.citytech.cuny.edu/pcp">
       Fraglight, an extension of the Mylyn Eclipse plug-in, which maintains
@@ -98,7 +99,7 @@ This Agreement is governed by the laws of the State of New York and the intellec
    </license>
 
    <url>
-      <update label="Fraglight Update Site" url="http://svn.codespot.com/a/eclipselabs.org/fraglight/trunk/edu.ohio_state.cse.khatchad.fraglight.updatesite/"/>
+      <update label="Fraglight Update Site" url="https://raw.githubusercontent.com/khatchad/fraglight/master/edu.ohio_state.cse.khatchad.fraglight.updatesite/"/>
    </url>
 
    <requires>
