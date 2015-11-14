@@ -319,14 +319,14 @@ public class JayFX {
 			try {
 				lAnalyzer.analyze(lCU, timeCollector);
 			} catch (Exception e) {
-				LogUtil.logError("Failed to analyze compilation unit: " + lCU.getElementName() + ". Skipping ...", e);
+				System.err.println("Failed to analyze compilation unit: " + lCU.getElementName() + ". Skipping ..." + e);
 				successfullyAnalyzedCompilationUnits--;
 			}
 			if (pProgress != null)
 				pProgress.worked(1);
 		}
 
-		LogUtil.logInfo("Successfully analyzed " + successfullyAnalyzedCompilationUnits + "/" + lTargets.size()
+		System.out.println("Successfully analyzed " + successfullyAnalyzedCompilationUnits + "/" + lTargets.size()
 				+ " compilation units.");
 
 		/*
