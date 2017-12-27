@@ -1,6 +1,6 @@
 # fraglight
 
-<img src="images/logo.png" width="10%" alt="logo" title="Logo" align="right" /> A tool for early detection of broken pointcuts in evolving Aspect-Oriented software.
+<img src="https://raw.githubusercontent.com/ponder-lab/fraglight/master/images/logo.png" width="10%" alt="logo" title="Logo" align="right" /> A tool for early detection of broken pointcuts in evolving Aspect-Oriented software.
 
 ## Introduction
 
