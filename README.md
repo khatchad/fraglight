@@ -1,4 +1,5 @@
 # fraglight
+ [![Java profiler](https://www.ej-technologies.com/images/product_banners/jprofiler_small.png)](https://www.ej-technologies.com/products/jprofiler/overview.html)
 
 ![Fraglight logo](https://raw.githubusercontent.com/ponder-lab/fraglight/master/images/logo.png) A tool for early detection of broken pointcuts in evolving Aspect-Oriented software.
 
